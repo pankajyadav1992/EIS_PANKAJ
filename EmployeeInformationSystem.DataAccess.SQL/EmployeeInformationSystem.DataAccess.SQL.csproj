@@ -51,11 +51,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeeInformationSystem.Core\EmployeeInformationSystem.Core.csproj">
+      <Project>{8d1d61ce-c4cb-41a9-8f23-46ee54462d6e}</Project>
+      <Name>EmployeeInformationSystem.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EmployeeInformationSystem.WebUI\EmployeeInformationSystem.WebUI.csproj">
+      <Project>{5cde25c8-5c1f-413b-948e-a26efc799670}</Project>
+      <Name>EmployeeInformationSystem.WebUI</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

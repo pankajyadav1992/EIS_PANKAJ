@@ -11,10 +11,13 @@ namespace EmployeeInformationSystem.Core.Models
         public string EmployeeDetailId { get; set; }
         public virtual EmployeeDetail Employee{get;set;}
 
+        public string HODId { get; set; }
+        public virtual EmployeeDetail HOD { get; set; }
+
         public string DepartmentId { get; set; }
         public virtual Department Department { get; set; }
 
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        public DateTime? From { get; set; }
+        public DateTime? To { get; set; }
     }
 }

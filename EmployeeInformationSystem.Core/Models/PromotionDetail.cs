@@ -8,13 +8,23 @@ namespace EmployeeInformationSystem.Core.Models
 {
     public class PromotionDetail : BaseEntity
     {
+        //NOT Nullable
         public string EmployeeDetailId { get; set; }
         public virtual EmployeeDetail Employee { get; set; }
 
+        //NOT Nullable
         public string DesignationId { get; set; }
         public virtual Designation Designation { get; set; }
 
-        public DateTime From { get; set; }
-        public DateTime To { get; set; }
+        //Nullable
+        public string PayScaleId { get; set; }
+        public virtual PayScale PayScale { get; set; }
+
+        //Nullable
+        public string LevelId { get; set; }
+        public virtual Level Level { get; set; }
+
+        public Nullable<DateTime> From { get; set; }
+        public Nullable<DateTime> To { get; set; }
     }
 }
