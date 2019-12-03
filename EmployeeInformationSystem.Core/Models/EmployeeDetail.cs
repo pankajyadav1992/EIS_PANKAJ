@@ -34,12 +34,12 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Parent Organisation")]
         public virtual Organisation Organisation { get; set; }
 
-        //Make required in View Model
+        //Make REQUIRED in View Model
         [Display(Name = "Date of Birth")]
-        public DateTime DateOfBirth { get; set; }
+        public DateTime? DateOfBirth { get; set; }
 
         [Display(Name = "Date of Superannuation")]
-        public DateTime DateOfSuperannuation { get; set; }
+        public DateTime? DateOfSuperannuation { get; set; }
 
         [Display(Name = "Date of Joining parent organisation")]
         public DateTime? DateofJoiningParentOrg { get; set; }
@@ -66,7 +66,6 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Mobile Number")]
         public string MobileNumber { get; set; }
 
-        [StringLength(450)]
         [Display(Name = "Residence Address")]
         public string ResidenceAddress { get; set;}
 
@@ -85,6 +84,7 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Date of Separation from DGH")]
         public DateTime? DateOfSeperation { get; set; }
 
+        [Required(ErrorMessage = "Valid Gender is required")]
         public Gender Gender { get; set; }
 
         public string Qualification { get; set; }
@@ -104,10 +104,12 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Current Basic Pay")]
         public string CurrentBasicPay { get; set; }
 
+        // Enable Length control at UI
         [StringLength(10, MinimumLength = 10, ErrorMessage = "PAN Number must be of 10 characters")]
         [Display(Name = "PAN Number")]
         public string PANNumber { get; set; }
 
+        // Enable Length control at UI
         [StringLength(12, MinimumLength = 12, ErrorMessage = "Aadhaar Number must be of 12 characters")]
         [Display(Name = "Aadhaar Number")]
         public string AadhaarNumer { get; set; }
