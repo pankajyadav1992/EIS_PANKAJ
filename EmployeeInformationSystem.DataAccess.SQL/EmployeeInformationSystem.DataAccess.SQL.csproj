@@ -52,9 +52,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201912030941311_Initial.cs" />
-    <Compile Include="Migrations\201912030941311_Initial.designer.cs">
-      <DependentUpon>201912030941311_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201912040445209_Initial.cs" />
+    <Compile Include="Migrations\201912040445209_Initial.designer.cs">
+      <DependentUpon>201912040445209_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -69,14 +69,10 @@
       <Project>{8d1d61ce-c4cb-41a9-8f23-46ee54462d6e}</Project>
       <Name>EmployeeInformationSystem.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\EmployeeInformationSystem.WebUI\EmployeeInformationSystem.WebUI.csproj">
-      <Project>{5cde25c8-5c1f-413b-948e-a26efc799670}</Project>
-      <Name>EmployeeInformationSystem.WebUI</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201912030941311_Initial.resx">
-      <DependentUpon>201912030941311_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201912040445209_Initial.resx">
+      <DependentUpon>201912040445209_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

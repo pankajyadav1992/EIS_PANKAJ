@@ -64,6 +64,7 @@
     <Compile Include="Models\PromotionDetail.cs" />
     <Compile Include="Models\TelephoneExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\DeputationistsViewModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

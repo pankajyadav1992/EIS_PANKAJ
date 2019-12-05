@@ -1,3 +1,6 @@
+using EmployeeInformationSystem.Core.Contracts;
+using EmployeeInformationSystem.Core.Models;
+using EmployeeInformationSystem.DataAccess.SQL;
 using System;
 
 using Unity;
@@ -42,6 +45,16 @@ namespace EmployeeInformationSystem.WebUI
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
+            container.RegisterType<IRepository<Department>, SQLRepository<Department>>();
+            container.RegisterType<IRepository<Designation>, SQLRepository<Designation>>();
+            container.RegisterType<IRepository<Discipline>, SQLRepository<Discipline>>();
+            container.RegisterType<IRepository<EmployeeDetail>, SQLRepository<EmployeeDetail>>();
+            container.RegisterType<IRepository<Level>, SQLRepository<Level>>();
+            container.RegisterType<IRepository<Organisation>, SQLRepository<Organisation>>();
+            container.RegisterType<IRepository<PayScale>, SQLRepository<PayScale>>();
+            container.RegisterType<IRepository<PostingDetail>, SQLRepository<PostingDetail>>();
+            container.RegisterType<IRepository<PromotionDetail>, SQLRepository<PromotionDetail>>();
+            container.RegisterType<IRepository<TelephoneExtension>, SQLRepository<TelephoneExtension>>();
         }
     }
 }

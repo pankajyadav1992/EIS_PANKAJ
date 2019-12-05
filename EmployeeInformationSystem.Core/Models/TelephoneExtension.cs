@@ -10,14 +10,20 @@ namespace EmployeeInformationSystem.Core.Models
 {
     public class TelephoneExtension: BaseEntity 
     {
-        [StringLength(450)]
         [Index(IsUnique = true)]
         [Required(ErrorMessage = "Valid Number is required")]
         public int Number { get; set; }
 
         public string EmployeeDetailId { get; set; }
         [Display(Name = "Current Employee")]
-        [Required(ErrorMessage = "Valid Employee is required")]
+        //[Required(ErrorMessage = "Valid Employee is required")]
         public virtual EmployeeDetail CurrentEmployee { get; set; }
+
+        /* Either/Or relationship with Owner or Employee.
+         * In case the telephone number is alloted to a Employee, fill in via Employee foreign key
+         * Else just fill in text name as in case of "Pantry"
+         * Handle this relationship in code manipulation
+        */
+        public string CurrentOwner { get; set; }
     }
 }

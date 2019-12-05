@@ -82,7 +82,7 @@ namespace EmployeeInformationSystem.Core.Models
         public Boolean WorkingStatus { get; set; }
 
         [Display(Name = "Date of Separation from DGH")]
-        public DateTime? DateOfSeperation { get; set; }
+        public DateTime? DateOfSeparation { get; set; }
 
         [Required(ErrorMessage = "Valid Gender is required")]
         public Gender Gender { get; set; }
