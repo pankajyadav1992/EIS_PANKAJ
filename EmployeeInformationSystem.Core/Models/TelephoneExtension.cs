@@ -12,6 +12,8 @@ namespace EmployeeInformationSystem.Core.Models
     {
         [Index(IsUnique = true)]
         [Required(ErrorMessage = "Valid Number is required")]
+        [Display(Name = "Telephone Extension")]
+        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public int Number { get; set; }
 
         public string EmployeeDetailId { get; set; }

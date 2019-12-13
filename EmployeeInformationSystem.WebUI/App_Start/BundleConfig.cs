@@ -32,6 +32,9 @@ namespace EmployeeInformationSystem.WebUI
             bundles.Add(new ScriptBundle("~/bundles/front").Include(
                         "~/Scripts/js/front.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/gijgo").Include(
+                        "~/Content/vendor/gijgo/js/gijgo.min.js"));
+
             //bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
             //            "~/Scripts/jquery.validate*"));
 
@@ -52,7 +55,8 @@ namespace EmployeeInformationSystem.WebUI
                       "~/Content/vendor/font-awesome/css/font-awesome.min.css",
                       "~/Content/css/fontastic.css",
                       "~/Content/css/style.default.css",
-                      "~/Content/css/custom.css"));
+                      "~/Content/css/custom.css",
+                      "~/Content/vendor/gijgo/css/gijgo.min.css"));
         }
     }
 }

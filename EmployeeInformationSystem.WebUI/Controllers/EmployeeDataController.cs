@@ -1,5 +1,6 @@
 ﻿using EmployeeInformationSystem.Core.Contracts;
 using EmployeeInformationSystem.Core.Models;
+using EmployeeInformationSystem.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,21 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         public ActionResult Add()
         {
             return View();
+        }
+
+        public ActionResult AjaxAdd(string targetPage)
+        {
+            object genericObject=null;
+            switch (targetPage)
+            {
+                case "Deputationist":
+                    genericObject = new DeputationistsViewModel();
+                    break;
+                case "Consultant": break;
+                case "Contractual": break;
+                default: break;
+            }
+            return View(targetPage, genericObject);
         }
     }
 }

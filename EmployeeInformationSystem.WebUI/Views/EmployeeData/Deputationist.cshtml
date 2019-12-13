@@ -1,0 +1,566 @@
+﻿@model EmployeeInformationSystem.Core.ViewModels.DeputationistsViewModel
+
+@{
+    Layout = null;
+}
+<style>
+    .stepwizard-step p {
+        margin-top: 10px;
+    }
+
+    .stepwizard-row {
+        display: table-row;
+    }
+
+    .stepwizard {
+        display: table;
+        width: 50%;
+        position: relative;
+    }
+
+    .stepwizard-step button[disabled] {
+        opacity: 1 !important;
+        filter: alpha(opacity=100) !important;
+    }
+
+    .stepwizard-row:before {
+        top: 14px;
+        bottom: 0;
+        position: absolute;
+        content: " ";
+        width: 100%;
+        height: 1px;
+        background-color: #ccc;
+        z-order: 0;
+    }
+
+    .stepwizard-step {
+        display: table-cell;
+        text-align: center;
+        position: relative;
+    }
+
+    .btn-circle {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        padding: 6px 0;
+        font-size: 12px;
+        line-height: 1.428571429;
+        border-radius: 15px;
+    }
+</style>
+
+<div class="card-body">
+    <div class="row justify-content-md-center">
+        <div class="stepwizard col-md-offset-3">
+            <div class="stepwizard-row setup-panel">
+                <div class="stepwizard-step">
+                    <button type="button" class="btn btn-primary btn-circle" data-btnParent="#personalDetails">1</button>
+                    <p>Personal Details</p>
+                </div>
+                <div class="stepwizard-step">
+                    <button type="button" class="btn btn-default btn-circle" data-btnParent="#contactDetails">2</button>
+                    <p>Contact Details</p>
+                </div>
+                <div class="stepwizard-step">
+                    <button type="button" class="btn btn-default btn-circle" data-btnParent="#professionalDetails">3</button>
+                    <p>Professional Details</p>
+                </div>
+                <div class="stepwizard-step">
+                    <button type="button" class="btn btn-default btn-circle" data-btnParent="#postingDetails">4</button>
+                    <p>Posting Details</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    @using (Html.BeginForm("AjaxAdd", "Deputationist", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+
+        <!-- id will be unique, but class name will be same -->
+        <div id="personalDetails" class="setup-content">
+            <div class="card-header d-flex">
+                <h3 class="h4">Personal Details</h3>
+            </div>
+            <br />
+            <!--  All fields pertaining to Personal information will be here with next button -->
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.EmployeeCode, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.EmployeeCode, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmployeeCode, "", new { @class = "text-danger" })
+                </div>
+
+
+                @Html.LabelFor(model => model.EmployeeDetails.EmployeeType, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EnumDropDownListFor(model => model.EmployeeType, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmployeeType, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="line"></div>
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.Title, htmlAttributes: new { @class = "col-sm-1 form-control-label" })
+                <div class="col-sm-1">
+                    @Html.EditorFor(model => model.EmployeeDetails.Title, new { htmlAttributes = new { @class = "form-control", @list = "TitleList" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Title, "", new { @class = "text-danger" })
+                    <datalist id="TitleList">
+                        <option>Mr.</option>
+                        <option>Mrs.</option>
+                        <option>Dr.</option>
+                    </datalist>
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.FirstName, htmlAttributes: new { @class = "col-sm-2 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.FirstName, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.LastName, htmlAttributes: new { @class = "col-sm-2 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.DateOfBirth, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.DateOfBirth, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateOfBirth, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.DateOfSuperannuation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.DateOfSuperannuation, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateOfSuperannuation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.MaritalStatus, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, true, new { @class = "radio-template" }) Married&nbsp;&nbsp;
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, false, new { @class = "radio-template" }) Single
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.MaritalStatus, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.MarriageDate, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.MarriageDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.MarriageDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.BloodGroup, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EnumDropDownListFor(model => model.EmployeeDetails.BloodGroup, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.BloodGroup, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.VehicleNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.VehicleNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.VehicleNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.PANNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.PANNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.PassportNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.PassportNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.AadhaarNumer, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.AadhaarPart1, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.AadhaarPart2, new { htmlAttributes = new { @class = "form-control" } })
+                </div>
+                <div class="col-sm-2">
+                    @Html.EditorFor(model => model.AadhaarPart3, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row justify-content-center">
+                <!-- open1 is given in the class that is binded with the click event -->
+                <button class="btn btn-info nextBtn" type="button" data-next="#contactDetails" data-parent="#personalDetails">Next <span class="fa fa-arrow-right"></span></button>
+            </div>
+
+        </div>
+
+        <!-- id will be unique, but class name will be same -->
+        <div id="contactDetails" class="setup-content">
+            <div class="card-header d-flex">
+                <h3 class="h4">Contact Details</h3>
+            </div>
+            <br />
+            <!--  User's contact Details will be here with next and previous button -->
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.EmailID, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.EmailID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmailID, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.AlternateEmailID, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.AlternateEmailID, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.AlternateEmailID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.MobileNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.MobileNumber, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.ResidenceNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.ResidenceNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.ResidenceNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.ResidenceAddress, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.ResidenceAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.ResidenceAddress, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.PermanentAddress, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.PermanentAddress, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PermanentAddress, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.EmergencyPerson, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.EmergencyPerson, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmergencyPerson, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.EmergencyContact, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.EmergencyContact, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmergencyContact, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.SeatingLocation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EnumDropDownListFor(model => model.EmployeeDetails.SeatingLocation, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.SeatingLocation, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.TelephoneExtensions.Number, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.TelephoneExtensions.Number, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TelephoneExtensions.Number, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row justify-content-center">
+                <!-- back2 unique class name  -->
+                <button class="btn btn-warning nextBtn" type="button" data-next="#personalDetails" data-parent="#contactDetails"><span class="fa fa-arrow-left"></span> Back</button>&nbsp;&nbsp;&nbsp;
+                <!-- open2 unique class name -->
+                <button class="btn btn-info nextBtn" type="button" data-next="#professionalDetails" data-parent="#contactDetails">Next <span class="fa fa-arrow-right"></span></button>
+            </div>
+        </div>
+
+        <!-- id will be unique, but class name will be same -->
+        <div id="professionalDetails" class="setup-content">
+            <div class="card-header d-flex">
+                <h3 class="h4">Professional Details</h3>
+            </div>
+            <br />
+            <!--  password and confirm password field will be here with submit and previous button -->
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.WorkingStatus, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.WorkingStatus, true, new { @class = "radio-template" }) Working&nbsp;&nbsp;
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.WorkingStatus, false, new { @class = "radio-template" }) Separated
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.WorkingStatus, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.Organisation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.Organisation.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Organisation, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.Discipline, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.Discipline.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Discipline, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.Qualification, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.Qualification, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Qualification, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.PrimaryExpertise, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-6">
+                    @Html.EditorFor(model => model.EmployeeDetails.PrimaryExpertise, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PrimaryExpertise, "", new { @class = "text-danger" })
+                </div>
+                <!---Add support for PROFILE PHOTO-->
+
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.DateofJoiningParentOrg, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.DateofJoiningParentOrg, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateofJoiningParentOrg, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.DateofRelievingLastOffice, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.DateofRelievingLastOffice, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateofRelievingLastOffice, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.DateofJoiningDGH, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.DateofJoiningDGH, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateofJoiningDGH, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.DeputationPeriod, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.DeputationPeriod, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DeputationPeriod, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.DateOfSeparation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.DateOfSeparation, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateOfSeparation, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.ReasonForLeaving, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EnumDropDownListFor(model => model.EmployeeDetails.ReasonForLeaving, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.ReasonForLeaving, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row justify-content-center">
+                <!-- back3 unique class name  -->
+                <button class="btn btn-warning nextBtn" type="button" data-next="#contactDetails" data-parent="#professionalDetails"><span class="fa fa-arrow-left"></span> Back</button>&nbsp;&nbsp;&nbsp;
+                <!-- open3 unique class name -->
+                <button class="btn btn-info nextBtn" type="button" data-next="#postingDetails" data-parent="#professionalDetails">Next <span class="fa fa-arrow-right"></span></button>
+            </div>
+
+        </div>
+
+        <!-- id will be unique, but class name will be same -->
+        <div id="postingDetails" class="setup-content">
+            <div class="card-header d-flex">
+                <h3 class="h4">Posting Details</h3>
+            </div>
+            <br />
+            <!--  password and confirm password field will be here with submit and previous button -->
+            <div class="form-group row">
+                @Html.LabelFor(model => model.PromotionDetails.Designation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.PromotionDetails.Designation.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PromotionDetails.Designation, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.PromotionDetails.From, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.PromotionDetails.From, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.PromotionDetails.From, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.PromotionDetails.Level, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.PromotionDetails.Level.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PromotionDetails.Level, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.EmployeeDetails.DGHLevel, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.DGHLevel.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DGHLevel, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.PromotionDetails.PayScale, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.PromotionDetails.PayScale.Scale, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PromotionDetails.PayScale, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.CurrentBasicPay, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.CurrentBasicPay, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.CurrentBasicPay, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.PostingDetails.Department, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.PostingDetails.Department.Name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PostingDetails.Department, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.PostingDetails.HOD, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.PostingDetails.HOD.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.PostingDetails.HOD, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
+                @Html.LabelFor(model => model.PostingDetails.From, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.PostingDetails.From, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.PostingDetails.From, "", new { @class = "text-danger" })
+                </div>
+
+                @Html.LabelFor(model => model.PostingDetails.To, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.PostingDetails.To, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.ValidationMessageFor(model => model.PostingDetails.To, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+            <div class="form-group row justify-content-center">
+                <!-- Unique class name -->
+                <button class="btn btn-warning nextBtn" type="button" data-next="#professionalDetails" data-parent="#postingDetails"><span class="fa fa-arrow-left"></span> Back</button> &nbsp;&nbsp;&nbsp;
+                <!-- Unique class name -->
+                <button class="btn btn-primary open4" type="button">Submit </button>
+                <!--<img src="spinner.gif" alt="" id="loader" style="display: none">-->
+            </div>
+        </div>
+
+
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        @*<div class="form-group row">
+                <div class="col-sm-4 offset-sm-3">
+                    <input type="submit" value="Submit" class="btn btn-primary" />
+                </div>
+            </div>*@
+    }
+</div>
+<script>
+    $(document).ready(function () {
+        $('[data-type="date"]').each(function () {
+            $(this).datepicker({
+                uiLibrary: 'bootstrap',
+                format: 'dd/mm/yyyy'
+            });
+        });
+
+        $("#contactDetails").hide();
+        $("#professionalDetails").hide();
+        $("#postingDetails").hide();
+        // Binding next button on first step
+        $(".nextBtn").click(function() {
+            var parent = $(this).attr("data-parent");
+            var nextItem = $(this).attr("data-next");
+            AnimateObjects(parent, nextItem);
+        });
+
+        $("[data-btnParent]").click(function () {
+            var parent = $(".btn-primary[data-btnParent]").attr("data-btnParent");
+            var nextItem = $(this).attr("data-btnParent");
+            AnimateObjects(parent, nextItem);
+        });
+
+        function AnimateObjects(parent, nextItem) {
+            var nextButton = '[data-btnParent="' + nextItem + '"]';
+            var currentButton = '[data-btnParent="' + parent + '"]';
+            $(currentButton).removeClass("btn-primary").addClass("btn-default");
+            $(nextButton).removeClass("btn-default").addClass("btn-primary");
+            $(parent).hide();
+            $(nextItem).show();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }
+
+    $(".open4").click(function() {
+      if (v.form()) {
+        // optional
+        // used delay form submission for a seccond and show a loader image
+        $("#loader").show();
+         setTimeout(function(){
+           $("#basicform").html('<h2>Thanks for your time.</h2>');
+         }, 1000);
+        // Remove this if you are not using ajax method for submitting values
+        return false;
+      }
+    });
+
+        @*$('#@Html.IdFor(model => model.EmployeeDetails.DateOfBirth)').change(function () {
+            var dateOfBirthValue = (this.value).split("/");
+            var dateOfBirth = new Date(dateOfBirthValue[1] + "/" + dateOfBirthValue[0] + "/" + dateOfBirthValue[2])
+            var dd = dateOfBirth.getDate();
+            if (dd == 1) dateOfBirth.setMonth(dateOfBirth.getMonth() - 1);
+            console.log("Formatted DOB : " + dateOfBirth);
+            var dateOfSuperannuation = new Date(dateOfBirth.getFullYear + 60, dateOfBirth.getMonth + 1, 0);
+            console.log(dateOfSuperannuation);
+        });*@
+    });
+</script>
