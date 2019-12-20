@@ -11,7 +11,7 @@ namespace EmployeeInformationSystem.Core.Models
     public class PromotionDetail : BaseEntity
     {
         //NOT Nullable
-        public string EmployeeDetailId { get; set; }
+        public string EmployeeId { get; set; }
         [Required(ErrorMessage = "Valid Employee ID is required")]
         public virtual EmployeeDetail Employee { get; set; }
 

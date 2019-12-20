@@ -146,8 +146,8 @@
             <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.MaritalStatus, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, true, new { @class = "radio-template" }) Married&nbsp;&nbsp;
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, false, new { @class = "radio-template" }) Single
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, true, new { @class = "radio-template", @id = "MaritalStatus_True" }) Married&nbsp;&nbsp;
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, false, new { @class = "radio-template", @id = "MaritalStatus_False" }) Single
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.MaritalStatus, "", new { @class = "text-danger" })
                 </div>
 
@@ -200,6 +200,29 @@
                 <div class="col-sm-2">
                     @Html.EditorFor(model => model.AadhaarPart3, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="line"></div>
+
+
+            <div class="form-group row justify-content-center">
+                <div class="col-sm-10">
+                    <h3 class="h4">Dependent Details</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="dependentTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date of Birth</th>
+                                    <th>Relationship</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-success float-right" id="addDependent"><span class="fa fa-plus"></span>  Add dependent</button>
+                    </div>
                 </div>
             </div>
             <div class="line"></div>
@@ -312,30 +335,39 @@
             <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.WorkingStatus, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.WorkingStatus, true, new { @class = "radio-template" }) Working&nbsp;&nbsp;
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.WorkingStatus, false, new { @class = "radio-template" }) Separated
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.WorkingStatus, true, new { @class = "radio-template", @id = "WorkingStatus_True" }) Working&nbsp;&nbsp;
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.WorkingStatus, false, new { @class = "radio-template", @id = "WorkingStatus_False" }) Separated
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.WorkingStatus, "", new { @class = "text-danger" })
                 </div>
 
                 @Html.LabelFor(model => model.EmployeeDetails.Organisation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.Organisation.Name, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Organisation, "", new { @class = "text-danger" })
+                    @Html.DropDownListFor(model => model.EmployeeDetails.OrganisationId, new SelectList(Model.Organisations, "Id", "Name"), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.OrganisationId, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="line"></div>
 
-            <div class="form-group row">
-                @Html.LabelFor(model => model.EmployeeDetails.Discipline, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.Discipline.Name, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Discipline, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.Qualification, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.Qualification, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Qualification, "", new { @class = "text-danger" })
+            <div class="form-group row justify-content-center">
+                <div class="col-sm-10">
+                    <h3 class="h4">Qualification Details</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="qualificationTable">
+                            <thead>
+                                <tr>
+                                    <th>Degree</th>
+                                    <th>Institute</th>
+                                    <th>University</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-success float-right" id="addQualification"><span class="fa fa-plus"></span>  Add Qualification</button>
+                    </div>
                 </div>
             </div>
             <div class="line"></div>
@@ -411,80 +443,71 @@
                 <h3 class="h4">Posting Details</h3>
             </div>
             <br />
-            <!--  password and confirm password field will be here with submit and previous button -->
-            <div class="form-group row">
-                @Html.LabelFor(model => model.PromotionDetails.Designation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.PromotionDetails.Designation.Name, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PromotionDetails.Designation, "", new { @class = "text-danger" })
-                </div>
 
-                @Html.LabelFor(model => model.PromotionDetails.From, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.PromotionDetails.From, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                    @Html.ValidationMessageFor(model => model.PromotionDetails.From, "", new { @class = "text-danger" })
+            <div class="form-group row justify-content-center">
+                <div class="col-sm-10">
+                    <h3 class="h4">Promotion Details</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="promotionTable">
+                            <thead>
+                                <tr>
+                                    <th>Designation</th>
+                                    <th>PayScale</th>
+                                    <th>Level</th>@* Filter Levels on Basis of Organisation*@
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-success float-right" id="addPromotion"><span class="fa fa-plus"></span>  Add Promotion</button>
+                    </div>
                 </div>
             </div>
             <div class="line"></div>
 
-            <div class="form-group row">
-                @Html.LabelFor(model => model.PromotionDetails.Level, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.PromotionDetails.Level.Name, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PromotionDetails.Level, "", new { @class = "text-danger" })
-                </div>
-                @Html.LabelFor(model => model.EmployeeDetails.DGHLevel, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.DGHLevel.Name, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DGHLevel, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                @Html.LabelFor(model => model.PromotionDetails.PayScale, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.PromotionDetails.PayScale.Scale, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PromotionDetails.PayScale, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.CurrentBasicPay, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.CurrentBasicPay, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.CurrentBasicPay, "", new { @class = "text-danger" })
+            <div class="form-group row justify-content-center">
+                <div class="col-sm-10">
+                    <h3 class="h4">Posting Details</h3>
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="postingTable">
+                            <thead>
+                                <tr>
+                                    <th>Department</th>
+                                    <th>Hod</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn btn-success float-right" id="addPosting"><span class="fa fa-plus"></span>  Add Posting</button>
+                    </div>
                 </div>
             </div>
             <div class="line"></div>
 
-            <div class="form-group row">
-                @Html.LabelFor(model => model.PostingDetails.Department, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.PostingDetails.Department.Name, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PostingDetails.Department, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.PostingDetails.HOD, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.PostingDetails.HOD.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.PostingDetails.HOD, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
+            
 
             <div class="form-group row">
-                @Html.LabelFor(model => model.PostingDetails.From, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.PostingDetails.From, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                    @Html.ValidationMessageFor(model => model.PostingDetails.From, "", new { @class = "text-danger" })
+                    @Html.LabelFor(model => model.EmployeeDetails.CurrentBasicPay, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                    <div class="col-sm-3">
+                        @Html.EditorFor(model => model.EmployeeDetails.CurrentBasicPay, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.EmployeeDetails.CurrentBasicPay, "", new { @class = "text-danger" })
+                    </div>
+                    @Html.LabelFor(model => model.EmployeeDetails.DGHLevel, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                    <div class="col-sm-3">
+                        @Html.DropDownListFor(model => model.EmployeeDetails.LevelId,new SelectList(Model.Levels, "Id", "Name") ,new { @class = "form-control"})
+                        @Html.ValidationMessageFor(model => model.EmployeeDetails.DGHLevel, "", new { @class = "text-danger" })
+                    </div>
+                @*Filter Levels on basis of DGH*@
                 </div>
+                <div class="line"></div>
 
-                @Html.LabelFor(model => model.PostingDetails.To, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.PostingDetails.To, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                    @Html.ValidationMessageFor(model => model.PostingDetails.To, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
             <div class="form-group row justify-content-center">
                 <!-- Unique class name -->
                 <button class="btn btn-warning nextBtn" type="button" data-next="#professionalDetails" data-parent="#postingDetails"><span class="fa fa-arrow-left"></span> Back</button> &nbsp;&nbsp;&nbsp;
@@ -507,6 +530,7 @@
 </div>
 <script>
     $(document).ready(function () {
+        //Adding Date input
         $('[data-type="date"]').each(function () {
             $(this).datepicker({
                 uiLibrary: 'bootstrap',
@@ -514,22 +538,28 @@
             });
         });
 
+        // Load time actions
         $("#contactDetails").hide();
         $("#professionalDetails").hide();
         $("#postingDetails").hide();
-        // Binding next button on first step
+        sessionStorage.clear();
+        $('#overlay').fadeOut();
+
+        // Binding next button to next object
         $(".nextBtn").click(function() {
             var parent = $(this).attr("data-parent");
             var nextItem = $(this).attr("data-next");
             AnimateObjects(parent, nextItem);
         });
 
+        //Showing the current part based on top icons
         $("[data-btnParent]").click(function () {
             var parent = $(".btn-primary[data-btnParent]").attr("data-btnParent");
             var nextItem = $(this).attr("data-btnParent");
             AnimateObjects(parent, nextItem);
         });
 
+        //Common function to animate div flow
         function AnimateObjects(parent, nextItem) {
             var nextButton = '[data-btnParent="' + nextItem + '"]';
             var currentButton = '[data-btnParent="' + parent + '"]';
@@ -539,6 +569,131 @@
             $(nextItem).show();
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }
+        $("#addDependent").click(function () {
+            if (sessionStorage.dependentCount) {
+                sessionStorage.dependentCount = Number(sessionStorage.dependentCount) + 1;
+            } else {
+                sessionStorage.dependentCount = 0;
+            }
+            var newDependent = sessionStorage.dependentCount;
+            var rowHtml = '<tr id="dependentRow' + newDependent + '"><td><input value="@Model.EmployeeDetails.Id" id="DependentDetails_' + newDependent + '__EmployeeId" name="DependentDetails[' + newDependent + '].EmployeeId" type="hidden"><input class="form-control text-box single-line" data-val="true" data-val-required="Valid Dependent Name is required" id="DependentDetails_' + newDependent + '__DependentName" name="DependentDetails[' + newDependent + '].DependentName" type="text" value="" ></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Date of Birth must be a date." id="DependentDetails_' + newDependent + '__DateofBirth" name="DependentDetails[' + newDependent + '].DateofBirth" type="text" value=""></td><td><input class="form-control text-box single-line" id="DependentDetails_' + newDependent + '__Relationship" name="DependentDetails[' + newDependent + '].Relationship" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#dependentRow' + newDependent +'"><span class="fa fa-minus"></span> Delete</button></td></tr>';
+            $('#dependentTable tbody').append(rowHtml);
+            $('#DependentDetails_' + newDependent + '__DateofBirth').datepicker({
+                uiLibrary: 'bootstrap',
+                format: 'dd/mm/yyyy'
+            });
+        });
+
+        $("#addQualification").click(function () {
+            if (sessionStorage.qualificationCount) {
+                sessionStorage.qualificationCount = Number(sessionStorage.qualificationCount) + 1;
+            } else {
+                sessionStorage.qualificationCount = 0;
+            }
+            var newQualification = sessionStorage.qualificationCount;
+            var degreeNames = " ";
+            @if (Model.Degrees.Count() != 0)
+            {
+            foreach(var degree in Model.Degrees)
+            {
+            <text>
+            degreeNames +='<option value="@degree.Id">@degree.Name</option>';
+            </text>
+            }
+            }
+            var rowHtml = '<tr id="qualificationRow' + newQualification + '"><td><input value="@Model.EmployeeDetails.Id" id="QualificationDetails_' + newQualification + '__EmployeeId" name="QualificationDetails[' + newQualification + '].EmployeeId" type="hidden"><select class="form-control" data-val="true" data-val-required="The Degree field is required." id="QualificationDetails_' + newQualification + '__Degree" name="QualificationDetails[' + newQualification + '].Degree" style="width:100px;">' + degreeNames + '</select></td><td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Institution" name="QualificationDetails[' + newQualification + '].Institution" type="text" value=""></td><td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__University" name="QualificationDetails[' + newQualification + '].University" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field From must be a date." id="QualificationDetails_' + newQualification + '__From" name="QualificationDetails[' + newQualification + '].From" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Date of Passing must be a date." id="QualificationDetails_' + newQualification + '__To" name="QualificationDetails[' + newQualification + '].To" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#qualificationRow' + newQualification + '">Delete</button></td></tr>';
+            $('#qualificationTable tbody').append(rowHtml);
+            $('#QualificationDetails_' + newQualification + '__From').datepicker({
+                uiLibrary: 'bootstrap',
+                format: 'dd/mm/yyyy'
+            });
+            $('#QualificationDetails_' + newQualification + '__To').datepicker({
+                uiLibrary: 'bootstrap',
+                format: 'dd/mm/yyyy'
+            });
+        });
+
+        $("#addPosting").click(function () {
+            if (sessionStorage.postingCount) {
+                sessionStorage.postingCount = Number(sessionStorage.postingCount) + 1;
+            } else {
+                sessionStorage.postingCount = 0;
+            }
+            var newPosting = sessionStorage.postingCount;
+            var departmentNames = " ";
+            var hodNames = " ";
+            @if (Model.Departments.Count() != 0)
+            {
+            foreach(var department in Model.Departments)
+            {
+            <text>
+            departmentNames +='<option value="@department.Id">@department.Name</option>';
+            </text>
+            }
+            }
+            @if (Model.HoDs.Count() != 0)
+            {
+            foreach(var hod in Model.HoDs)
+            {
+            <text>
+            hodNames +='<option value="@hod.Id">@hod.Employee.FirstName' + ' @hod.Employee.LastName</option>';
+            </text>
+            }
+            }
+            var rowHtml = '<tr id="postingRow' + newPosting + '"><td><input value="@Model.EmployeeDetails.Id" id="PostingDetails_' + newPosting + '__EmployeeId" name="PostingDetails[' + newPosting + '].EmployeeId" type="hidden"><select class="form-control" id="PostingDetails_' + newPosting + '__DepartmentId" name="PostingDetails[' + newPosting + '].DepartmentId" style="width:100px;"></select>' + departmentNames + '</td><td><select class="form-control" id="PostingDetails_' + newPosting + '__HODId" name="PostingDetails[' + newPosting + '].HODId" style="width:100px;"></select>' + hodNames + '</td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Posting From must be a date." id="PostingDetails_' + newPosting + '__From" name="PostingDetails[' + newPosting + '].From" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Posting Till must be a date." id="PostingDetails_' + newPosting + '__To" name="PostingDetails[' + newPosting + '].To" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#postingRow' + newPosting + '">Delete</button></td></tr>';
+            $('#postingTable tbody').append(rowHtml);
+            $('#PostingDetails_' + newPosting + '__From').datepicker({
+                uiLibrary: 'bootstrap',
+                format: 'dd/mm/yyyy'
+            });
+            $('#PostingDetails_' + newPosting + '__To').datepicker({
+                uiLibrary: 'bootstrap',
+                format: 'dd/mm/yyyy'
+            });
+        });
+
+        $("#addPromotion").click(function () {
+            if (sessionStorage.promotionCount) {
+                sessionStorage.promotionCount = Number(sessionStorage.promotionCount) + 1;
+            } else {
+                sessionStorage.promotionCount = 0;
+            }
+            var newPromotion = sessionStorage.promotionCount;
+            var designationNames = " ";
+            var levelNames = " ";
+            @if (Model.Designations.Count() != 0)
+            {
+            foreach(var designation in Model.Designations)
+            {
+            <text>
+            designationNames +='<option value="@designation.Id">@designation.Name</option>';
+            </text>
+            }
+            }
+            @if (Model.Levels.Count() != 0)
+            {
+            foreach(var level in Model.Levels)
+            {
+            <text>
+            levelNames +='<option value="@level.Id">@level.Name</option>';
+            </text>
+            }
+            }
+            var rowHtml = '<tr id="promotionRow' + newPromotion + '"><td><input value="@Model.EmployeeDetails.Id" id="PromotionDetails_' + newPromotion + '__EmployeeId" name="PromotionDetails[' + newPromotion + '].EmployeeId" type="hidden"><select class="form-control" id="PromotionDetails_'+ newPromotion +'__DesignationId" name="PromotionDetails['+ newPromotion +'].DesignationId" style="width:100px;">'+ designationNames +'</select></td><td><select class="form-control" id="PromotionDetails_'+ newPromotion +'__PayScaleId" name="PromotionDetails['+ newPromotion +'].PayScaleId" style="width:100px;"></select></td><td><select class="form-control" id="PromotionDetails_'+ newPromotion +'__LevelId" name="PromotionDetails['+ newPromotion +'].LevelId" style="width:100px;">'+ levelNames +'</select></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Effective From must be a date." id="PromotionDetails_'+ newPromotion +'__From" name="PromotionDetails['+ newPromotion +'].From" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field To must be a date." id="PromotionDetails_'+ newPromotion +'__To" name="PromotionDetails['+ newPromotion +'].To" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#promotionRow' + newPromotion + '">Delete</button></td></tr>';
+            $('#promotionTable tbody').append(rowHtml);
+            $('#PromotionDetails_' + newPromotion + '__From').datepicker({
+                uiLibrary: 'bootstrap',
+                format: 'dd/mm/yyyy'
+            });
+            $('#PromotionDetails_' + newPromotion + '__To').datepicker({
+                uiLibrary: 'bootstrap',
+                format: 'dd/mm/yyyy'
+            });
+        });
+        $(document).on('click', '.deleteRow',function () {
+            var rowId = $(this).attr("data-rowid");
+            $(rowId).remove();
+        });
 
     $(".open4").click(function() {
       if (v.form()) {

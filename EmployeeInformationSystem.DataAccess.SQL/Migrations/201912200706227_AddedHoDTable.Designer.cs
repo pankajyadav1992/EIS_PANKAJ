@@ -7,13 +7,13 @@ namespace EmployeeInformationSystem.DataAccess.SQL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.3.0")]
-    public sealed partial class Initial : IMigrationMetadata
+    public sealed partial class AddedHoDTable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(AddedHoDTable));
         
         string IMigrationMetadata.Id
         {
-            get { return "201912040445209_Initial"; }
+            get { return "201912200706227_AddedHoDTable"; }
         }
         
         string IMigrationMetadata.Source

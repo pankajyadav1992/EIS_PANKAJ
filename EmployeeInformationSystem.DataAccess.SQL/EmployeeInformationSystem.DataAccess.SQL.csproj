@@ -52,9 +52,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201912040445209_Initial.cs" />
-    <Compile Include="Migrations\201912040445209_Initial.designer.cs">
-      <DependentUpon>201912040445209_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201912181102070_Initial.cs" />
+    <Compile Include="Migrations\201912181102070_Initial.designer.cs">
+      <DependentUpon>201912181102070_Initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912191016535_UpdatedEmployeeKeyId.cs" />
+    <Compile Include="Migrations\201912191016535_UpdatedEmployeeKeyId.designer.cs">
+      <DependentUpon>201912191016535_UpdatedEmployeeKeyId.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912200706227_AddedHoDTable.cs" />
+    <Compile Include="Migrations\201912200706227_AddedHoDTable.designer.cs">
+      <DependentUpon>201912200706227_AddedHoDTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,8 +79,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201912040445209_Initial.resx">
-      <DependentUpon>201912040445209_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201912181102070_Initial.resx">
+      <DependentUpon>201912181102070_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912191016535_UpdatedEmployeeKeyId.resx">
+      <DependentUpon>201912191016535_UpdatedEmployeeKeyId.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912200706227_AddedHoDTable.resx">
+      <DependentUpon>201912200706227_AddedHoDTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

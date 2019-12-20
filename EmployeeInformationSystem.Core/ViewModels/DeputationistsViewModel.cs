@@ -21,12 +21,18 @@ namespace EmployeeInformationSystem.Core.ViewModels
 
         [StringLength(6, MinimumLength = 6, ErrorMessage = "Aadhaar Number must be of 12 characters")]
         public string AadhaarPart3 { get; set; }
-        public PostingDetail PostingDetails { get; set; }
-        public PromotionDetail PromotionDetails { get; set; }
+        public List<PostingDetail> PostingDetails { get; set; }
+        public List<PromotionDetail> PromotionDetails { get; set; }
+        public List<QualificationDetail> QualificationDetails { get; set; }
+        public List<DependentDetail> DependentDetails { get; set; }
         public IEnumerable<Organisation> Organisations { get; set; }
+        public IEnumerable<Degree> Degrees { get; set; }
         public IEnumerable<Discipline> Disciplines { get; set; }
+        public IEnumerable<Designation> Designations { get; set; }
         public IEnumerable<Level> Levels { get; set; }
         public IEnumerable<PayScale> PayScales { get; set; }
+        public IEnumerable<Department> Departments { get; set; }
+        public IEnumerable<HoD> HoDs { get; set; }
 
         [StringLength(4, MinimumLength = 4, ErrorMessage = "Telephone Extension must be of 4 characters")]
         public TelephoneExtension TelephoneExtensions { get; set; }

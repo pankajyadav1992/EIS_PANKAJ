@@ -14,5 +14,8 @@ namespace EmployeeInformationSystem.Core.Models
         [Index(IsUnique = true)]
         [Required(ErrorMessage = "Valid Designation Name is required")]
         public string Name { get; set; }
+
+        public string OrganisationId { get; set; }
+        public virtual Organisation Organisation { get; set; }
     }
 }

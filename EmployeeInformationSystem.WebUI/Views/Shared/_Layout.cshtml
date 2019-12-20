@@ -1,50 +1,4 @@
-﻿@*<!DOCTYPE html>
-    <html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>@ViewBag.Title - My ASP.NET Application</title>
-        @Styles.Render("~/Content/css")
-        @Scripts.Render("~/bundles/modernizr")
-
-    </head>
-    <body>
-        <div class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-                </div>
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                        <li>@Html.ActionLink("About", "About", "Home")</li>
-                        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    </ul>
-                    @Html.Partial("_LoginPartial")
-                </div>
-            </div>
-        </div>
-        <div class="container body-content">
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
-            </footer>
-        </div>
-
-        @Scripts.Render("~/bundles/jquery")
-        @Scripts.Render("~/bundles/bootstrap")
-        @RenderSection("scripts", required: false)
-    </body>
-    </html>*@
-
-
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -65,7 +19,7 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
-    @RenderSection("CustomStyles", required:false)
+    @RenderSection("CustomStyles", required: false)
 </head>
 <body>
     <div class="page">
@@ -113,26 +67,28 @@
                     </div>
                 </div>
                 <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
-                <ul class="list-unstyled">
-                    <li @RenderSection("Home", required: false)><a href="@Url.Action("Index", "Home")"> <i class="icon-home"></i>Home </a></li>
-                    <li>
-                        <a href="#DataManageDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-database"></i>Employee Data</a>
-                        <ul id="DataManageDropdown" class="collapse list-unstyled @RenderSection("DataManage",required:false)">
-                            <li @RenderSection("AddEmployee", required: false)><a href="@Url.Action("Add", "EmployeeData")"><i class="fa fa-user-plus"></i>Add Employee</a></li>
-                            <li><a href="#"><i class="fa fa-address-card"></i>View Employee Data</a></li>
-                            <li><a href="#"><i class="fa fa-edit"></i>Update Record</a></li>
-                            <li><a href="#"><i class="fa fa-trash"></i>Delete Record</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <a href="#GenerateReportsDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-bar-chart"></i>Generate Reports</a>
-                        <ul id="GenerateReportsDropdown" class="collapse list-unstyled ">
-                            <li><a href="#"><i class="fa fa-user-circle"></i>Active Employess</a></li>
-                            <li><a href="#"><i class="fa fa-times-rectangle"></i>Inactive Employees</a></li>
-                            <li><a href="#"><i class="fa fa-users"></i>All Employees</a></li>
-                        </ul>
-                    </li>
-                </ul>
+                                                <ul class="list-unstyled">
+                                                    <li @RenderSection("Home", required: false)><a href="@Url.Action("Index", "Home")"> <i class="icon-home"></i>Home </a></li>
+                                                    <li>
+                                                        <a href="#DataManageDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-database"></i>Employee Data</a>
+                                                        <ul id="DataManageDropdown" class="collapse list-unstyled @RenderSection("DataManage",required:false)">
+                                                            <li @RenderSection("AddEmployee", required: false)><a href="@Url.Action("Add", "EmployeeData")"><i class="fa fa-user-plus"></i>Add Employee</a></li>
+                                                            <li><a href="#"><i class="fa fa-address-card"></i>View Employee Data</a></li>
+                                                            <li><a href="#"><i class="fa fa-edit"></i>Update Record</a></li>
+                                                            <li><a href="#"><i class="fa fa-trash"></i>Delete Record</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li>
+                                                        <a href="#GenerateReportsDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-bar-chart"></i>Generate Reports</a>
+                                                        <ul id="GenerateReportsDropdown" class="collapse list-unstyled ">
+                                                            <li><a href="#"><i class="fa fa-user-circle"></i>Active Employess</a></li>
+                                                            <li><a href="#"><i class="fa fa-times-rectangle"></i>Inactive Employees</a></li>
+                                                            <li><a href="#"><i class="fa fa-users"></i>All Employees</a></li>
+                                                        </ul>
+                                                    </li>
+                                                    <li><span class="heading">Administrator Section</span></li>
+                                                    <li @RenderSection("Admin", required: false)><a href="@Url.Action("Index", "Home")"> <i class="fa fa-key"></i>Master Data </a></li>
+                                                </ul>
             </nav>
             <div class="content-inner">
                 @RenderBody()
@@ -163,7 +119,7 @@
     @*@Scripts.Render("~/bundles/charts-home")*@
     <!-- Main File-->
     @Scripts.Render("~/bundles/front")
-    @Scripts.Render("~/bundles/gijgo")
+
     @RenderSection("scripts", required: false)
 </body>
 </html>

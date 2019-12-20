@@ -1,8 +1,9 @@
-﻿ @{
+﻿@{
     ViewBag.Title = "Add Employee";
 }
 
 @section CustomStyles{
+    @Styles.Render("~/Content/gijgo")
     <style>
         #overlay {
             position: absolute;
@@ -69,6 +70,7 @@
     </div>
 </section>
 @section Scripts{
+    @Scripts.Render("~/bundles/gijgo")
     <script>
         $(document).ready(function () {
             $("#chooseEmployeeType").change(function () {
@@ -96,7 +98,7 @@
                         }
                     });
                 }
-                $('#overlay').fadeOut();
+                
             });
         });
     </script>

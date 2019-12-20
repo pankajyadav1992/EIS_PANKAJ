@@ -16,10 +16,10 @@ namespace EmployeeInformationSystem.Core.Models
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public int Number { get; set; }
 
-        public string EmployeeDetailId { get; set; }
-        [Display(Name = "Current Employee")]
         //[Required(ErrorMessage = "Valid Employee is required")]
-        public virtual EmployeeDetail CurrentEmployee { get; set; }
+        public string EmployeeId { get; set; }
+        [Display(Name = "Current Employee")]
+        public virtual EmployeeDetail Employee { get; set; }
 
         /* Either/Or relationship with Owner or Employee.
          * In case the telephone number is alloted to a Employee, fill in via Employee foreign key

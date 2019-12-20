@@ -16,7 +16,7 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "CPF Number/Employee Code")]
         public string EmployeeCode { get; set; }
 
-        public String Title { get; set; }
+        public string Title { get; set; }
            
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -116,7 +116,9 @@ namespace EmployeeInformationSystem.Core.Models
         [Required(ErrorMessage = "Valid Gender is required")]
         public Gender Gender { get; set; }
 
-        public string Qualification { get; set; }
+        //public string Qualification { get; set; }
+        /* Taken care via seperate Table
+         */
 
         //Nullable
         public string DisciplineId { get; set; }
@@ -156,7 +158,7 @@ namespace EmployeeInformationSystem.Core.Models
         public string VehicleNumber { get; set; }
 
         [Display(Name = "Marital Status")]
-        public Nullable<Boolean> MaritalStatus { get; set; }
+        public Nullable<MaritalStatus> MaritalStatus { get; set; }
 
         [Display(Name = "Marriage Date")]
         [Column(TypeName = "date")]
@@ -245,6 +247,13 @@ namespace EmployeeInformationSystem.Core.Models
         Superannuation,
         [Display(Name = "Consultancy Completion")]
         ConsultancyCompletion,
+        Others
+    }
+
+    public enum MaritalStatus
+    {
+        Married,
+        Single,
         Others
     }
 }

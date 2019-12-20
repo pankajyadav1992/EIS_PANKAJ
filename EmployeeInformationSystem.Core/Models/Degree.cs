@@ -8,16 +8,11 @@ using System.Threading.Tasks;
 
 namespace EmployeeInformationSystem.Core.Models
 {
-    public class PayScale: BaseEntity
+    public class Degree : BaseEntity
     {
         [StringLength(450)]
         [Index(IsUnique = true)]
-        [Required(ErrorMessage = "Valid Pay Scale is required")]
-        public string Scale { get; set; }
-
-        
-        public string OrganisationId { get; set; }
-        [Required]
-        public virtual Organisation Organisation { get; set; }
+        [Required(ErrorMessage = "Valid Name is required")]
+        public string Name { get; set; }
     }
 }

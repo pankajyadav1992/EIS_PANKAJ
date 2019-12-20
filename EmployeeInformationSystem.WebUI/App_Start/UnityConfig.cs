@@ -49,11 +49,15 @@ namespace EmployeeInformationSystem.WebUI
             container.RegisterType<IRepository<Designation>, SQLRepository<Designation>>();
             container.RegisterType<IRepository<Discipline>, SQLRepository<Discipline>>();
             container.RegisterType<IRepository<EmployeeDetail>, SQLRepository<EmployeeDetail>>();
+            container.RegisterType<IRepository<HoD>, SQLRepository<HoD>>();
             container.RegisterType<IRepository<Level>, SQLRepository<Level>>();
             container.RegisterType<IRepository<Organisation>, SQLRepository<Organisation>>();
             container.RegisterType<IRepository<PayScale>, SQLRepository<PayScale>>();
+            container.RegisterType<IRepository<Degree>, SQLRepository<Degree>>();
             container.RegisterType<IRepository<PostingDetail>, SQLRepository<PostingDetail>>();
             container.RegisterType<IRepository<PromotionDetail>, SQLRepository<PromotionDetail>>();
+            container.RegisterType<IRepository<QualificationDetail>, SQLRepository<QualificationDetail>>();
+            container.RegisterType<IRepository<DependentDetail>, SQLRepository<DependentDetail>>();
             container.RegisterType<IRepository<TelephoneExtension>, SQLRepository<TelephoneExtension>>();
         }
     }

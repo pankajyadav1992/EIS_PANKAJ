@@ -8,19 +8,15 @@ using System.Threading.Tasks;
 
 namespace EmployeeInformationSystem.Core.Models
 {
-    public class PostingDetail: BaseEntity
+    public class HoD : BaseEntity
     {
         public string EmployeeId { get; set; }
-        [Required(ErrorMessage = "Valid Employee ID is required")]
-        public virtual EmployeeDetail Employee{get;set;}
-
-        // Nullable
-        public string HODId { get; set; }
-        [Display(Name= "Head of Department(HoD)")]
-        public virtual EmployeeDetail HOD { get; set; }
+        [Required]
+        [Display(Name ="Head of Department")]
+        public virtual EmployeeDetail Employee { get; set; }
 
         public string DepartmentId { get; set; }
-        [Required(ErrorMessage = "Valid Department is required")]
+        [Required]
         public virtual Department Department { get; set; }
 
         [Column(TypeName = "date")]

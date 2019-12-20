@@ -55,8 +55,8 @@ namespace EmployeeInformationSystem.WebUI
                       "~/Content/vendor/font-awesome/css/font-awesome.min.css",
                       "~/Content/css/fontastic.css",
                       "~/Content/css/style.default.css",
-                      "~/Content/css/custom.css",
-                      "~/Content/vendor/gijgo/css/gijgo.min.css"));
+                      "~/Content/css/custom.css"));
+            bundles.Add(new StyleBundle("~/Content/gijgo").Include("~/Content/vendor/gijgo/css/gijgo.min.css"));
         }
     }
 }

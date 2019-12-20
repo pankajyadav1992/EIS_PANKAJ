@@ -8,31 +8,32 @@ using System.Threading.Tasks;
 
 namespace EmployeeInformationSystem.Core.Models
 {
-    public class PostingDetail: BaseEntity
+    public class QualificationDetail : BaseEntity
     {
         public string EmployeeId { get; set; }
-        [Required(ErrorMessage = "Valid Employee ID is required")]
-        public virtual EmployeeDetail Employee{get;set;}
+        [Required]
+        public virtual EmployeeDetail Employee { get; set; }
+        
+        public string DegreeId { get; set; }
+        [Required]
+        public virtual Degree Degree { get; set; }
 
-        // Nullable
-        public string HODId { get; set; }
-        [Display(Name= "Head of Department(HoD)")]
-        public virtual EmployeeDetail HOD { get; set; }
+        public string Institution { get; set; }
 
-        public string DepartmentId { get; set; }
-        [Required(ErrorMessage = "Valid Department is required")]
-        public virtual Department Department { get; set; }
+        public string University { get; set; }
 
+         
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        [Display(Name = "Posting From")]
         public DateTime? From { get; set; }
 
+        [Display(Name = "Date of Passing")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        [Display(Name = "Posting Till")]
         public DateTime? To { get; set; }
+        
+        public string Grade { get; set; }
     }
 }
