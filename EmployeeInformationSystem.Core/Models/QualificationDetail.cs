@@ -10,12 +10,12 @@ namespace EmployeeInformationSystem.Core.Models
 {
     public class QualificationDetail : BaseEntity
     {
+        [Required]
         public string EmployeeId { get; set; }
-        [Required]
         public virtual EmployeeDetail Employee { get; set; }
-        
-        public string DegreeId { get; set; }
+
         [Required]
+        public string DegreeId { get; set; }
         public virtual Degree Degree { get; set; }
 
         public string Institution { get; set; }

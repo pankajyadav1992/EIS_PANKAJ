@@ -11,13 +11,13 @@ namespace EmployeeInformationSystem.Core.Models
     public class PromotionDetail : BaseEntity
     {
         //NOT Nullable
+        [Required(ErrorMessage = "Valid Employee is required")]
         public string EmployeeId { get; set; }
-        [Required(ErrorMessage = "Valid Employee ID is required")]
         public virtual EmployeeDetail Employee { get; set; }
 
         //NOT Nullable
-        public string DesignationId { get; set; }
         [Required(ErrorMessage = "Valid Designation is required")]
+        public string DesignationId { get; set; }
         public virtual Designation Designation { get; set; }
 
         //Nullable

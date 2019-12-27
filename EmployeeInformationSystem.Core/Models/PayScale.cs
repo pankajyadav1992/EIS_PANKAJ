@@ -11,13 +11,14 @@ namespace EmployeeInformationSystem.Core.Models
     public class PayScale: BaseEntity
     {
         [StringLength(450)]
-        [Index(IsUnique = true)]
+        [Index("IX_ScaleAndOrganisation", 1, IsUnique = true)]
         [Required(ErrorMessage = "Valid Pay Scale is required")]
         public string Scale { get; set; }
 
-        
-        public string OrganisationId { get; set; }
+
+        [Index("IX_ScaleAndOrganisation", 2, IsUnique = true)]
         [Required]
+        public string OrganisationId { get; set; }
         public virtual Organisation Organisation { get; set; }
     }
 }

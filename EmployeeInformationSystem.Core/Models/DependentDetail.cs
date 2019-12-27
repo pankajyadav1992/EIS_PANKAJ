@@ -10,8 +10,8 @@ namespace EmployeeInformationSystem.Core.Models
 {
     public class DependentDetail: BaseEntity
     {
-        public string EmployeeId { get; set; }
         [Required(ErrorMessage = "Valid Employee is required")]
+        public string EmployeeId { get; set; }
         public virtual EmployeeDetail Employee { get; set; }
 
         [Required(ErrorMessage ="Valid Dependent Name is required")]

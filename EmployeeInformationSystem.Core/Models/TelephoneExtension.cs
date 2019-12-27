@@ -17,8 +17,8 @@ namespace EmployeeInformationSystem.Core.Models
         public int Number { get; set; }
 
         //[Required(ErrorMessage = "Valid Employee is required")]
-        public string EmployeeId { get; set; }
         [Display(Name = "Current Employee")]
+        public string EmployeeId { get; set; }
         public virtual EmployeeDetail Employee { get; set; }
 
         /* Either/Or relationship with Owner or Employee.

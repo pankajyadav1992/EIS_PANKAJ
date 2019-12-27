@@ -64,6 +64,14 @@
     <Compile Include="Migrations\201912200706227_AddedHoDTable.designer.cs">
       <DependentUpon>201912200706227_AddedHoDTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201912240724323_CompositeUniqueKey_ReOrderKey.cs" />
+    <Compile Include="Migrations\201912240724323_CompositeUniqueKey_ReOrderKey.designer.cs">
+      <DependentUpon>201912240724323_CompositeUniqueKey_ReOrderKey.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201912241019592_NullableInts.cs" />
+    <Compile Include="Migrations\201912241019592_NullableInts.designer.cs">
+      <DependentUpon>201912241019592_NullableInts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLRepository.cs" />
@@ -87,6 +95,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201912200706227_AddedHoDTable.resx">
       <DependentUpon>201912200706227_AddedHoDTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912240724323_CompositeUniqueKey_ReOrderKey.resx">
+      <DependentUpon>201912240724323_CompositeUniqueKey_ReOrderKey.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201912241019592_NullableInts.resx">
+      <DependentUpon>201912241019592_NullableInts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

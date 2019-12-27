@@ -63,7 +63,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         Organisations = OrganisationContext.Collection(),
                         Disciplines = DisciplineContext.Collection(),
                         Designations = DesignationContext.Collection(),
-                        Levels = LevelContext.Collection(),
+                        Levels = LevelContext.Collection(), // Add proper support for separating levels
                         PayScales = PayScaleContext.Collection(),
                         Departments = DepartmentContext.Collection(),
                         HoDs = HoDContext.Collection() //Add proper support for determining HoDs

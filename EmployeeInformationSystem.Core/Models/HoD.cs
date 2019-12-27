@@ -10,13 +10,13 @@ namespace EmployeeInformationSystem.Core.Models
 {
     public class HoD : BaseEntity
     {
-        public string EmployeeId { get; set; }
         [Required]
-        [Display(Name ="Head of Department")]
+        [Display(Name = "Head of Department")]
+        public string EmployeeId { get; set; }
         public virtual EmployeeDetail Employee { get; set; }
 
-        public string DepartmentId { get; set; }
         [Required]
+        public string DepartmentId { get; set; }
         public virtual Department Department { get; set; }
 
         [Column(TypeName = "date")]

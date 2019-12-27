@@ -10,17 +10,17 @@ namespace EmployeeInformationSystem.Core.Models
 {
     public class PostingDetail: BaseEntity
     {
-        public string EmployeeId { get; set; }
         [Required(ErrorMessage = "Valid Employee ID is required")]
+        public string EmployeeId { get; set; }
         public virtual EmployeeDetail Employee{get;set;}
 
         // Nullable
+        [Display(Name = "Head of Department(HoD)")]
         public string HODId { get; set; }
-        [Display(Name= "Head of Department(HoD)")]
         public virtual EmployeeDetail HOD { get; set; }
 
-        public string DepartmentId { get; set; }
         [Required(ErrorMessage = "Valid Department is required")]
+        public string DepartmentId { get; set; }
         public virtual Department Department { get; set; }
 
         [Column(TypeName = "date")]

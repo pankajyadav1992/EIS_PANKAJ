@@ -30,8 +30,8 @@ namespace EmployeeInformationSystem.Core.Models
         public EmployeeType EmployeeType { get; set; }
 
         //Nullable
-        public string OrganisationId { get; set; }
         [Display(Name = "Parent Organisation")]
+        public string OrganisationId { get; set; }
         public virtual Organisation Organisation { get; set; }
 
         //Make REQUIRED in View Model
@@ -83,11 +83,11 @@ namespace EmployeeInformationSystem.Core.Models
 
         [Display(Name = "Mobile Number")]
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
-        public int MobileNumber { get; set; }
+        public Nullable<int> MobileNumber { get; set; }
 
         [Display(Name = "Residence Phone Number")]
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
-        public int ResidenceNumber { get; set; }
+        public Nullable<int> ResidenceNumber { get; set; }
 
         [Display(Name = "Residence Address")]
         public string ResidenceAddress { get; set;}
@@ -128,8 +128,8 @@ namespace EmployeeInformationSystem.Core.Models
         public string PrimaryExpertise { get; set; }
 
         //Nullable & Add support for Org Level in Promotion details
-        public string LevelId { get; set; }
         [Display(Name = "DGH Level")]
+        public string LevelId { get; set; }
         public virtual Level DGHLevel { get; set; }
 
         [Display(Name = "Current Basic Pay")]
@@ -174,7 +174,7 @@ namespace EmployeeInformationSystem.Core.Models
 
         [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         [Display(Name = "Emergency Phone Number")]
-        public int EmergencyContact { get; set; }
+        public Nullable<int> EmergencyContact { get; set; }
     }
 
 

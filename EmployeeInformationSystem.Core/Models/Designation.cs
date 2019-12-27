@@ -11,10 +11,13 @@ namespace EmployeeInformationSystem.Core.Models
     public class Designation : BaseEntity
     {
         [StringLength(450)]
-        [Index(IsUnique = true)]
+        [Index("IX_DesignationAndOrganisation", 1, IsUnique = true)]
         [Required(ErrorMessage = "Valid Designation Name is required")]
         public string Name { get; set; }
 
+
+        [Required(ErrorMessage = "Valid Organisation Name is required")]
+        [Index("IX_DesignationAndOrganisation", 2, IsUnique = true)]
         public string OrganisationId { get; set; }
         public virtual Organisation Organisation { get; set; }
     }

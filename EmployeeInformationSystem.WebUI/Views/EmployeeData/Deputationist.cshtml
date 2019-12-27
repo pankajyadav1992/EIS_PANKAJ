@@ -74,12 +74,12 @@
             </div>
         </div>
     </div>
-    @using (Html.BeginForm("AjaxAdd", "Deputationist", FormMethod.Post, new { @class = "form-horizontal" }))
+    @using (Html.BeginForm("AjaxAdd", "Deputationist", FormMethod.Post, new { @class = "form-horizontal", @id = "deputationistForm" }))
     {
         @Html.AntiForgeryToken()
 
         <!-- id will be unique, but class name will be same -->
-        <div id="personalDetails" class="setup-content">
+        <div id="personalDetails tab" class="setup-content">
             <div class="card-header d-flex">
                 <h3 class="h4">Personal Details</h3>
             </div>
@@ -153,7 +153,7 @@
 
                 @Html.LabelFor(model => model.EmployeeDetails.MarriageDate, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.MarriageDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.EditorFor(model => model.EmployeeDetails.MarriageDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.MarriageDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -192,13 +192,13 @@
             <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.AadhaarNumer, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-2">
-                    @Html.EditorFor(model => model.AadhaarPart1, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.AadhaarPart1, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
                 </div>
                 <div class="col-sm-2">
-                    @Html.EditorFor(model => model.AadhaarPart2, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.AadhaarPart2, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
                 </div>
                 <div class="col-sm-2">
-                    @Html.EditorFor(model => model.AadhaarPart3, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.EditorFor(model => model.AadhaarPart3, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -453,7 +453,8 @@
                                 <tr>
                                     <th>Designation</th>
                                     <th>PayScale</th>
-                                    <th>Level</th>@* Filter Levels on Basis of Organisation*@
+                                    <th>Level</th>
+                                    @* Filter Levels on Basis of Organisation*@
                                     <th>From</th>
                                     <th>To</th>
                                     <th>Action</th>
@@ -491,22 +492,22 @@
             </div>
             <div class="line"></div>
 
-            
+
 
             <div class="form-group row">
-                    @Html.LabelFor(model => model.EmployeeDetails.CurrentBasicPay, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                    <div class="col-sm-3">
-                        @Html.EditorFor(model => model.EmployeeDetails.CurrentBasicPay, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.EmployeeDetails.CurrentBasicPay, "", new { @class = "text-danger" })
-                    </div>
-                    @Html.LabelFor(model => model.EmployeeDetails.DGHLevel, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                    <div class="col-sm-3">
-                        @Html.DropDownListFor(model => model.EmployeeDetails.LevelId,new SelectList(Model.Levels, "Id", "Name") ,new { @class = "form-control"})
-                        @Html.ValidationMessageFor(model => model.EmployeeDetails.DGHLevel, "", new { @class = "text-danger" })
-                    </div>
-                @*Filter Levels on basis of DGH*@
+                @Html.LabelFor(model => model.EmployeeDetails.CurrentBasicPay, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.CurrentBasicPay, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.CurrentBasicPay, "", new { @class = "text-danger" })
                 </div>
-                <div class="line"></div>
+                @Html.LabelFor(model => model.EmployeeDetails.DGHLevel, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.DropDownListFor(model => model.EmployeeDetails.LevelId, new SelectList(Model.Levels, "Id", "Name"), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DGHLevel, "", new { @class = "text-danger" })
+                </div>
+                @*Filter Levels on basis of DGH*@
+            </div>
+            <div class="line"></div>
 
             <div class="form-group row justify-content-center">
                 <!-- Unique class name -->
@@ -544,12 +545,77 @@
         $("#postingDetails").hide();
         sessionStorage.clear();
         $('#overlay').fadeOut();
+        $.validator.addMethod("australianDate",function(value, element) {
+            // RegEx Match
+            return value.match(/^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/);
+            },
+            "Please enter a date in the format dd/mm/yyyy."
+        );
+        $.validator.addMethod("indianPAN",function(value, element) {
+            // RegEx Match
+            return value.match(/[a-zA-Z]{3}[PCHFATBLJG]{1}[a-zA-Z]{1}[0-9]{4}[a-zA-Z]{1}$/);
+            },
+            "Please enter a valid PAN"
+        );
+
 
         // Binding next button to next object
         $(".nextBtn").click(function() {
             var parent = $(this).attr("data-parent");
             var nextItem = $(this).attr("data-next");
-            AnimateObjects(parent, nextItem);
+
+            var form = $("#deputationistForm");
+            form.validate({
+            rules: {
+                '@Html.NameFor(model => model.EmployeeDetails.EmployeeCode)': {
+                    required:true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.Title)': {
+                    required:true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.LastName)': {
+                    required: true,
+                    minlength: 2
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.DateOfBirth)': {
+                    required: true,
+                    australianDate :true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.DateOfSuperannuation)': {
+                    required: true,
+                    australianDate :true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.PANNumber)': {
+                    indianPAN: true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.MaritalStatus)': {
+                    required: true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.MarriageDate)':  {
+                    required: function(element) {
+                        return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.MaritalStatus)']:checked").val() == 'True';
+                        }
+                }
+            },
+            errorClass: 'invalid-feedback',
+            errorElement: 'div',
+            errorPlacement: function(error, element) {
+                error.insertAfter(element);
+            },
+            highlight: function(element) {
+        $(element).addClass("is-invalid");
+    },
+            unhighlight: function(element) {
+        $(element).removeClass("is-invalid");
+    }
+            });
+
+            if (form.valid() == true) {
+                 AnimateObjects(parent, nextItem);
+            }
+            else {
+               return;
+            }
         });
 
         //Showing the current part based on top icons
@@ -569,6 +635,8 @@
             $(nextItem).show();
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }
+
+
         $("#addDependent").click(function () {
             if (sessionStorage.dependentCount) {
                 sessionStorage.dependentCount = Number(sessionStorage.dependentCount) + 1;
@@ -576,7 +644,7 @@
                 sessionStorage.dependentCount = 0;
             }
             var newDependent = sessionStorage.dependentCount;
-            var rowHtml = '<tr id="dependentRow' + newDependent + '"><td><input value="@Model.EmployeeDetails.Id" id="DependentDetails_' + newDependent + '__EmployeeId" name="DependentDetails[' + newDependent + '].EmployeeId" type="hidden"><input class="form-control text-box single-line" data-val="true" data-val-required="Valid Dependent Name is required" id="DependentDetails_' + newDependent + '__DependentName" name="DependentDetails[' + newDependent + '].DependentName" type="text" value="" ></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Date of Birth must be a date." id="DependentDetails_' + newDependent + '__DateofBirth" name="DependentDetails[' + newDependent + '].DateofBirth" type="text" value=""></td><td><input class="form-control text-box single-line" id="DependentDetails_' + newDependent + '__Relationship" name="DependentDetails[' + newDependent + '].Relationship" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#dependentRow' + newDependent +'"><span class="fa fa-minus"></span> Delete</button></td></tr>';
+            var rowHtml = '<tr id="dependentRow' + newDependent + '"><td><input value="@Model.EmployeeDetails.Id" id="DependentDetails_' + newDependent + '__EmployeeId" name="DependentDetails[' + newDependent + '].EmployeeId" type="hidden"><input class="form-control text-box single-line" data-val="true" data-val-required="Valid Dependent Name is required" id="DependentDetails_' + newDependent + '__DependentName" name="DependentDetails[' + newDependent + '].DependentName" type="text" value="" ></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Date of Birth must be a date." id="DependentDetails_' + newDependent + '__DateofBirth" name="DependentDetails[' + newDependent + '].DateofBirth" type="text" value=""></td><td><input class="form-control text-box single-line" id="DependentDetails_' + newDependent + '__Relationship" name="DependentDetails[' + newDependent + '].Relationship" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#dependentRow' + newDependent +'">Delete</button></td></tr>';
             $('#dependentTable tbody').append(rowHtml);
             $('#DependentDetails_' + newDependent + '__DateofBirth').datepicker({
                 uiLibrary: 'bootstrap',
@@ -640,7 +708,7 @@
             </text>
             }
             }
-            var rowHtml = '<tr id="postingRow' + newPosting + '"><td><input value="@Model.EmployeeDetails.Id" id="PostingDetails_' + newPosting + '__EmployeeId" name="PostingDetails[' + newPosting + '].EmployeeId" type="hidden"><select class="form-control" id="PostingDetails_' + newPosting + '__DepartmentId" name="PostingDetails[' + newPosting + '].DepartmentId" style="width:100px;"></select>' + departmentNames + '</td><td><select class="form-control" id="PostingDetails_' + newPosting + '__HODId" name="PostingDetails[' + newPosting + '].HODId" style="width:100px;"></select>' + hodNames + '</td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Posting From must be a date." id="PostingDetails_' + newPosting + '__From" name="PostingDetails[' + newPosting + '].From" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Posting Till must be a date." id="PostingDetails_' + newPosting + '__To" name="PostingDetails[' + newPosting + '].To" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#postingRow' + newPosting + '">Delete</button></td></tr>';
+            var rowHtml = '<tr id="postingRow' + newPosting + '"><td><input value="@Model.EmployeeDetails.Id" id="PostingDetails_' + newPosting + '__EmployeeId" name="PostingDetails[' + newPosting + '].EmployeeId" type="hidden"><select class="form-control" id="PostingDetails_' + newPosting + '__DepartmentId" name="PostingDetails[' + newPosting + '].DepartmentId" style="width:100px;">' + departmentNames + '</select></td><td><select class="form-control" id="PostingDetails_' + newPosting + '__HODId" name="PostingDetails[' + newPosting + '].HODId" style="width:100px;">' + hodNames + '</select></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Posting From must be a date." id="PostingDetails_' + newPosting + '__From" name="PostingDetails[' + newPosting + '].From" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Posting Till must be a date." id="PostingDetails_' + newPosting + '__To" name="PostingDetails[' + newPosting + '].To" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#postingRow' + newPosting + '">Delete</button></td></tr>';
             $('#postingTable tbody').append(rowHtml);
             $('#PostingDetails_' + newPosting + '__From').datepicker({
                 uiLibrary: 'bootstrap',
@@ -661,6 +729,7 @@
             var newPromotion = sessionStorage.promotionCount;
             var designationNames = " ";
             var levelNames = " ";
+            var payScaleNames = " ";
             @if (Model.Designations.Count() != 0)
             {
             foreach(var designation in Model.Designations)
@@ -679,7 +748,16 @@
             </text>
             }
             }
-            var rowHtml = '<tr id="promotionRow' + newPromotion + '"><td><input value="@Model.EmployeeDetails.Id" id="PromotionDetails_' + newPromotion + '__EmployeeId" name="PromotionDetails[' + newPromotion + '].EmployeeId" type="hidden"><select class="form-control" id="PromotionDetails_'+ newPromotion +'__DesignationId" name="PromotionDetails['+ newPromotion +'].DesignationId" style="width:100px;">'+ designationNames +'</select></td><td><select class="form-control" id="PromotionDetails_'+ newPromotion +'__PayScaleId" name="PromotionDetails['+ newPromotion +'].PayScaleId" style="width:100px;"></select></td><td><select class="form-control" id="PromotionDetails_'+ newPromotion +'__LevelId" name="PromotionDetails['+ newPromotion +'].LevelId" style="width:100px;">'+ levelNames +'</select></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Effective From must be a date." id="PromotionDetails_'+ newPromotion +'__From" name="PromotionDetails['+ newPromotion +'].From" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field To must be a date." id="PromotionDetails_'+ newPromotion +'__To" name="PromotionDetails['+ newPromotion +'].To" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#promotionRow' + newPromotion + '">Delete</button></td></tr>';
+            @if (Model.PayScales.Count() != 0)
+            {
+            foreach(var payScale in Model.PayScales)
+            {
+            <text>
+            payScaleNames += '<option value="@payScale.Id">@payScale.Scale</option>';
+            </text>
+            }
+            }
+            var rowHtml = '<tr id="promotionRow' + newPromotion + '"><td><input value="@Model.EmployeeDetails.Id" id="PromotionDetails_' + newPromotion + '__EmployeeId" name="PromotionDetails[' + newPromotion + '].EmployeeId" type="hidden"><select class="form-control" id="PromotionDetails_' + newPromotion + '__DesignationId" name="PromotionDetails[' + newPromotion + '].DesignationId" style="width:100px;">' + designationNames + '</select></td><td><select class="form-control" id="PromotionDetails_' + newPromotion + '__PayScaleId" name="PromotionDetails[' + newPromotion + '].PayScaleId" style="width:100px;">' + payScaleNames + '</select></td><td><select class="form-control" id="PromotionDetails_' + newPromotion + '__LevelId" name="PromotionDetails[' + newPromotion + '].LevelId" style="width:100px;">' + levelNames + '</select></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Effective From must be a date." id="PromotionDetails_' + newPromotion + '__From" name="PromotionDetails[' + newPromotion + '].From" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field To must be a date." id="PromotionDetails_' + newPromotion + '__To" name="PromotionDetails[' + newPromotion + '].To" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#promotionRow' + newPromotion + '">Delete</button></td></tr>';
             $('#promotionTable tbody').append(rowHtml);
             $('#PromotionDetails_' + newPromotion + '__From').datepicker({
                 uiLibrary: 'bootstrap',
@@ -694,6 +772,19 @@
             var rowId = $(this).attr("data-rowid");
             $(rowId).remove();
         });
+        $(document).on('click', '.deleteRow',function () {
+            var rowId = $(this).attr("data-rowid");
+            $(rowId).remove();
+        });
+
+         $(document).on('change', 'input[type="radio"][name="@Html.NameFor(model=>model.EmployeeDetails.MaritalStatus)"]',function () {
+             if (this.value == 'True') {
+                 $('#@Html.IdFor(model=>model.EmployeeDetails.MarriageDate)').removeAttr('disabled');
+            }
+             else if (this.value == 'False') {
+                 $('#@Html.IdFor(model=>model.EmployeeDetails.MarriageDate)').val(null).attr('disabled','disabled');
+            }
+         });
 
     $(".open4").click(function() {
       if (v.form()) {
@@ -707,15 +798,5 @@
         return false;
       }
     });
-
-        @*$('#@Html.IdFor(model => model.EmployeeDetails.DateOfBirth)').change(function () {
-            var dateOfBirthValue = (this.value).split("/");
-            var dateOfBirth = new Date(dateOfBirthValue[1] + "/" + dateOfBirthValue[0] + "/" + dateOfBirthValue[2])
-            var dd = dateOfBirth.getDate();
-            if (dd == 1) dateOfBirth.setMonth(dateOfBirth.getMonth() - 1);
-            console.log("Formatted DOB : " + dateOfBirth);
-            var dateOfSuperannuation = new Date(dateOfBirth.getFullYear + 60, dateOfBirth.getMonth + 1, 0);
-            console.log(dateOfSuperannuation);
-        });*@
-    });
+});
 </script>
