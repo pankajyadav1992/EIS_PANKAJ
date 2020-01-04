@@ -1,4 +1,4 @@
-﻿@model EmployeeInformationSystem.Core.ViewModels.DeputationistsViewModel
+﻿@model EmployeeInformationSystem.Core.ViewModels.DataViewModel
 
 @{
     Layout = null;
@@ -31,7 +31,7 @@
         width: 100%;
         height: 1px;
         background-color: #ccc;
-        z-order: 0;
+        /*z-order: 0;*/
     }
 
     .stepwizard-step {
@@ -51,35 +51,37 @@
     }
 </style>
 
-<div class="card-body">
+<div class="card-body" id="formContent">
     <div class="row justify-content-md-center">
         <div class="stepwizard col-md-offset-3">
             <div class="stepwizard-row setup-panel">
                 <div class="stepwizard-step">
-                    <button type="button" class="btn btn-primary btn-circle" data-btnParent="#personalDetails">1</button>
+                    <button type="button" class="btn btn-primary btn-circle" data-btnParent="#personalDetails" disabled>1</button>
                     <p>Personal Details</p>
                 </div>
                 <div class="stepwizard-step">
-                    <button type="button" class="btn btn-default btn-circle" data-btnParent="#contactDetails">2</button>
+                    <button type="button" class="btn btn-default btn-circle" data-btnParent="#contactDetails" disabled>2</button>
                     <p>Contact Details</p>
                 </div>
                 <div class="stepwizard-step">
-                    <button type="button" class="btn btn-default btn-circle" data-btnParent="#professionalDetails">3</button>
+                    <button type="button" class="btn btn-default btn-circle" data-btnParent="#professionalDetails" disabled>3</button>
                     <p>Professional Details</p>
                 </div>
                 <div class="stepwizard-step">
-                    <button type="button" class="btn btn-default btn-circle" data-btnParent="#postingDetails">4</button>
+                    <button type="button" class="btn btn-default btn-circle" data-btnParent="#postingDetails" disabled>4</button>
                     <p>Posting Details</p>
                 </div>
             </div>
         </div>
     </div>
-    @using (Html.BeginForm("AjaxAdd", "Deputationist", FormMethod.Post, new { @class = "form-horizontal", @id = "deputationistForm" }))
+    @using (Html.BeginForm("AjaxAdd", "EmployeeData", new { targetPage= "Deputationist" }, FormMethod.Post, new { @class = "form-horizontal", @id = "deputationistForm" }))
     {
         @Html.AntiForgeryToken()
 
+        @Html.ValidationSummary()
+
         <!-- id will be unique, but class name will be same -->
-        <div id="personalDetails tab" class="setup-content">
+        <div id="personalDetails" class="setup-content">
             <div class="card-header d-flex">
                 <h3 class="h4">Personal Details</h3>
             </div>
@@ -146,8 +148,8 @@
             <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.MaritalStatus, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, true, new { @class = "radio-template", @id = "MaritalStatus_True" }) Married&nbsp;&nbsp;
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, false, new { @class = "radio-template", @id = "MaritalStatus_False" }) Single
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, EmployeeInformationSystem.Core.Models.MaritalStatus.Married, new { @class = "radio-template", @id = "MaritalStatus_Married" }) Married&nbsp;&nbsp;
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, EmployeeInformationSystem.Core.Models.MaritalStatus.Single, new { @class = "radio-template", @id = "MaritalStatus_Single" }) Single
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.MaritalStatus, "", new { @class = "text-danger" })
                 </div>
 
@@ -160,16 +162,30 @@
             <div class="line"></div>
 
             <div class="form-group row">
+                @Html.LabelFor(model => model.EmployeeDetails.Gender, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.Gender, EmployeeInformationSystem.Core.Models.Gender.Male, new { @class = "radio-template", @id = "Gender_Male" }) Male&nbsp;&nbsp;
+                    @Html.RadioButtonFor(model => model.EmployeeDetails.Gender, EmployeeInformationSystem.Core.Models.Gender.Female, new { @class = "radio-template", @id = "Gender_Female" }) Female
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Gender, "", new { @class = "text-danger" })
+                </div>
                 @Html.LabelFor(model => model.EmployeeDetails.BloodGroup, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
                     @Html.EnumDropDownListFor(model => model.EmployeeDetails.BloodGroup, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.BloodGroup, "", new { @class = "text-danger" })
                 </div>
+            </div>
+            <div class="line"></div>
 
+            <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.VehicleNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
                     @Html.EditorFor(model => model.EmployeeDetails.VehicleNumber, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.VehicleNumber, "", new { @class = "text-danger" })
+                </div>
+                @Html.LabelFor(model => model.EmployeeDetails.PassportNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.PassportNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportNumber, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="line"></div>
@@ -180,27 +196,18 @@
                     @Html.EditorFor(model => model.EmployeeDetails.PANNumber, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
                 </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.PassportNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.PassportNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportNumber, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.AadhaarNumer, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     @Html.EditorFor(model => model.AadhaarPart1, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     @Html.EditorFor(model => model.AadhaarPart2, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-1">
                     @Html.EditorFor(model => model.AadhaarPart3, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
                 </div>
+
             </div>
             <div class="line"></div>
 
@@ -310,6 +317,7 @@
 
                 @Html.LabelFor(model => model.TelephoneExtensions.Number, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
+                    @Html.HiddenFor(model=> model.TelephoneExtensions.EmployeeId, new { Value=@Model.EmployeeDetails.Id} )
                     @Html.EditorFor(model => model.TelephoneExtensions.Number, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.TelephoneExtensions.Number, "", new { @class = "text-danger" })
                 </div>
@@ -416,13 +424,13 @@
             <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.DateOfSeparation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.DateOfSeparation, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                    @Html.EditorFor(model => model.EmployeeDetails.DateOfSeparation, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.DateOfSeparation, "", new { @class = "text-danger" })
                 </div>
 
                 @Html.LabelFor(model => model.EmployeeDetails.ReasonForLeaving, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.EnumDropDownListFor(model => model.EmployeeDetails.ReasonForLeaving, new { @class = "form-control" })
+                    @Html.EnumDropDownListFor(model => model.EmployeeDetails.ReasonForLeaving, new { @class = "form-control", @disabled = "disabled" })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.ReasonForLeaving, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -513,7 +521,7 @@
                 <!-- Unique class name -->
                 <button class="btn btn-warning nextBtn" type="button" data-next="#professionalDetails" data-parent="#postingDetails"><span class="fa fa-arrow-left"></span> Back</button> &nbsp;&nbsp;&nbsp;
                 <!-- Unique class name -->
-                <button class="btn btn-primary open4" type="button">Submit </button>
+                <button class="btn btn-primary" type="button" id="finalSubmit">Submit</button>
                 <!--<img src="spinner.gif" alt="" id="loader" style="display: none">-->
             </div>
         </div>
@@ -531,7 +539,7 @@
 </div>
 <script>
     $(document).ready(function () {
-        //Adding Date input
+        //Adding Datepicker for date inputs
         $('[data-type="date"]').each(function () {
             $(this).datepicker({
                 uiLibrary: 'bootstrap',
@@ -543,11 +551,15 @@
         $("#contactDetails").hide();
         $("#professionalDetails").hide();
         $("#postingDetails").hide();
+        $("#@Html.IdFor(model => model.EmployeeDetails.OrganisationId)").prepend('<option selected="selected" value="">--Select Organisation--</option>');
+        $("#@Html.IdFor(model => model.EmployeeDetails.DGHLevel)").prepend('<option selected="selected" value="">--Select DGH Level--</option>')
         sessionStorage.clear();
         $('#overlay').fadeOut();
+
+        // Custom validators for jQuery Validation
         $.validator.addMethod("australianDate",function(value, element) {
             // RegEx Match
-            return value.match(/^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$/);
+            return value.match(/^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$|^$/);
             },
             "Please enter a date in the format dd/mm/yyyy."
         );
@@ -557,15 +569,15 @@
             },
             "Please enter a valid PAN"
         );
+        $.validator.addMethod("indianPassport",function(value, element) {
+            // RegEx Match
+            return value.match(/^[A-Z]{1}[0-9]{7}$|^$/);
+            },
+            "Please enter a valid Passport number"
+        );
 
-
-        // Binding next button to next object
-        $(".nextBtn").click(function() {
-            var parent = $(this).attr("data-parent");
-            var nextItem = $(this).attr("data-next");
-
-            var form = $("#deputationistForm");
-            form.validate({
+        //jQuery Validation on the form
+        var v = $("#deputationistForm").validate({
             rules: {
                 '@Html.NameFor(model => model.EmployeeDetails.EmployeeCode)': {
                     required:true
@@ -582,20 +594,96 @@
                     australianDate :true
                 },
                 '@Html.NameFor(model => model.EmployeeDetails.DateOfSuperannuation)': {
-                    required: true,
                     australianDate :true
                 },
                 '@Html.NameFor(model => model.EmployeeDetails.PANNumber)': {
                     indianPAN: true
+                    },
+                '@Html.NameFor(model => model.EmployeeDetails.PassportNumber)': {
+                    indianPassport: true
                 },
-                '@Html.NameFor(model => model.EmployeeDetails.MaritalStatus)': {
-                    required: true
+                '@Html.NameFor(model => model.AadhaarPart1)': {
+                    digits: true,
+                    required:true
+                },
+                '@Html.NameFor(model => model.AadhaarPart2)': {
+                    digits: true,
+                    required:true
+                },
+                '@Html.NameFor(model => model.AadhaarPart3)': {
+                    digits: true,
+                    required:true
                 },
                 '@Html.NameFor(model => model.EmployeeDetails.MarriageDate)':  {
-                    required: function(element) {
-                        return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.MaritalStatus)']:checked").val() == 'True';
+                    australianDate :true,
+                    required: function (element) {
+                        return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.MaritalStatus)']:checked").val() == 'Married';
                         }
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.EmailID)':  {
+                    required: true,
+                    email: true,
+                },
+                 '@Html.NameFor(model => model.EmployeeDetails.AlternateEmailID)':  {
+                    email: true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.MobileNumber)':  {
+                    required: true,
+                    digits: true,
+                    minlength: 10,
+                    maxlength: 10
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.ResidenceNumber)':  {
+                    digits: true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.EmergencyContact)':  {
+                    digits: true
+                },
+                '@Html.NameFor(model => model.TelephoneExtensions.Number)':  {
+                    digits: true,
+                    maxlength: 4,
+                    minlength: 4
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.OrganisationId)':  {
+                    required: true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.DateofJoiningDGH)':  {
+                    required: true,
+                    australianDate :true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.DateofJoiningParentOrg)':  {
+                    required: true,
+                    australianDate :true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.DateofRelievingLastOffice)':  {
+                    required: true,
+                    australianDate :true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.DateOfSeparation)':  {
+                    required: function(element) {
+                        return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.WorkingStatus)']:checked").val() == 'False';
+                        },
+                    australianDate :true
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.ReasonForLeaving)':  {
+                    required: function(element) {
+                        return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.WorkingStatus)']:checked").val() == 'False';
+                        }
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.DGHLevel)': {
+                    required: true
                 }
+            },
+            messages: {
+            '@Html.NameFor(model => model.AadhaarPart1)': {
+                    required:"Required"
+                },
+             '@Html.NameFor(model => model.AadhaarPart2)': {
+                    required:"Required"
+                },
+              '@Html.NameFor(model => model.AadhaarPart3)': {
+                    required:"Required"
+                },
             },
             errorClass: 'invalid-feedback',
             errorElement: 'div',
@@ -603,40 +691,51 @@
                 error.insertAfter(element);
             },
             highlight: function(element) {
-        $(element).addClass("is-invalid");
-    },
+				$(element).addClass("is-invalid");
+			},
             unhighlight: function(element) {
-        $(element).removeClass("is-invalid");
-    }
-            });
+				$(element).removeClass("is-invalid");
+			}
+        });
 
-            if (form.valid() == true) {
-                 AnimateObjects(parent, nextItem);
+        // Binding next button to form div
+        $(".nextBtn").click(function() {
+            var parent = $(this).attr("data-parent");
+            var nextItem = $(this).attr("data-next");
+            if (v.form()) {
+                AnimateObjects(parent, nextItem);
             }
             else {
                return;
             }
         });
 
-        //Showing the current part based on top icons
+        //Showing the correct div based on click of top icons
         $("[data-btnParent]").click(function () {
             var parent = $(".btn-primary[data-btnParent]").attr("data-btnParent");
             var nextItem = $(this).attr("data-btnParent");
-            AnimateObjects(parent, nextItem);
+            if (v.form()) {
+                AnimateObjects(parent, nextItem);
+            }
+            else {
+               return;
+            }
         });
 
         //Common function to animate div flow
         function AnimateObjects(parent, nextItem) {
             var nextButton = '[data-btnParent="' + nextItem + '"]';
             var currentButton = '[data-btnParent="' + parent + '"]';
-            $(currentButton).removeClass("btn-primary").addClass("btn-default");
-            $(nextButton).removeClass("btn-default").addClass("btn-primary");
+            $(currentButton).removeClass("btn-primary").addClass("btn-success").removeAttr("disabled");
+            $(nextButton).removeClass("btn-success btn-default").addClass("btn-primary");
             $(parent).hide();
             $(nextItem).show();
             $("html, body").animate({ scrollTop: 0 }, "slow");
         }
 
+        // Button Click Methods
 
+        //Add new row to Dependent table
         $("#addDependent").click(function () {
             if (sessionStorage.dependentCount) {
                 sessionStorage.dependentCount = Number(sessionStorage.dependentCount) + 1;
@@ -649,9 +748,23 @@
             $('#DependentDetails_' + newDependent + '__DateofBirth').datepicker({
                 uiLibrary: 'bootstrap',
                 format: 'dd/mm/yyyy'
-            });
+            }).rules('add',
+                {
+                    australianDate:true
+                });
+            $('#DependentDetails_' + newDependent + '__DependentName').rules('add',
+                {
+                    required: true,
+                    minlength:2
+                });
+            $('#DependentDetails_' + newDependent + '__Relationship').rules('add',
+                {
+                    required: true,
+                    minlength:2
+                });
         });
 
+        //Add new row to Qualification table
         $("#addQualification").click(function () {
             if (sessionStorage.qualificationCount) {
                 sessionStorage.qualificationCount = Number(sessionStorage.qualificationCount) + 1;
@@ -659,7 +772,7 @@
                 sessionStorage.qualificationCount = 0;
             }
             var newQualification = sessionStorage.qualificationCount;
-            var degreeNames = " ";
+            var degreeNames = '<option selected="selected" value="">Select Degree</option>';
             @if (Model.Degrees.Count() != 0)
             {
             foreach(var degree in Model.Degrees)
@@ -669,18 +782,29 @@
             </text>
             }
             }
-            var rowHtml = '<tr id="qualificationRow' + newQualification + '"><td><input value="@Model.EmployeeDetails.Id" id="QualificationDetails_' + newQualification + '__EmployeeId" name="QualificationDetails[' + newQualification + '].EmployeeId" type="hidden"><select class="form-control" data-val="true" data-val-required="The Degree field is required." id="QualificationDetails_' + newQualification + '__Degree" name="QualificationDetails[' + newQualification + '].Degree" style="width:100px;">' + degreeNames + '</select></td><td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Institution" name="QualificationDetails[' + newQualification + '].Institution" type="text" value=""></td><td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__University" name="QualificationDetails[' + newQualification + '].University" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field From must be a date." id="QualificationDetails_' + newQualification + '__From" name="QualificationDetails[' + newQualification + '].From" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Date of Passing must be a date." id="QualificationDetails_' + newQualification + '__To" name="QualificationDetails[' + newQualification + '].To" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#qualificationRow' + newQualification + '">Delete</button></td></tr>';
+            var rowHtml = '<tr id="qualificationRow' + newQualification + '"><td><input value="@Model.EmployeeDetails.Id" id="QualificationDetails_' + newQualification + '__EmployeeId" name="QualificationDetails[' + newQualification + '].EmployeeId" type="hidden"><select class="form-control" data-val="true" data-val-required="The Degree field is required." id="QualificationDetails_' + newQualification + '__DegreeId" name="QualificationDetails[' + newQualification + '].DegreeId" style="width:100px;">' + degreeNames + '</select></td><td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Institution" name="QualificationDetails[' + newQualification + '].Institution" type="text" value=""></td><td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__University" name="QualificationDetails[' + newQualification + '].University" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field From must be a date." id="QualificationDetails_' + newQualification + '__From" name="QualificationDetails[' + newQualification + '].From" type="text" value=""></td><td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Date of Passing must be a date." id="QualificationDetails_' + newQualification + '__To" name="QualificationDetails[' + newQualification + '].To" type="text" value=""></td><td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#qualificationRow' + newQualification + '">Delete</button></td></tr>';
             $('#qualificationTable tbody').append(rowHtml);
             $('#QualificationDetails_' + newQualification + '__From').datepicker({
                 uiLibrary: 'bootstrap',
                 format: 'dd/mm/yyyy'
-            });
+            }).rules('add',
+                {
+                    australianDate:true
+                });
             $('#QualificationDetails_' + newQualification + '__To').datepicker({
                 uiLibrary: 'bootstrap',
                 format: 'dd/mm/yyyy'
-            });
+            }).rules('add',
+                {
+                    australianDate:true
+                });
+            $('#QualificationDetails_' + newQualification + '__DegreeId').rules('add',
+                {
+                    required: true
+                });
         });
 
+        //Add new row to Posting table
         $("#addPosting").click(function () {
             if (sessionStorage.postingCount) {
                 sessionStorage.postingCount = Number(sessionStorage.postingCount) + 1;
@@ -688,8 +812,8 @@
                 sessionStorage.postingCount = 0;
             }
             var newPosting = sessionStorage.postingCount;
-            var departmentNames = " ";
-            var hodNames = " ";
+            var departmentNames = '<option selected="selected" value="">Select Department</option>';
+            var hodNames = '<option selected="selected" value="">Select HOD</option>';
             @if (Model.Departments.Count() != 0)
             {
             foreach(var department in Model.Departments)
@@ -713,13 +837,28 @@
             $('#PostingDetails_' + newPosting + '__From').datepicker({
                 uiLibrary: 'bootstrap',
                 format: 'dd/mm/yyyy'
-            });
+            }).rules('add',
+                {
+                    australianDate:true
+                });
             $('#PostingDetails_' + newPosting + '__To').datepicker({
                 uiLibrary: 'bootstrap',
                 format: 'dd/mm/yyyy'
-            });
+            }).rules('add',
+                {
+                    australianDate:true
+                });
+            $('#PostingDetails_' + newPosting + '__DepartmentId').rules('add',
+             {
+                required: true
+             });
+             $('#PostingDetails_' + newPosting + '__HODId').rules('add',
+             {
+                required: true
+             });
         });
 
+        //Add new row to Promotion table
         $("#addPromotion").click(function () {
             if (sessionStorage.promotionCount) {
                 sessionStorage.promotionCount = Number(sessionStorage.promotionCount) + 1;
@@ -727,9 +866,9 @@
                 sessionStorage.promotionCount = 0;
             }
             var newPromotion = sessionStorage.promotionCount;
-            var designationNames = " ";
-            var levelNames = " ";
-            var payScaleNames = " ";
+            var designationNames = '<option selected="selected" value="">Select Designation</option>';
+            var levelNames = '<option selected="selected" value="">Select Level</option>';
+            var payScaleNames = '<option selected="selected" value="">Select PayScale</option>';
             @if (Model.Designations.Count() != 0)
             {
             foreach(var designation in Model.Designations)
@@ -762,40 +901,81 @@
             $('#PromotionDetails_' + newPromotion + '__From').datepicker({
                 uiLibrary: 'bootstrap',
                 format: 'dd/mm/yyyy'
-            });
+            }).rules('add',
+                {
+                    australianDate:true
+                });
             $('#PromotionDetails_' + newPromotion + '__To').datepicker({
                 uiLibrary: 'bootstrap',
                 format: 'dd/mm/yyyy'
-            });
+            }).rules('add',
+                {
+                    australianDate:true
+                });
+            $('#PromotionDetails_' + newPromotion + '__DesignationId').rules('add',
+             {
+                required: true
+             });
         });
-        $(document).on('click', '.deleteRow',function () {
-            var rowId = $(this).attr("data-rowid");
-            $(rowId).remove();
-        });
-        $(document).on('click', '.deleteRow',function () {
+
+
+        //Button click actions for dynamically generated buttons
+
+        // Common function to delete row any dynamic table
+        $(document).on('click', '.deleteRow', function () {
             var rowId = $(this).attr("data-rowid");
             $(rowId).remove();
         });
 
-         $(document).on('change', 'input[type="radio"][name="@Html.NameFor(model=>model.EmployeeDetails.MaritalStatus)"]',function () {
-             if (this.value == 'True') {
+        // Activating marriage date based on Marital status
+        $(document).on('change', 'input[type="radio"][name="@Html.NameFor(model=>model.EmployeeDetails.MaritalStatus)"]', function () {
+             if (this.value == 'Married') {
                  $('#@Html.IdFor(model=>model.EmployeeDetails.MarriageDate)').removeAttr('disabled');
             }
-             else if (this.value == 'False') {
+             else if (this.value == 'Single') {
                  $('#@Html.IdFor(model=>model.EmployeeDetails.MarriageDate)').val(null).attr('disabled','disabled');
             }
          });
 
-    $(".open4").click(function() {
+        // Activate fields based on working status
+        $(document).on('change', 'input[type="radio"][name="@Html.NameFor(model=>model.EmployeeDetails.WorkingStatus)"]', function () {
+             if (this.value == 'False') {
+                 $('#@Html.IdFor(model=>model.EmployeeDetails.DateOfSeparation)').removeAttr('disabled');
+                 $('#@Html.IdFor(model=>model.EmployeeDetails.ReasonForLeaving)').removeAttr('disabled');
+            }
+             else if (this.value == 'True') {
+                 $('#@Html.IdFor(model=>model.EmployeeDetails.DateOfSeparation)').val(null).attr('disabled', 'disabled');
+                  $('#@Html.IdFor(model=>model.EmployeeDetails.ReasonForLeaving)').val(null).attr('disabled','disabled');
+            }
+         });
+
+
+    // Form submission via AJAX
+    $("#finalSubmit").click(function () {
       if (v.form()) {
-        // optional
-        // used delay form submission for a seccond and show a loader image
-        $("#loader").show();
-         setTimeout(function(){
-           $("#basicform").html('<h2>Thanks for your time.</h2>');
-         }, 1000);
-        // Remove this if you are not using ajax method for submitting values
-        return false;
+        //  Show a loader image
+          $('#overlay').fadeIn();
+          var formUrl = $('#deputationistForm').attr('action');
+          $.ajax({
+            url: formUrl,
+            type: 'POST',
+            data: $('#deputationistForm').serialize(),
+            success: function (result) {
+                if ('Success' == result) {
+                    $('#formContent').html('<div class="alert alert-success" role="alert"> Successfully Added </div >');
+                } else {
+                    $('#formContent').html(result);
+                }
+            },
+            error: function () {
+                $('#formContent').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+            },
+            fail: function (xhr, textStatus, errorThrown) {
+                $('#formContent').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+            }
+          });
+          //console.log($("#deputationistForm").serialize());
+          $('#overlay').fadeOut();
       }
     });
 });

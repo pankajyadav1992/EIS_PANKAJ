@@ -68,7 +68,7 @@
     <Compile Include="Models\QualificationDetail.cs" />
     <Compile Include="Models\TelephoneExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModels\DeputationistsViewModel.cs" />
+    <Compile Include="ViewModels\DataViewModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

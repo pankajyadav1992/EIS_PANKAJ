@@ -82,12 +82,12 @@ namespace EmployeeInformationSystem.Core.Models
         public Nullable<SeatingLocation> SeatingLocation { get; set; }
 
         [Display(Name = "Mobile Number")]
-        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
-        public Nullable<int> MobileNumber { get; set; }
+        [RegularExpression(@"^(\d{10})$", ErrorMessage = "Please enter valid mobile number")]
+        public string MobileNumber { get; set; }
 
+        [RegularExpression(@"^\d+$", ErrorMessage = "Please enter valid contact number")]
         [Display(Name = "Residence Phone Number")]
-        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
-        public Nullable<int> ResidenceNumber { get; set; }
+        public string ResidenceNumber { get; set; }
 
         [Display(Name = "Residence Address")]
         public string ResidenceAddress { get; set;}
@@ -172,9 +172,10 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Emergency Contact Person")]
         public string EmergencyPerson { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Only positive number allowed")]
+
+        [RegularExpression(@"^\d+$", ErrorMessage = "Please enter valid contact number")]
         [Display(Name = "Emergency Phone Number")]
-        public Nullable<int> EmergencyContact { get; set; }
+        public string EmergencyContact { get; set; }
     }
 
 

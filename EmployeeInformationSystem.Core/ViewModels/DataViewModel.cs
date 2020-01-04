@@ -8,18 +8,18 @@ using System.Threading.Tasks;
 
 namespace EmployeeInformationSystem.Core.ViewModels
 {
-    public class DeputationistsViewModel
+    public class DataViewModel
     {
         public EmployeeDetail EmployeeDetails { get; set; }
-        [StringLength(6, MinimumLength = 6, ErrorMessage = "Aadhaar Number must be of 12 characters")]
+        [StringLength(4, MinimumLength = 4, ErrorMessage = "Aadhaar Number must be of 12 characters")]
         public string AadhaarPart1 { get; set; }
 
         public CustomEmployeeType EmployeeType { get; set; }
 
-        [StringLength(6, MinimumLength = 6, ErrorMessage = "Aadhaar Number must be of 12 characters")]
+        [StringLength(4, MinimumLength = 4, ErrorMessage = "Aadhaar Number must be of 12 characters")]
         public string AadhaarPart2 { get; set; }
 
-        [StringLength(6, MinimumLength = 6, ErrorMessage = "Aadhaar Number must be of 12 characters")]
+        [StringLength(4, MinimumLength = 4 , ErrorMessage = "Aadhaar Number must be of 12 characters")]
         public string AadhaarPart3 { get; set; }
         public List<PostingDetail> PostingDetails { get; set; }
         public List<PromotionDetail> PromotionDetails { get; set; }
@@ -34,7 +34,7 @@ namespace EmployeeInformationSystem.Core.ViewModels
         public IEnumerable<Department> Departments { get; set; }
         public IEnumerable<HoD> HoDs { get; set; }
 
-        [StringLength(4, MinimumLength = 4, ErrorMessage = "Telephone Extension must be of 4 characters")]
+        //[StringLength(4, MinimumLength = 4, ErrorMessage = "Telephone Extension must be of 4 characters")]
         public TelephoneExtension TelephoneExtensions { get; set; }
     }
 
