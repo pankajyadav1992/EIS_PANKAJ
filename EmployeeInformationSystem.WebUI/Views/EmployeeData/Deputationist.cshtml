@@ -74,7 +74,7 @@
             </div>
         </div>
     </div>
-    @using (Html.BeginForm("AjaxAdd", "EmployeeData", new { targetPage= "Deputationist" }, FormMethod.Post, new { @class = "form-horizontal", @id = "deputationistForm" }))
+    @using (Html.BeginForm("AjaxAdd", "EmployeeData", new { targetPage = "Deputationist" }, FormMethod.Post, new { @class = "form-horizontal", @id = "deputationistForm" }))
     {
         @Html.AntiForgeryToken()
 
@@ -168,27 +168,45 @@
                     @Html.RadioButtonFor(model => model.EmployeeDetails.Gender, EmployeeInformationSystem.Core.Models.Gender.Female, new { @class = "radio-template", @id = "Gender_Female" }) Female
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.Gender, "", new { @class = "text-danger" })
                 </div>
+
+                @Html.LabelFor(model => model.EmployeeDetails.ProfilePhoto, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.ProfilePhoto, new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.ProfilePhoto, "", new { @class = "text-danger" })
+                </div>
+
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.BloodGroup, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
                     @Html.EnumDropDownListFor(model => model.EmployeeDetails.BloodGroup, new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.BloodGroup, "", new { @class = "text-danger" })
                 </div>
-            </div>
-            <div class="line"></div>
 
-            <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.VehicleNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
                     @Html.EditorFor(model => model.EmployeeDetails.VehicleNumber, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.VehicleNumber, "", new { @class = "text-danger" })
                 </div>
+            </div>
+            <div class="line"></div>
+
+            <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.PassportNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
                     @Html.EditorFor(model => model.EmployeeDetails.PassportNumber, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportNumber, "", new { @class = "text-danger" })
                 </div>
+                @Html.LabelFor(model => model.EmployeeDetails.PassportValidity, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.EditorFor(model => model.EmployeeDetails.PassportValidity, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportValidity, "", new { @class = "text-danger" })
+                </div>
             </div>
             <div class="line"></div>
+
 
             <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.PANNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
@@ -317,7 +335,7 @@
 
                 @Html.LabelFor(model => model.TelephoneExtensions.Number, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.HiddenFor(model=> model.TelephoneExtensions.EmployeeId, new { Value=@Model.EmployeeDetails.Id} )
+                    @Html.HiddenFor(model => model.TelephoneExtensions.EmployeeId, new { Value = @Model.EmployeeDetails.Id })
                     @Html.EditorFor(model => model.TelephoneExtensions.Number, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.TelephoneExtensions.Number, "", new { @class = "text-danger" })
                 </div>
@@ -382,11 +400,17 @@
 
             <div class="form-group row">
                 @Html.LabelFor(model => model.EmployeeDetails.PrimaryExpertise, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                     @Html.EditorFor(model => model.EmployeeDetails.PrimaryExpertise, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.PrimaryExpertise, "", new { @class = "text-danger" })
                 </div>
                 <!---Add support for PROFILE PHOTO-->
+
+                @Html.LabelFor(model => model.EmployeeDetails.Discipline, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.DropDownListFor(model => model.EmployeeDetails.DisciplineId, new SelectList(Model.Disciplines, "Id", "Name"), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DisciplineId, "", new { @class = "text-danger" })
+                </div>
 
             </div>
             <div class="line"></div>
@@ -485,7 +509,7 @@
                             <thead>
                                 <tr>
                                     <th>Department</th>
-                                    <th>Hod</th>
+                                    <th>HoD</th>
                                     <th>From</th>
                                     <th>To</th>
                                     <th>Action</th>
@@ -618,6 +642,12 @@
                     australianDate :true,
                     required: function (element) {
                         return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.MaritalStatus)']:checked").val() == 'Married';
+                        }
+                },
+                '@Html.NameFor(model => model.EmployeeDetails.PassportValidity)':  {
+                    australianDate :true,
+                    required: function (element) {
+                        return $("#@Html.IdFor(model => model.EmployeeDetails.PassportNumber)").val() != '';
                         }
                 },
                 '@Html.NameFor(model => model.EmployeeDetails.EmailID)':  {
@@ -935,6 +965,16 @@
              else if (this.value == 'Single') {
                  $('#@Html.IdFor(model=>model.EmployeeDetails.MarriageDate)').val(null).attr('disabled','disabled');
             }
+        });
+
+        // Activating Passport Validity based on Passport Number Status
+        $(document).on('change', 'input[type="text"][name="@Html.NameFor(model=>model.EmployeeDetails.PassportNumber)"]', function () {
+            if (this.value != '') {
+                 $('#@Html.IdFor(model=>model.EmployeeDetails.PassportValidity)').removeAttr('disabled');
+            }
+             else if (this.value == null) {
+                 $('#@Html.IdFor(model=>model.EmployeeDetails.PassportValidity)').val(null).attr('disabled','disabled');
+            }
          });
 
         // Activate fields based on working status
@@ -955,6 +995,9 @@
       if (v.form()) {
         //  Show a loader image
           $('#overlay').fadeIn();
+          if (0 == $("#@Html.IdFor(model => model.TelephoneExtensions.Number)").val()) {
+              $("#@Html.IdFor(model => model.TelephoneExtensions.Number)").val(9999);
+          }
           var formUrl = $('#deputationistForm').attr('action');
           $.ajax({
             url: formUrl,

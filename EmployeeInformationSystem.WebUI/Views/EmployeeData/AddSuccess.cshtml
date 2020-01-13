@@ -1,0 +1,23 @@
+﻿@{
+    Layout = null;
+}
+@if (ViewBag.addStatus)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Success!</h4>
+        <p>Successfully Added user with Employee Code/CPF No. @ViewBag.EmployeeCode</p>
+        <hr>
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <button type="button" class="btn btn-primary">View Added Employee</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href = '@Url.Action("Add", "EmployeeData")';">Add another Employee</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger" role="alert"> An Error has occured </div>
+}

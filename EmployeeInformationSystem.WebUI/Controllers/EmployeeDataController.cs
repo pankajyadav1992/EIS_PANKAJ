@@ -85,8 +85,14 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         HoDs = HoDContext.Collection() //Add proper support for determining HoDs
                     };
                     break;
-                case "Consultant": break;
-                case "Contractual": break;
+                case "Consultant":
+                    ViewBag.addStatus = true;
+                    ViewBag.EmployeeCode = "125118";
+                    targetPage = "AddSuccess";
+                    break;
+                case "Contractual":
+                    return RedirectToAction("ViewEmployee", new { EmployeeId = "1f4f5af8-e961-4ac8-bbdd-886da0ed0c2d" });
+                    //break;
                 default: break;
             }
             return View(targetPage, genericObject);
@@ -95,7 +101,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         [HttpPost]
         public ActionResult AjaxAdd(string targetPage, DataViewModel viewModel)
         {
+            ViewBag.addStatus = false;
             string returnText = "Error";
+            string EmpId = null;
             switch (targetPage)
             {
                 case "Deputationist":
@@ -111,52 +119,100 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         viewModel.EmployeeDetails.AadhaarNumer = viewModel.AadhaarPart1 + viewModel.AadhaarPart2 + viewModel.AadhaarPart3;
                         //Insert employee first
                         EmployeeDetailContext.Insert(viewModel.EmployeeDetails);
+                        EmpId = viewModel.EmployeeDetails.Id;
                         EmployeeDetailContext.Commit();
                         //Dependents next
-                        foreach(DependentDetail dependent in viewModel.DependentDetails)
+                        if (null != viewModel.DependentDetails)
                         {
-                            DependentDetailContext.Insert(dependent);
+                            foreach (DependentDetail dependent in viewModel.DependentDetails)
+                            {
+                                dependent.EmployeeId = EmpId;
+                                DependentDetailContext.Insert(dependent);
+                            }
+                            DependentDetailContext.Commit();
                         }
-                        DependentDetailContext.Commit();
                         //Telephone Extension 
                         //Check if exists
                         TelephoneExtension telephoneExtension = TelephoneExtensionContext.Collection().FirstOrDefault(t => t.Number == viewModel.TelephoneExtensions.Number);
-                        if (null == telephoneExtension)
+                        viewModel.TelephoneExtensions.EmployeeId = EmpId;
+                        if (null == telephoneExtension && 9999 != viewModel.TelephoneExtensions.Number)
+                        //Incase the telephone number is NULL, Model state is valid but it goes forward and doesn't insert anything
                         {
                             TelephoneExtensionContext.Insert(viewModel.TelephoneExtensions);
                         }
-                        else
+                        else if (null != telephoneExtension)
                         {
                             telephoneExtension.EmployeeId = viewModel.TelephoneExtensions.EmployeeId;
                             telephoneExtension.CurrentOwner = null;
                         }
                         TelephoneExtensionContext.Commit();
                         // Qualification Details
-                        foreach (QualificationDetail qualification in viewModel.QualificationDetails)
+                        if (null != viewModel.QualificationDetails)
                         {
-                            QualificationDetailContext.Insert(qualification);
+                            foreach (QualificationDetail qualification in viewModel.QualificationDetails)
+                            {
+                                qualification.EmployeeId = EmpId;
+                                QualificationDetailContext.Insert(qualification);
+                            }
+                            QualificationDetailContext.Commit();
                         }
-                        QualificationDetailContext.Commit();
                         //Promotion Details
-                        foreach (PromotionDetail promotion in viewModel.PromotionDetails)
+                        if (null != viewModel.PromotionDetails)
                         {
-                            PromotionDetailContext.Insert(promotion);
+                            foreach (PromotionDetail promotion in viewModel.PromotionDetails)
+                            {
+                                promotion.EmployeeId = EmpId;
+                                PromotionDetailContext.Insert(promotion);
+                            }
+                            PromotionDetailContext.Commit();
                         }
-                        PromotionDetailContext.Commit();
                         //Posting Details
-                        foreach (PostingDetail posting in viewModel.PostingDetails)
+                        if (null != viewModel.PostingDetails)
                         {
-                            PostingDetailContext.Insert(posting);
+                            foreach (PostingDetail posting in viewModel.PostingDetails)
+                            {
+                                posting.EmployeeId = EmpId;
+                                PostingDetailContext.Insert(posting);
+                            }
+                            PostingDetailContext.Commit();
                         }
-                        PostingDetailContext.Commit();
-                        returnText = "Success";
+                        ViewBag.addStatus = true;
+                        ViewBag.EmployeeCode = viewModel.EmployeeDetails.EmployeeCode;
+                        ViewBag.EmployeeId = EmpId;
                     }
                     break;
                 case "Consultant": break;
                 case "Contractual": break;
                 default: break;
             }
+            if (ViewBag.addStatus)
+            {
+                return View("AddSuccess");
+            }
             return Content(returnText);
+        }
+
+        public ActionResult ViewEmployee(string EmployeeId)
+        {
+            EmployeeId = "1f4f5af8-e961-4ac8-bbdd-886da0ed0c2d";
+            EmployeeDetail employee = EmployeeDetailContext.Find(EmployeeId);
+            if(null != employee)
+            {
+                DataViewModel viewModel = new DataViewModel()
+                {
+                    EmployeeDetails = employee,
+                    DependentDetails = DependentDetailContext.Collection().Where(d => d.EmployeeId == employee.Id).ToList(),
+                    TelephoneExtensions = TelephoneExtensionContext.Collection().FirstOrDefault(t => t.EmployeeId == employee.Id),
+                    QualificationDetails = QualificationDetailContext.Collection().Where(q => q.EmployeeId == employee.Id).ToList(),
+                    PromotionDetails = PromotionDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList(),
+                    PostingDetails = PostingDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
+                };
+                return View(viewModel);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
         }
     }
 }

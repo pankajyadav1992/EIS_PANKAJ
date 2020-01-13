@@ -12,10 +12,11 @@ namespace EmployeeInformationSystem.DataAccess.SQL
     {
         public DataContext(): base("name=DefaultConnection")
         {
-            Database.SetInitializer<DataContext>(new DropCreateDatabaseIfModelChanges<DataContext>());
+            //Caution: This deletes all the existing data in case of migrations
+            //Database.SetInitializer<DataContext>(new DropCreateDatabaseIfModelChanges<DataContext>());
 
             //For Production
-            //Database.SetInitializer<DataContext>(null);
+            Database.SetInitializer<DataContext>(null);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
