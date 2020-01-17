@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace EmployeeInformationSystem.Core.ViewModels
 {
@@ -14,7 +15,8 @@ namespace EmployeeInformationSystem.Core.ViewModels
         [StringLength(4, MinimumLength = 4, ErrorMessage = "Aadhaar Number must be of 12 characters")]
         public string AadhaarPart1 { get; set; }
 
-        public CustomEmployeeType EmployeeType { get; set; }
+        public List<SelectListItem> EmployeeType { get; set; }
+        //public CustomEmployeeType EmployeeType { get; set; }
 
         [StringLength(4, MinimumLength = 4, ErrorMessage = "Aadhaar Number must be of 12 characters")]
         public string AadhaarPart2 { get; set; }
@@ -36,10 +38,5 @@ namespace EmployeeInformationSystem.Core.ViewModels
 
         //[StringLength(4, MinimumLength = 4, ErrorMessage = "Telephone Extension must be of 4 characters")]
         public TelephoneExtension TelephoneExtensions { get; set; }
-    }
-
-    public enum CustomEmployeeType
-    {
-        Deputationist = 0
     }
 }

@@ -76,6 +76,14 @@
     <Compile Include="Migrations\202001030933223_UpdatedIntToString.designer.cs">
       <DependentUpon>202001030933223_UpdatedIntToString.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001160641221_UpdatedQualificationTable.cs" />
+    <Compile Include="Migrations\202001160641221_UpdatedQualificationTable.designer.cs">
+      <DependentUpon>202001160641221_UpdatedQualificationTable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202001161018458_MandatedOrganisationLevel.cs" />
+    <Compile Include="Migrations\202001161018458_MandatedOrganisationLevel.designer.cs">
+      <DependentUpon>202001161018458_MandatedOrganisationLevel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLRepository.cs" />
@@ -108,6 +116,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202001030933223_UpdatedIntToString.resx">
       <DependentUpon>202001030933223_UpdatedIntToString.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001160641221_UpdatedQualificationTable.resx">
+      <DependentUpon>202001160641221_UpdatedQualificationTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001161018458_MandatedOrganisationLevel.resx">
+      <DependentUpon>202001161018458_MandatedOrganisationLevel.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

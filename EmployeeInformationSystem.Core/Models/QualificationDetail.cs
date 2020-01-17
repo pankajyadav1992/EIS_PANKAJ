@@ -18,6 +18,13 @@ namespace EmployeeInformationSystem.Core.Models
         public string DegreeId { get; set; }
         public virtual Degree Degree { get; set; }
 
+        public string Specialization{ get; set; }
+
+        [Display(Name ="Grade/Percentage")]
+        public string Grade { get; set; }
+
+        public string Class { get; set; }
+
         public string Institution { get; set; }
 
         public string University { get; set; }
@@ -33,7 +40,5 @@ namespace EmployeeInformationSystem.Core.Models
         [DataType(DataType.Date)]
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? To { get; set; }
-        
-        public string Grade { get; set; }
     }
 }

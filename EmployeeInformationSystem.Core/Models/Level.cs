@@ -11,8 +11,13 @@ namespace EmployeeInformationSystem.Core.Models
     public class Level : BaseEntity
     {
         [StringLength(450)]
-        [Index(IsUnique = true)]
+        [Index("IX_LevelAndOrganisation", 1, IsUnique = true)]
         [Required(ErrorMessage = "Valid Level Name is required")]
         public string Name { get; set; }
+
+        [Index("IX_LevelAndOrganisation", 2, IsUnique = true)]
+        [Required(ErrorMessage = "Valid Organisation is required")]
+        public string OrganisationId { get; set; }
+        public virtual Organisation Organisation { get; set; }
     }
 }

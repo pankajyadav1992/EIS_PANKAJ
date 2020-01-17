@@ -595,7 +595,7 @@
     <Content Include="Scripts\old_js\popper.js.map" />
     <Content Include="Scripts\old_js\popper-utils.min.js.map" />
     <Content Include="Scripts\old_js\popper-utils.js.map" />
-    <Content Include="Views\EmployeeData\Add.cshtml" />
+    <Content Include="Views\EmployeeData\AddEmployee.cshtml" />
     <Content Include="Views\EmployeeData\Deputationist.cshtml" />
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Scripts\umd\popper.min.js.map" />
@@ -610,10 +610,12 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\EmployeeData\AddSuccess.cshtml" />
     <Content Include="Views\EmployeeData\ViewEmployee.cshtml" />
+    <Content Include="Views\EmployeeData\Consultant.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\img\photos\" />
+    <Folder Include="Content\profile_pics\" />
     <Folder Include="Content\vendor\font-awesome\less\" />
     <Folder Include="Content\vendor\font-awesome\scss\" />
     <Folder Include="Views\MasterData\" />

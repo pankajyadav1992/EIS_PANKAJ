@@ -103,7 +103,7 @@
                     <p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p>
                 </div>
                 <div class="col-sm-3">
-                    @Html.DropDownListFor(model => model.EmployeeDetails.EmployeeType, new SelectList(Model.EmployeeType, "Value", "Text"), new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.EmployeeDetails.EmployeeType, new SelectList(Model.EmployeeType, "Value", "Text"), new { @class="form-control"})
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.EmployeeType, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -418,11 +418,11 @@
             <div class="form-group row justify-content-center">
                 <div class="col-sm-10">
                     <h3 class="h4">Qualification Details</h3>
-                    <div class="table" style="overflow-x:scroll;">
-                        <table class="table table-hover" id="qualificationTable">
+                    <div class="table-responsive">
+                        <table class="table table-hover" id="qualificationTable" style="table-layout: fixed;word-wrap: break-word;">
                             <thead>
                                 <tr>
-                                    <th style="min-width:150px;">Degree<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
+                                    <th>Degree<p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p></th>
                                     <th>Subject/Specialization</th>
                                     <th>Grade/Percentage</th>
                                     <th>Class</th>
@@ -632,7 +632,7 @@
 
         // Load time actions
         $("#contactDetails").hide();
-        //$("#professionalDetails").hide();
+        $("#professionalDetails").hide();
         $("#postingDetails").hide();
         $("#@Html.IdFor(model => model.EmployeeDetails.OrganisationId)").prepend('<option selected="selected" value="">--Select Organisation--</option>');
         $("#@Html.IdFor(model => model.EmployeeDetails.DisciplineId)").prepend('<option selected="selected" value="">--Select Discipline--</option>');
@@ -944,9 +944,9 @@
             }
             var rowHtml = '<tr id="qualificationRow' + newQualification + '"><td><input value="@Model.EmployeeDetails.Id" id="QualificationDetails_' + newQualification + '__EmployeeId" name="QualificationDetails[' + newQualification + '].EmployeeId" type="hidden"> \
                            <select class="form-control" data-val="true" data-val-required="The Degree field is required." id="QualificationDetails_' + newQualification + '__DegreeId" name="QualificationDetails[' + newQualification + '].DegreeId">' + degreeNames + '</select></td> \
-                           <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Specialization" name="QualificationDetails[' + newQualification + '].Specialization" type="text" value=""></td> \
-                           <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Grade" name="QualificationDetails[' + newQualification + '].Grade" type="text" value=""></td> \
-                           <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Class" name="QualificationDetails[' + newQualification + '].Class" type="text" value=""></td> \
+                           <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Specialization" name="QualificationDetails[' + newQualification + '].Specialization" type="text" value="" style="width:70px;"></td> \
+                           <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Grade" name="QualificationDetails[' + newQualification + '].Grade" type="text" value="" style="width:70px;"></td> \
+                           <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Class" name="QualificationDetails[' + newQualification + '].Class" type="text" value="" style="width:70px;"></td> \
                            <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Institution" name="QualificationDetails[' + newQualification + '].Institution" type="text" value=""></td> \
                            <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__University" name="QualificationDetails[' + newQualification + '].University" type="text" value=""></td> \
                            <td><input class="form-control text-box single-line" data-val="true" data-val-date="The field From must be a date." id="QualificationDetails_' + newQualification + '__From" name="QualificationDetails[' + newQualification + '].From" type="text" value=""></td> \
@@ -1190,3 +1190,4 @@
     });
 });
 </script>
+  

@@ -10,8 +10,8 @@
         <div class="container">
             <div class="row">
                 <div class="col text-center">
-                    <button type="button" class="btn btn-primary">View Added Employee</button>
-                    <button type="button" class="btn btn-secondary" onclick="window.location.href = '@Url.Action("Add", "EmployeeData")';">Add another Employee</button>
+                    <button type="button" onclick="window.location.href = '@Url.Action("ViewEmployee", "EmployeeData", new { EmployeeId = ViewBag.EmployeeId})';" class="btn btn-primary">View Added Employee</button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href = '@Url.Action("AddEmployee", "EmployeeData")';">Add another Employee</button>
                 </div>
             </div>
         </div>
