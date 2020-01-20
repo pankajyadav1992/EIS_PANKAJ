@@ -75,7 +75,7 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Reason for Leaving DGH")]
         public Nullable<ReasonForLeaving> ReasonForLeaving { get; set; }
 
-        [Display(Name = "Deputation Period")]
+        [Display(Name = "Deputation/Engagement Period")]
         public string DeputationPeriod { get; set; }
 
         [Display(Name = "Seating Location")]

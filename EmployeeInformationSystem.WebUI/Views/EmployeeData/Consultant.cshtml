@@ -103,7 +103,7 @@
                     <p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p>
                 </div>
                 <div class="col-sm-3">
-                    @Html.DropDownListFor(model => model.EmployeeDetails.EmployeeType, new SelectList(Model.EmployeeType, "Value", "Text"), new { @class="form-control"})
+                    @Html.DropDownListFor(model => model.EmployeeDetails.EmployeeType, new SelectList(Model.EmployeeType, "Value", "Text"), new { @class = "form-control" })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.EmployeeType, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -404,33 +404,26 @@
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.WorkingStatus, "", new { @class = "text-danger" })
                 </div>
 
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.Organisation, htmlAttributes: new { @class = "form-control-label" })
-                    <p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p>
-                </div>
-                <div class="col-sm-3">
-                    @Html.DropDownListFor(model => model.EmployeeDetails.OrganisationId, new SelectList(Model.Organisations, "Id", "Name"), new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.OrganisationId, "", new { @class = "text-danger" })
-                </div>
+                <!--Org Removed-->
             </div>
             <div class="line"></div>
 
             <div class="form-group row justify-content-center">
                 <div class="col-sm-10">
                     <h3 class="h4">Qualification Details</h3>
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="qualificationTable" style="table-layout: fixed;word-wrap: break-word;">
+                    <div class="table" style="overflow-x:scroll;">
+                        <table class="table table-hover" id="qualificationTable">
                             <thead>
                                 <tr>
-                                    <th>Degree<p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p></th>
-                                    <th>Subject/Specialization</th>
-                                    <th>Grade/Percentage</th>
-                                    <th>Class</th>
-                                    <th>Institute</th>
-                                    <th>University</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Action</th>
+                                    <th style="min-width:150px;" class="text-center">Degree<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
+                                    <th class="text-center">Subject/Specialization</th>
+                                    <th class="text-center">Grade/Percentage</th>
+                                    <th style="min-width:100px;" class="text-center">Class</th>
+                                    <th style="min-width:150px;" class="text-center">Institute</th>
+                                    <th style="min-width:150px;" class="text-center">University</th>
+                                    <th style="min-width:150px;" class="text-center">From</th>
+                                    <th style="min-width:100px;" class="text-center">To</th>
+                                    <th style="min-width:100px;" class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -461,26 +454,7 @@
             </div>
             <div class="line"></div>
 
-            <div class="form-group row">
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.DateofJoiningParentOrg, htmlAttributes: new { @class = "form-control-label" })
-                    <p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p>
-                </div>
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.DateofJoiningParentOrg, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateofJoiningParentOrg, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.DateofRelievingLastOffice, htmlAttributes: new { @class = "form-control-label" })
-                    <p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p>
-                </div>
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.DateofRelievingLastOffice, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateofRelievingLastOffice, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
+            <!-- Parent Org Dates removed-->
 
             <div class="form-group row">
                 <div class="col-sm-3" style="text-align:right;">
@@ -531,28 +505,21 @@
             </div>
             <br />
 
-            <div class="form-group row justify-content-center">
-                <div class="col-sm-10">
-                    <h3 class="h4">Promotion Details</h3>
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="promotionTable">
-                            <thead>
-                                <tr>
-                                    <th>Designation<p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p></th>
-                                    <th>PayScale</th>
-                                    <th>Level</th>
-                                    @* Filter Levels on Basis of Organisation*@
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <button type="button" class="btn btn-success float-right" id="addPromotion"><span class="fa fa-plus"></span>  Add Promotion</button>
-                    </div>
+            <!-- Promotion Details removed-->
+
+            <div class="form-group row">
+                @Html.HiddenFor(model => model.PromotionDetails[0].EmployeeId, new { Value = Model.EmployeeDetails.Id })
+                @Html.LabelFor(model => model.PromotionDetails[0].Designation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3">
+                    @Html.DropDownListFor(model => model.PromotionDetails[0].DesignationId, new SelectList(Model.Designations, "Id", "Name"), new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PromotionDetails[0].DesignationId, "", new { @class = "text-danger" })
                 </div>
+
+                @Html.LabelFor(model => model.PromotionDetails[0].PayScale, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+            <div class="col-sm-3">
+                @Html.DropDownListFor(model => model.PromotionDetails[0].PayScaleId, new SelectList(Model.PayScales, "Id", "Scale"), new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PromotionDetails[0].PayScaleId, "", new { @class = "text-danger" })
+            </div>
             </div>
             <div class="line"></div>
 
@@ -563,7 +530,7 @@
                         <table class="table table-hover" id="postingTable">
                             <thead>
                                 <tr>
-                                    <th>Department<p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p></th>
+                                    <th>Department<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
                                     <th>HoD<p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p></th>
                                     <th>From</th>
                                     <th>To</th>
@@ -631,10 +598,11 @@
         });
 
         // Load time actions
-        $("#contactDetails").hide();
-        $("#professionalDetails").hide();
-        $("#postingDetails").hide();
-        $("#@Html.IdFor(model => model.EmployeeDetails.OrganisationId)").prepend('<option selected="selected" value="">--Select Organisation--</option>');
+        //$("#contactDetails").hide();
+        //$("#professionalDetails").hide();
+        //$("#postingDetails").hide();
+        $("#@Html.IdFor(model => model.PromotionDetails[0].DesignationId)").prepend('<option selected="selected" value="">--Select Designation--</option>');
+        $("#@Html.IdFor(model => model.PromotionDetails[0].PayScaleId)").prepend('<option selected="selected" value="">--Select PayScale--</option>');
         $("#@Html.IdFor(model => model.EmployeeDetails.DisciplineId)").prepend('<option selected="selected" value="">--Select Discipline--</option>');
         $("#@Html.IdFor(model => model.EmployeeDetails.LevelId)").prepend('<option selected="selected" value="">--Select DGH Level--</option>')
         sessionStorage.clear();
@@ -795,21 +763,10 @@
                     maxlength: 4,
                     minlength: 4
                 },
-                '@Html.NameFor(model => model.EmployeeDetails.OrganisationId)':  {
-                    required: true
-                },
                  '@Html.NameFor(model => model.EmployeeDetails.DisciplineId)':  {
                     required: true
                 },
                 '@Html.NameFor(model => model.EmployeeDetails.DateofJoiningDGH)':  {
-                    required: true,
-                    australianDate :true
-                },
-                '@Html.NameFor(model => model.EmployeeDetails.DateofJoiningParentOrg)':  {
-                    required: true,
-                    australianDate :true
-                },
-                '@Html.NameFor(model => model.EmployeeDetails.DateofRelievingLastOffice)':  {
                     required: true,
                     australianDate :true
                 },
@@ -823,6 +780,12 @@
                     required: function(element) {
                         return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.WorkingStatus)']:checked").val() == 'False';
                         }
+                },
+                '@Html.NameFor(model => model.PromotionDetails[0].DesignationId)':  {
+                    required: true
+                },
+                '@Html.NameFor(model => model.PromotionDetails[0].PayScaleId)':  {
+                    required: true
                 }
             },
             messages: {
@@ -1033,56 +996,6 @@
              });
         });
 
-        //Add new row to Promotion table
-        $("#addPromotion").click(function () {
-            if (sessionStorage.promotionCount) {
-                sessionStorage.promotionCount = Number(sessionStorage.promotionCount) + 1;
-            } else {
-                sessionStorage.promotionCount = 0;
-            }
-            var newPromotion = sessionStorage.promotionCount;
-            var designationNames = '<option selected="selected" value="">Select Designation</option>';
-            var levelNames = '<option selected="selected" value="">Select Level</option>';
-            var payScaleNames = '<option selected="selected" value="">Select PayScale</option>';
-            if (null != sessionStorage.getItem("designationJSON") && null != sessionStorage.getItem("levelJSON") && null != sessionStorage.getItem("payscaleJSON"))
-            {
-                var designationJSON = JSON.parse(sessionStorage.getItem("designationJSON"));
-                designationJSON.forEach(function (designation) { designationNames += '<option value="' + designation.Id + '">' + designation.Name + '</option>'; });
-
-                var levelJSON = JSON.parse(sessionStorage.getItem("levelJSON"));
-                levelJSON.forEach(function (level) { levelNames += '<option value="' + level.Id + '">' + level.Name + '</option>'; });
-
-                var payscaleJSON = JSON.parse(sessionStorage.getItem("payscaleJSON"));
-                payscaleJSON.forEach(function (payscale) { payScaleNames += '<option value="' + payscale.Id + '">' + payscale.Name + '</option>'; });
-            }
-            var rowHtml = '<tr id="promotionRow' + newPromotion + '"><td><input value="@Model.EmployeeDetails.Id" id="PromotionDetails_' + newPromotion + '__EmployeeId" name="PromotionDetails[' + newPromotion + '].EmployeeId" type="hidden"> \
-                           <select class="form-control" id="PromotionDetails_' + newPromotion + '__DesignationId" name="PromotionDetails[' + newPromotion + '].DesignationId" style="width:100px;">' + designationNames + '</select></td> \
-                           <td><select class="form-control" id="PromotionDetails_' + newPromotion + '__PayScaleId" name="PromotionDetails[' + newPromotion + '].PayScaleId" style="width:100px;">' + payScaleNames + '</select></td> \
-                           <td><select class="form-control" id="PromotionDetails_' + newPromotion + '__LevelId" name="PromotionDetails[' + newPromotion + '].LevelId" style="width:100px;">' + levelNames + '</select></td> \
-                           <td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Effective From must be a date." id="PromotionDetails_' + newPromotion + '__From" name="PromotionDetails[' + newPromotion + '].From" type="text" value=""></td> \
-                           <td><input class="form-control text-box single-line" data-val="true" data-val-date="The field To must be a date." id="PromotionDetails_' + newPromotion + '__To" name="PromotionDetails[' + newPromotion + '].To" type="text" value=""></td> \
-                           <td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#promotionRow' + newPromotion + '">Delete</button></td></tr>';
-            $('#promotionTable tbody').append(rowHtml);
-            $('#PromotionDetails_' + newPromotion + '__From').datepicker({
-                uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
-            }).rules('add',
-                {
-                    australianDate:true
-                });
-            $('#PromotionDetails_' + newPromotion + '__To').datepicker({
-                uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
-            }).rules('add',
-                {
-                    australianDate:true
-                });
-            $('#PromotionDetails_' + newPromotion + '__DesignationId').rules('add',
-             {
-                required: true
-             });
-        });
-
         //Button click actions for dynamically generated buttons
 
         // Common function to delete row any dynamic table
@@ -1123,37 +1036,6 @@
             }
          });
 
-        // Fetch PayScales, Designations and Fields based on Organisation
-        $(document).on('change', '#@Html.IdFor(model => model.EmployeeDetails.OrganisationId)', function () {
-            if (sessionStorage.promotionCount) {
-                    $('#promotionTable tbody').html("");
-                    sessionStorage.removeItem('promotionCount');
-                }
-            if (this.value != "") {
-                var url = '@Url.Action("GetOrganisationDependentInfo", "EmployeeData")?organisationId=' + this.value;
-                $.getJSON(
-                    url + '&infoType=level', function (data) {
-                        sessionStorage.setItem('levelJSON', JSON.stringify(data));
-                    }
-                );
-                $.getJSON(
-                    url + '&infoType=payscale', function (data) {
-                        sessionStorage.setItem('payscaleJSON', JSON.stringify(data));
-                    }
-                );
-                $.getJSON(
-                    url + '&infoType=designation', function (data) {
-                        sessionStorage.setItem('designationJSON', JSON.stringify(data));
-                    }
-                );
-
-            } else {
-                sessionStorage.removeItem("levelJSON");
-                sessionStorage.removeItem("payscaleJSON");
-                sessionStorage.removeItem("designationJSON");
-            }
-        });
-
     // Form submission via AJAX
     $("#finalSubmit").click(function () {
       if (v.form()) {
@@ -1190,4 +1072,3 @@
     });
 });
 </script>
-  

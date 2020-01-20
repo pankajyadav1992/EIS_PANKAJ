@@ -422,15 +422,15 @@
                         <table class="table table-hover" id="qualificationTable">
                             <thead>
                                 <tr>
-                                    <th style="min-width:150px;">Degree<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
-                                    <th>Subject/Specialization</th>
-                                    <th>Grade/Percentage</th>
-                                    <th>Class</th>
-                                    <th>Institute</th>
-                                    <th>University</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Action</th>
+                                    <th style="min-width:150px;" class="text-center">Degree<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
+                                    <th class="text-center">Subject/Specialization</th>
+                                    <th class="text-center">Grade/Percentage</th>
+                                    <th style="min-width:100px;" class="text-center">Class</th>
+                                    <th style="min-width:150px;" class="text-center">Institute</th>
+                                    <th style="min-width:150px;" class="text-center">University</th>
+                                    <th style="min-width:150px;" class="text-center">From</th>
+                                    <th style="min-width:100px;" class="text-center">To</th>
+                                    <th style="min-width:100px;" class="text-center">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -632,7 +632,7 @@
 
         // Load time actions
         $("#contactDetails").hide();
-        //$("#professionalDetails").hide();
+        $("#professionalDetails").hide();
         $("#postingDetails").hide();
         $("#@Html.IdFor(model => model.EmployeeDetails.OrganisationId)").prepend('<option selected="selected" value="">--Select Organisation--</option>');
         $("#@Html.IdFor(model => model.EmployeeDetails.DisciplineId)").prepend('<option selected="selected" value="">--Select Discipline--</option>');
