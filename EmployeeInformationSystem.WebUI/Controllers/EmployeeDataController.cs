@@ -94,7 +94,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         viewModel.AadhaarPart2 = employee.AadhaarNumer.Substring(4, 4);
                         viewModel.AadhaarPart3 = employee.AadhaarNumer.Substring(8, 4);
                     }
-                    organisationName = null != employee.Organisation ? employee.Organisation.Name : "DGH";
+                    organisationName = null != employee.Organisation ? employee.Organisation.Name : "DGH"; // Temp Bug fix to resolve issue with empty Org Names
                 }
                 else
                 {
@@ -182,7 +182,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     file.SaveAs(Server.MapPath("//Content//profile_pics//") + viewModel.EmployeeDetails.ProfilePhoto);
                 }
                 //Insert employee first
-                EmployeeDetailContext.Update(viewModel.EmployeeDetails);
+                EmployeeDetailContext.Insert(viewModel.EmployeeDetails);
                 EmpId = viewModel.EmployeeDetails.Id;
                 EmployeeDetailContext.Commit();
                 //Dependents next
@@ -430,12 +430,12 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public ActionResult ViewEmployee(string EmployeeId)
         {
+            ViewBag.Target = "View";
+            ViewBag.Title = "View Employee";
             if (null == EmployeeId)
             {
                 List<EmployeeDetail> employees = EmployeeDetailContext.Collection().ToList();
                 ViewBag.Employees = employees;
-                ViewBag.Target = "View";
-                ViewBag.Title = "View Employee";
                 return View("SelectEmployee");
             }
             EmployeeDetail employee = EmployeeDetailContext.Find(EmployeeId);
@@ -457,6 +457,115 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             {
                 return HttpNotFound();
             }
+        }
+
+        public ActionResult DeleteEmployee(string EmployeeId)
+        {
+            ViewBag.Target = "Delete";
+            ViewBag.Title = "Delete Employee";
+            if (null == EmployeeId)
+            {
+                List<EmployeeDetail> employees = EmployeeDetailContext.Collection().ToList();
+                ViewBag.Employees = employees;
+                return View("SelectEmployee");
+            }
+            EmployeeDetail employee = EmployeeDetailContext.Find(EmployeeId);
+            if (null != employee)
+            {
+                DataViewModel viewModel = new DataViewModel()
+                {
+                    EmployeeDetails = employee,
+                    DependentDetails = DependentDetailContext.Collection().Where(d => d.EmployeeId == employee.Id).ToList(),
+                    TelephoneExtensions = TelephoneExtensionContext.Collection().FirstOrDefault(t => t.EmployeeId == employee.Id),
+                    QualificationDetails = QualificationDetailContext.Collection().Where(q => q.EmployeeId == employee.Id).ToList(),
+                    PastExperiences = PastExperienceContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList(),
+                    PromotionDetails = PromotionDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList(),
+                    PostingDetails = PostingDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
+                };
+                return View("ViewEmployee", viewModel);
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+        }
+
+        public ActionResult AjaxDelete(string EmployeeId)
+        {
+            string returnText = "<div class=\"alert alert-danger\" role=\"alert\"> An Error has occured </div>";
+            EmployeeDetail employee = null != EmployeeId ? EmployeeDetailContext.Find(EmployeeId) : null;
+            if (null != employee)
+            {
+                // Dependents
+                var dependentsId = (from dependent in DependentDetailContext.Collection()
+                                    where dependent.EmployeeId == employee.Id
+                                    select dependent.Id).ToList() ?? new List<string>();
+                foreach (var dependentId in dependentsId)
+                {
+                    DependentDetailContext.Delete(dependentId);
+                }
+                DependentDetailContext.Commit();
+
+                // Telephone Extension
+                TelephoneExtension telephoneExtension = TelephoneExtensionContext.Collection().FirstOrDefault(t => t.EmployeeId == employee.Id);
+                if (null != telephoneExtension)
+                {
+                    TelephoneExtensionContext.Delete(telephoneExtension.Id);
+                    TelephoneExtensionContext.Commit();
+                }
+
+                // Qualification Details
+                var qualificationsId = (from qualification in QualificationDetailContext.Collection()
+                                        where qualification.EmployeeId == employee.Id
+                                        select qualification.Id).ToList() ?? new List<string>();
+                foreach (var qualificationId in qualificationsId)
+                {
+                    QualificationDetailContext.Delete(qualificationId);
+                }
+                QualificationDetailContext.Commit();
+
+                //Past Experiences
+                var experiencesId = (from experience in PastExperienceContext.Collection()
+                                        where experience.EmployeeId == employee.Id
+                                        select experience.Id).ToList() ?? new List<string>();
+                foreach (var experienceId in experiencesId)
+                {
+                    PastExperienceContext.Delete(experienceId);
+                }
+                PastExperienceContext.Commit();
+
+                // Posting Details
+                var postingsId = (from posting in PostingDetailContext.Collection()
+                                     where posting.EmployeeId == employee.Id
+                                     select posting.Id).ToList() ?? new List<string>();
+                foreach (var postingId in postingsId)
+                {
+                    PostingDetailContext.Delete(postingId);
+                }
+                PostingDetailContext.Commit();
+
+                //Promotion Details
+                var promotionsId = (from promotion in PromotionDetailContext.Collection()
+                                  where promotion.EmployeeId == employee.Id
+                                  select promotion.Id).ToList() ?? new List<string>();
+                foreach (var promotionId in promotionsId)
+                {
+                    PromotionDetailContext.Delete(promotionId);
+                }
+                PromotionDetailContext.Commit();
+
+                // Finally Employee
+                EmployeeDetailContext.Delete(employee.Id);
+                EmployeeDetailContext.Commit();
+
+                returnText = "<div class=\"alert alert-success\" role=\"alert\"> Successfully deleted Employee "+ employee.GetFullName +" </div>";
+            }
+            else
+            {
+                return HttpNotFound();
+            }
+
+            return Content(returnText);
         }
 
         public JsonResult GetOrganisationDependentInfo(string organisationId, string infoType)

@@ -19,17 +19,21 @@
 @section DataManage{
     show
 }
-@if (ViewBag.Target == "View")
+@{ string headerClass = "";}
+@switch (ViewBag.Target)
 {
-    @section ViewEmployee{
+    case "View":headerClass = "bg-info";
+        @section ViewEmployee{
+            class="active"
+    } break;
+    case "Edit":headerClass = "bg-warning";
+        @section EditEmployee{
         class="active"
-    }
-}
-else
-{
-    @section EditEmployee{
-        class="active"
-    }
+    } break;
+    case "Delete": headerClass = "bg-danger";
+        @section DeleteEmployee{
+    class="active"
+    } break;
 }
 
 <div id="overlay" style="display:none;text-align:center;">
@@ -38,7 +42,8 @@ else
 </div>
 
 <!-- Page Header-->
-<header class="page-header">
+
+<header class="page-header @headerClass text-white">
     <div class="container-fluid">
         <h2 class="no-margin-bottom">@ViewBag.Target Employee Data</h2>
     </div>
@@ -122,7 +127,7 @@ else
     <script>
         $(document).ready(function () {
             $('select').prop('disabled', true).selectpicker({
-                liveSearchStyle: "contains"
+            liveSearchStyle: "contains"
             });
 
             $('input[type="radio"][name="radioEmployeeOption"').change(function () {
@@ -155,37 +160,37 @@ else
                 var EmployeeId = null;
                 EmployeeId = $("select:enabled").val();
                 if ("" != EmployeeId) {
-                    @if(ViewBag.Target == "View")
+                    @if("View" == ViewBag.Target || "Delete" == ViewBag.Target)
                     {
                     <text>
-                    window.location.href = '@Url.Action("ViewEmployee", "EmployeeData")?EmployeeId=' + EmployeeId;
+                    window.location.href = '@Url.Action("View" == ViewBag.Target ?"ViewEmployee": "DeleteEmployee", "EmployeeData")?EmployeeId=' + EmployeeId;
                     </text>
                     }
                     else
                     {
                     <text>
                     $('#overlay').fadeIn();
-                    var employeeType = $("select:enabled").find(':selected').data('employeetype');
-                    var targetPage = "Contractual";
-                    if (employeeType == "Deputationist") {
-                        targetPage = "Deputationist";
-                    } else if (employeeType == "Advisor" || employeeType == "Consultant") {
-                        targetPage = "Consultant";
-                    }
-                    if ('NA' != targetPage) {
+                        var employeeType = $("select:enabled").find(':selected').data('employeetype');
+                        var targetPage = "Contractual";
+                        if (employeeType == "Deputationist") {
+                            targetPage = "Deputationist";
+                        } else if (employeeType == "Advisor" || employeeType == "Consultant") {
+                            targetPage = "Consultant";
+                        }
+                        if ('NA' != targetPage) {
                         $.ajax({
                             url: '@Url.Action("AjaxAdd", "EmployeeData")?targetPage=' + targetPage + '&mode=Edit&EmployeeId=' + EmployeeId,
                             success: function (result) {
                                 $('#AddDataForm').html(result);
-                            },
+                                },
                             error: function () {
                                 $('#AddDataForm').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
-                            },
+                                },
                             fail: function (xhr, textStatus, errorThrown) {
                                 $('#AddDataForm').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
-                            }
-                        });
-                    }
+                                }
+                            });
+                        }
                     </text>
                     }
                 } else {

@@ -73,9 +73,9 @@
                                                         <a href="#DataManageDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-database"></i>Employee Data</a>
                                                         <ul id="DataManageDropdown" class="collapse list-unstyled @RenderSection("DataManage",required:false)">
                                                             <li @RenderSection("AddEmployee", required: false)><a href="@Url.Action("AddEmployee", "EmployeeData")"><i class="fa fa-user-plus"></i>Add Employee</a></li>
-                                                            <li @RenderSection("ViewEmployee", required: false)><a href="@Url.Action("ViewEmployee", "EmployeeData")"><i class="fa fa-address-card"></i>View Employee Data</a></li>
+                                                            <li @RenderSection("ViewEmployee", required: false)><a href="@Url.Action("ViewEmployee", "EmployeeData")"><i class="fa fa-address-card"></i>View Employee</a></li>
                                                             <li @RenderSection("EditEmployee", required: false)><a href="@Url.Action("EditEmployee", "EmployeeData")"><i class="fa fa-edit"></i>Update Record</a></li>
-                                                            <li><a href="#"><i class="fa fa-trash"></i>Delete Record</a></li>
+                                                            <li @RenderSection("DeleteEmployee", required: false)><a href="@Url.Action("DeleteEmployee", "EmployeeData")"><i class="fa fa-trash"></i>Delete Record</a></li>
                                                         </ul>
                                                     </li>
                                                     <li>
