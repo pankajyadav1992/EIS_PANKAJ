@@ -9,10 +9,5 @@ namespace EmployeeInformationSystem.Services
 {
     public class ManipulateData
     {
-        object CreateObjectFromForm(FormCollection collection, string objectType)
-        {
-            object genericObject = null;
-            return genericObject;
-        }
     }
 }

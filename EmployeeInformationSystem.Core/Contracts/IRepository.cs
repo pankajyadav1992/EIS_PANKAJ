@@ -12,7 +12,7 @@ namespace EmployeeInformationSystem.Core.Contracts
         IQueryable<T> Collection();
         void Commit();
         void Delete(string Id);
-        T Find(string Id);
+        T Find(string Id, Boolean asNoTracking = false);
         void Insert(T t);
         void Update(T t);
     }

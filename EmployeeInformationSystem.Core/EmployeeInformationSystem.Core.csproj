@@ -83,6 +83,7 @@
     <Compile Include="Models\HoD.cs" />
     <Compile Include="Models\Level.cs" />
     <Compile Include="Models\Organisation.cs" />
+    <Compile Include="Models\PastExperience.cs" />
     <Compile Include="Models\PayScale.cs" />
     <Compile Include="Models\PostingDetail.cs" />
     <Compile Include="Models\PromotionDetail.cs" />

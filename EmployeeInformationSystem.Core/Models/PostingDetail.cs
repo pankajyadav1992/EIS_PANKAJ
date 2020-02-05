@@ -14,10 +14,13 @@ namespace EmployeeInformationSystem.Core.Models
         public string EmployeeId { get; set; }
         public virtual EmployeeDetail Employee{get;set;}
 
-        // Nullable
+        // Nullable. Consider Linking to HoD Table??
         [Display(Name = "Head of Department(HoD)")]
         public string HODId { get; set; }
         public virtual EmployeeDetail HOD { get; set; }
+
+        // This is ONLY for contractual employees reporting to MoPNG & DGH
+        public string Reporting { get; set; }
 
         [Required(ErrorMessage = "Valid Department is required")]
         public string DepartmentId { get; set; }

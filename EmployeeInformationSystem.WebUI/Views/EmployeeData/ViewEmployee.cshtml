@@ -26,7 +26,7 @@
                 <div class="card" id="AddDataForm">
                     <div class="card-header">
                         <h3 class="h4">Details of : @Model.EmployeeDetails.Title @Model.EmployeeDetails.FirstName @Model.EmployeeDetails.LastName <input type="button" class="btn btn-info float-right" value="Show All" id="togggleAll" style="display:inline-block !important;" /></h3>
-                        
+
                     </div>
 
                     <div class="card-body">
@@ -91,8 +91,9 @@
                                             </div>
 
 
-                                            <h5 class="title col-sm-3" style="        text-align: right;
-">@Html.DisplayNameFor(model => model.EmployeeDetails.MarriageDate):</h5>
+                                            <h5 class="title col-sm-3" style="text-align:right;">
+                                                @Html.DisplayNameFor(model => model.EmployeeDetails.MarriageDate):
+                                            </h5>
                                             <div class="col-sm-3">
                                                 @Html.DisplayFor(model => model.EmployeeDetails.MarriageDate)
                                             </div>
@@ -110,20 +111,45 @@
                                                 @Html.DisplayFor(model => model.EmployeeDetails.BloodGroup)
                                             </div>
                                         </div>
+                                        @{
+                                            var employeeTypes = new List<EmployeeInformationSystem.Core.Models.EmployeeType>() {
+                                                EmployeeInformationSystem.Core.Models.EmployeeType.Deputationist,
+                                                EmployeeInformationSystem.Core.Models.EmployeeType.Consultant,
+                                                EmployeeInformationSystem.Core.Models.EmployeeType.Advisor
+                                                                        };
 
-                                        <div class="form-group row">
-                                            <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.PassportNumber):</h5>
-                                            <div class="col-sm-3">
-                                                @Html.DisplayFor(model => model.EmployeeDetails.PassportNumber)
+                                        }
+                                        @if (employeeTypes.Contains(Model.EmployeeDetails.EmployeeType))
+                                        {
+                                            <div class="form-group row">
+                                                <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.PassportNumber):</h5>
+
+                                                <div class="col-sm-3">
+                                                    @Html.DisplayFor(model => model.EmployeeDetails.PassportNumber)
+                                                </div>
+
+
+                                                <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.PassportValidity):</h5>
+                                                <div class="col-sm-3">
+                                                    @Html.DisplayFor(model => model.EmployeeDetails.PassportValidity)
+                                                </div>
                                             </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group row">
+                                                <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.DeputedLocation):</h5>
+                                                <div class="col-sm-3">
+                                                    @Html.DisplayFor(model => model.EmployeeDetails.DeputedLocation)
+                                                </div>
 
 
-                                            <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.PassportValidity):</h5>
-                                            <div class="col-sm-3">
-                                                @Html.DisplayFor(model => model.EmployeeDetails.PassportValidity)
+                                                <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.UANNumber):</h5>
+                                                <div class="col-sm-3">
+                                                    @Html.DisplayFor(model => model.EmployeeDetails.UANNumber)
+                                                </div>
                                             </div>
-                                        </div>
-
+                                        }
                                         <div class="form-group row">
                                             <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.PANNumber):</h5>
                                             <div class="col-sm-3">
@@ -133,7 +159,11 @@
 
                                             <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.AadhaarNumer):</h5>
                                             <div class="col-sm-3">
-                                                @Html.DisplayFor(model => model.EmployeeDetails.AadhaarNumer).ToString().Substring(0, 4)-@Html.DisplayFor(model => model.EmployeeDetails.AadhaarNumer).ToString().Substring(4, 4)-@Html.DisplayFor(model => model.EmployeeDetails.AadhaarNumer).ToString().Substring(8, 4)
+                                                @if (Model.EmployeeDetails.AadhaarNumer != null)
+                                                {
+                                                    @Html.DisplayFor(model => model.EmployeeDetails.AadhaarNumer).ToString().Substring(0, 4) <text>-</text> @Html.DisplayFor(model => model.EmployeeDetails.AadhaarNumer).ToString().Substring(4, 4) <text>-</text> @Html.DisplayFor(model => model.EmployeeDetails.AadhaarNumer).ToString().Substring(8, 4)
+                                                }
+
                                             </div>
                                         </div>
 
@@ -277,11 +307,11 @@
                                             <div class="col-sm-3">
                                                 @if (Model.EmployeeDetails.WorkingStatus)
                                                 {
-                                                    <p>Working</p>
+                                                    <text>Working</text>
                                                 }
                                                 else
                                                 {
-                                                    <p>Separated</p>
+                                                    <text>Separated</text>
                                                 }
                                             </div>
 
@@ -299,26 +329,32 @@
                                                 <div class="form-group row justify-content-center">
                                                     <div class="col-sm-10">
                                                         <h3 class="h4">Qualification Details</h3>
-                                                        <div class="table-responsive">
+                                                        <div class="table" style="overflow-x:scroll;">
                                                             <table class="table table-hover" id="qualificationTable">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th>Degree</th>
-                                                                        <th>Institute</th>
-                                                                        <th>University</th>
-                                                                        <th>From</th>
-                                                                        <th>To</th>
+                                                                        <th style="min-width:150px;" class="text-center">Degree</th>
+                                                                        <th class="text-center">Subject/Specialization</th>
+                                                                        <th class="text-center">Grade/Percentage</th>
+                                                                        <th style="min-width:100px;" class="text-center">Class</th>
+                                                                        <th style="min-width:150px;" class="text-center">Institute</th>
+                                                                        <th style="min-width:150px;" class="text-center">University</th>
+                                                                        <th style="min-width:150px;" class="text-center">From</th>
+                                                                        <th style="min-width:100px;" class="text-center">To</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                     @for (int i = 0; i < Model.QualificationDetails.Count(); i++)
                                                                     {
                                                                         <tr>
-                                                                            <td>@Html.DisplayFor(model => Model.QualificationDetails[i].Degree.Name)</td>
-                                                                            <td>@Html.DisplayFor(model => Model.QualificationDetails[i].Institution)</td>
-                                                                            <td>@Html.DisplayFor(model => Model.QualificationDetails[i].University)</td>
-                                                                            <td>@Html.DisplayFor(model => Model.QualificationDetails[i].From)</td>
-                                                                            <td>@Html.DisplayFor(model => Model.QualificationDetails[i].To)</td>
+                                                                            <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].Degree.Name)</td>
+                                                                            <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].Specialization)</td>
+                                                                            <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].Grade)</td>
+                                                                            <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].Class)</td>
+                                                                            <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].Institution)</td>
+                                                                            <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].University)</td>
+                                                                            <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].From)</td>
+                                                                            <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].To)</td>
                                                                         </tr>
                                                                     }
                                                                 </tbody>
@@ -351,19 +387,22 @@
                                                 @Html.DisplayFor(model => model.EmployeeDetails.Discipline.Name)
                                             </div>
                                         </div>
+                                        @if (Model.EmployeeDetails.EmployeeType == EmployeeInformationSystem.Core.Models.EmployeeType.Deputationist)
+                                        {
+                                            <div class="form-group row">
+                                                <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.DateofJoiningParentOrg):</h5>
+                                                <div class="col-sm-3">
+                                                    @Html.DisplayFor(model => model.EmployeeDetails.DateofJoiningParentOrg)
+                                                </div>
 
-                                        <div class="form-group row">
-                                            <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.DateofJoiningParentOrg):</h5>
-                                            <div class="col-sm-3">
-                                                @Html.DisplayFor(model => model.EmployeeDetails.DateofJoiningParentOrg)
+
+                                                <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.DateofRelievingLastOffice):</h5>
+                                                <div class="col-sm-3">
+                                                    @Html.DisplayFor(model => model.EmployeeDetails.DateofRelievingLastOffice)
+                                                </div>
                                             </div>
+                                        }
 
-
-                                            <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.DateofRelievingLastOffice):</h5>
-                                            <div class="col-sm-3">
-                                                @Html.DisplayFor(model => model.EmployeeDetails.DateofRelievingLastOffice)
-                                            </div>
-                                        </div>
 
                                         <div class="form-group row">
                                             <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.DateofJoiningDGH):</h5>
@@ -402,44 +441,60 @@
                                         </button>
                                     </h2>
                                 </div>
-
                                 <div id="collapseFour" class="collapse" aria-labelledby="postingDetails" data-parent="#viewDataAccordion">
                                     <div class="card-body">
-
                                         @{ if (0 != Model.PromotionDetails.Count())
                                             {
-                                                <div class="line"></div>
-                                                <div class="form-group row justify-content-center">
-                                                    <div class="col-sm-10">
-                                                        <h3 class="h4">Promotion Details</h3>
-                                                        <div class="table-responsive">
-                                                            <table class="table table-hover" id="promotionTable">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Designation</th>
-                                                                        <th>PayScale</th>
-                                                                        <th>Level</th>
-                                                                        <th>From</th>
-                                                                        <th>To</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    @for (int i = 0; i < Model.PromotionDetails.Count(); i++)
-                                                                    {
-                                                                        <tr>
-                                                                            <td>@Html.DisplayFor(model => Model.PromotionDetails[i].Designation.Name)</td>
-                                                                            <td>@Html.DisplayFor(model => Model.PromotionDetails[i].PayScale.Scale)</td>
-                                                                            <td>@Html.DisplayFor(model => Model.PromotionDetails[i].Level.Name)</td>
-                                                                            <td>@Html.DisplayFor(model => Model.PromotionDetails[i].From)</td>
-                                                                            <td>@Html.DisplayFor(model => Model.PromotionDetails[i].To)</td>
-                                                                        </tr>
-                                                                    }
-                                                                </tbody>
-                                                            </table>
+                                                if (Model.EmployeeDetails.EmployeeType != EmployeeInformationSystem.Core.Models.EmployeeType.Deputationist)
+                                                {
+                                                    <div class="form-group row">
+                                                        <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.PromotionDetails[0].Designation):</h5>
+                                                        <div class="col-sm-3">
+                                                            @Html.DisplayFor(model => model.PromotionDetails[0].Designation.Name)
+                                                        </div>
+
+                                                        <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.PromotionDetails[0].PayScale):</h5>
+                                                        <div class="col-sm-3">
+                                                            @Html.DisplayFor(model => model.PromotionDetails[0].PayScale.Scale)
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="line"></div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="line"></div>
+                                                    <div class="form-group row justify-content-center">
+                                                        <div class="col-sm-10">
+                                                            <h3 class="h4">Promotion Details</h3>
+                                                            <div class="table-responsive">
+                                                                <table class="table table-hover" id="promotionTable">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Designation</th>
+                                                                            <th>PayScale</th>
+                                                                            <th>Level</th>
+                                                                            <th>From</th>
+                                                                            <th>To</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        @for (int i = 0; i < Model.PromotionDetails.Count(); i++)
+                                                                        {
+                                                                            <tr>
+                                                                                <td>@Html.DisplayFor(model => Model.PromotionDetails[i].Designation.Name)</td>
+                                                                                <td>@Html.DisplayFor(model => Model.PromotionDetails[i].PayScale.Scale)</td>
+                                                                                <td>@Html.DisplayFor(model => Model.PromotionDetails[i].Level.Name)</td>
+                                                                                <td>@Html.DisplayFor(model => Model.PromotionDetails[i].From)</td>
+                                                                                <td>@Html.DisplayFor(model => Model.PromotionDetails[i].To)</td>
+                                                                            </tr>
+                                                                        }
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="line"></div>
+                                                }
+
                                             }
                                             else
                                             {
@@ -452,7 +507,58 @@
                                             }
                                         }
 
-                                        @{ if (0 != Model.PromotionDetails.Count())
+                                        @if (Model.EmployeeDetails.EmployeeType != EmployeeInformationSystem.Core.Models.EmployeeType.Deputationist)
+                                        {
+                                            if (0 != Model.PastExperiences.Count())
+                                            {
+                                                <div class="line"></div>
+                                                <div class="form-group row justify-content-center">
+                                                    <div class="col-sm-10">
+                                                        <h3 class="h4">Past Experience</h3>
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover" id="experienceTable">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Name of Organisation</th>
+                                                                        <th>Position</th>
+                                                                        <th>Compensation</th>
+                                                                        <th>Location</th>
+                                                                        <th>From</th>
+                                                                        <th>To</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @for (int i = 0; i < Model.PastExperiences.Count(); i++)
+                                                                    {
+                                                                        <tr>
+                                                                            <td>@Html.DisplayFor(model => Model.PastExperiences[i].Organisation)</td>
+                                                                            <td>@Html.DisplayFor(model => Model.PastExperiences[i].Position)</td>
+                                                                            <td>@Html.DisplayFor(model => Model.PastExperiences[i].Compensation)</td>
+                                                                            <td>@Html.DisplayFor(model => Model.PastExperiences[i].Location)</td>
+                                                                            <td>@Html.DisplayFor(model => Model.PastExperiences[i].From)</td>
+                                                                            <td>@Html.DisplayFor(model => Model.PastExperiences[i].To)</td>
+                                                                        </tr>
+                                                                    }
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="line"></div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group row">
+                                                    <h5 class="title col-sm-3" style="text-align:right;">Past Experience:</h5>
+                                                    <div class="col-sm-3">
+                                                        Not available
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+
+
+                                        @{ if (0 != Model.PostingDetails.Count())
                                             {
                                                 <div class="line"></div>
                                                 <div class="form-group row justify-content-center">

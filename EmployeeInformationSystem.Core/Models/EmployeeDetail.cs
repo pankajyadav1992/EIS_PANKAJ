@@ -17,11 +17,14 @@ namespace EmployeeInformationSystem.Core.Models
         public string EmployeeCode { get; set; }
 
         public string Title { get; set; }
-           
+
+        [Required(ErrorMessage = "Valid First Name is required")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [Required(ErrorMessage ="Valid Last Name is required")]
+        [Display(Name = "Middle Name")]
+        public string MiddleName { get; set; }
+
         [Display(Name = "Last  Name")]
         public string LastName { get; set; }
 
@@ -90,7 +93,7 @@ namespace EmployeeInformationSystem.Core.Models
         public string ResidenceNumber { get; set; }
 
         [Display(Name = "Residence Address")]
-        public string ResidenceAddress { get; set;}
+        public string ResidenceAddress { get; set; }
 
         [Display(Name = "Permanent Address")]
         public string PermanentAddress { get; set; }
@@ -128,8 +131,8 @@ namespace EmployeeInformationSystem.Core.Models
         public string PrimaryExpertise { get; set; }
 
         //Nullable & Add support for Org Level in Promotion details
-        [Display(Name = "DGH Level")]
         public string LevelId { get; set; }
+        [Display(Name = "DGH Level")]
         public virtual Level DGHLevel { get; set; }
 
         [Display(Name = "Current Basic Pay")]
@@ -176,15 +179,39 @@ namespace EmployeeInformationSystem.Core.Models
         [RegularExpression(@"^\d+$", ErrorMessage = "Please enter valid contact number")]
         [Display(Name = "Emergency Phone Number")]
         public string EmergencyContact { get; set; }
+
+        /*
+         * Additional fields for Contractual Staff
+         */
+
+        [StringLength(12, MinimumLength = 12, ErrorMessage = "UAN Number must be of 12 characters")]
+        [Display(Name = "UAN Number")]
+        public string UANNumber { get; set; }
+
+        [Display(Name = "Deputed Location")]
+        public DeputeLocations? DeputedLocation { get; set; }
+
+        [NotMapped]
+        public string GetFullName
+        {
+            get
+            {
+                string _fullName = (this.Title == null ? "" : this.Title + " ") + (this.FirstName == null ? "" : this.FirstName + " ") + (this.MiddleName == null ? "" : this.MiddleName + " ") + this.LastName ?? "";
+                return _fullName;
+            }
+        }
     }
 
 
     public enum EmployeeType
     {
         Deputationist,
-        Adviser,
+        Advisor,
         Consultant,
-        Contractual,
+        [Display(Name = "Contractual - DGH Staff")]
+        ContractualDGHStaff,
+        [Display(Name = "Contractual - MoPNG Staff")]
+        ContractualMoPNGStaff,
         [Display(Name = "Trainee Officer")]
         TraineeOfficer,
         Others
@@ -209,6 +236,17 @@ namespace EmployeeInformationSystem.Core.Models
         Others
     }
 
+    public enum DeputeLocations
+    {
+        [Display(Name = "DGH, Noida")]
+        DGHNoida,
+        [Display(Name = "MoPN&G, New Delhi")]
+        MoPNGDelhi,
+        [Display(Name = "SDC, Bhubhaneshwar")]
+        SDCBhubhaneshwar,
+        [Display(Name = "Scope Minar, New Delhi")]
+        ScopeMinarDelhi
+    }
     public enum BloodGroup
     {
         [Display(Name = "A+")]

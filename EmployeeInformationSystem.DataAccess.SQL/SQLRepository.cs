@@ -20,7 +20,7 @@ namespace EmployeeInformationSystem.DataAccess.SQL
         {
             this._context = dataContext;
             this._dbset = _context.Set<T>();
-            
+
         }
 
         public IQueryable<T> Collection()
@@ -61,9 +61,16 @@ namespace EmployeeInformationSystem.DataAccess.SQL
             _context.Entry(t).State = EntityState.Modified;
         }
 
-        public T Find(string Id)
+        public T Find(string Id, bool asNoTracking = false)
         {
-            return _dbset.Find(Id);
+            T tToReturn = null;
+            if (asNoTracking)
+            {
+                try { tToReturn = _dbset.AsNoTracking().Single(t => t.Id == Id); }
+                catch { tToReturn = null; }
+            }
+            else tToReturn= _dbset.Find(Id);
+            return tToReturn;
         }
 
         public void Delete(string Id)

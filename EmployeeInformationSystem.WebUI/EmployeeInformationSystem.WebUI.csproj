@@ -243,6 +243,8 @@
     <Content Include="Content\old_css\bootstrap-reboot.min.css" />
     <Content Include="Content\old_css\bootstrap.css" />
     <Content Include="Content\old_css\bootstrap.min.css" />
+    <Content Include="Content\vendor\bootstrap-select\css\bootstrap-select.min.css" />
+    <Content Include="Content\vendor\bootstrap-select\js\bootstrap-select.min.js" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap-grid.css" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap-grid.min.css" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap-reboot.css" />
@@ -608,9 +610,11 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\EmployeeData\AddSuccess.cshtml" />
+    <Content Include="Views\EmployeeData\Success.cshtml" />
     <Content Include="Views\EmployeeData\ViewEmployee.cshtml" />
     <Content Include="Views\EmployeeData\Consultant.cshtml" />
+    <Content Include="Views\EmployeeData\Contractual.cshtml" />
+    <Content Include="Views\EmployeeData\SelectEmployee.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

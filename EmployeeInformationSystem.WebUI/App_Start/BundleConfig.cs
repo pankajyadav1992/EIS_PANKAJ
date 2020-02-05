@@ -35,6 +35,9 @@ namespace EmployeeInformationSystem.WebUI
             bundles.Add(new ScriptBundle("~/bundles/gijgo").Include(
                         "~/Content/vendor/gijgo/js/gijgo.min.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/bootstrap-select").Include(
+                        "~/Content/vendor/bootstrap-select/js/bootstrap-select.min.js"));
+
             //bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
             //            "~/Scripts/jquery.validate*"));
 
@@ -57,6 +60,7 @@ namespace EmployeeInformationSystem.WebUI
                       "~/Content/css/style.default.css",
                       "~/Content/css/custom.css"));
             bundles.Add(new StyleBundle("~/Content/gijgo").Include("~/Content/vendor/gijgo/css/gijgo.min.css"));
+            bundles.Add(new StyleBundle("~/Content/bootstrap-select").Include("~/Content/vendor/bootstrap-select/css/bootstrap-select.min.css"));
         }
     }
 }

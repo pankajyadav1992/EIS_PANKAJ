@@ -43,6 +43,7 @@ namespace EmployeeInformationSystem.DataAccess.SQL
         public DbSet<HoD> HoDs { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<Organisation> Organisations { get; set; }
+        public DbSet<PastExperience> PastExperiences { get; set; }
         public DbSet<PayScale> PayScales { get; set; }
         public DbSet<PostingDetail> PostingDetails { get; set; }
         public DbSet<PromotionDetail> PromotionDetails { get; set; }

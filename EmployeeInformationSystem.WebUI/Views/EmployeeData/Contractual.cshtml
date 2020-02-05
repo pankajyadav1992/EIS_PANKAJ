@@ -74,7 +74,7 @@
             </div>
         </div>
     </div>
-    @using (Html.BeginForm(ViewBag.Mode == "Add" ? "AjaxAdd" : "AjaxEdit", "EmployeeData", FormMethod.Post, new { encType = "multipart/form-data", @class = "form-horizontal", @id = "consultantForm" }))
+    @using (Html.BeginForm(ViewBag.Mode == "Add" ? "AjaxAdd" : "AjaxEdit", "EmployeeData", FormMethod.Post, new { encType = "multipart/form-data", @class = "form-horizontal", @id = "contractualForm" }))
     {
         @Html.AntiForgeryToken()
 
@@ -182,7 +182,7 @@
 
                 @Html.LabelFor(model => model.EmployeeDetails.MarriageDate, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.MarriageDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
+                    @Html.EditorFor(model => model.EmployeeDetails.MarriageDate, new { htmlAttributes = new { @class = "form-control FieldDate", @type = "text", @data_type = "date", @disabled = "disabled" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.MarriageDate, "", new { @class = "text-danger" })
                 </div>
             </div>
@@ -224,15 +224,22 @@
             <div class="line"></div>
 
             <div class="form-group row">
-                @Html.LabelFor(model => model.EmployeeDetails.PassportNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.PassportNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportNumber, "", new { @class = "text-danger" })
+                <div class="col-sm-3" style="text-align:right;">
+                    @Html.LabelFor(model => model.EmployeeDetails.UANNumber, htmlAttributes: new { @class = "form-control-label" })
+                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
                 </div>
-                @Html.LabelFor(model => model.EmployeeDetails.PassportValidity, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.PassportValidity, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportValidity, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.EmployeeDetails.UANNumber, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.UANNumber, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="col-sm-3" style="text-align:right;">
+                    @Html.LabelFor(model => model.EmployeeDetails.DeputedLocation, htmlAttributes: new { @class = "form-control-label" })
+                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+                </div>
+                <div class="col-sm-3">
+                    @Html.EnumDropDownListFor(model => model.EmployeeDetails.DeputedLocation, new { @class = "form-control requiredField" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DeputedLocation, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="line"></div>
@@ -249,7 +256,7 @@
                 </div>
                 <div class="col-sm-3" style="text-align:right;">
                     @Html.LabelFor(model => model.EmployeeDetails.AadhaarNumer, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+                    <!--<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>-->
                 </div>
                 <div class="col-sm-1">
                     @Html.EditorFor(model => model.AadhaarPart1, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
@@ -322,7 +329,7 @@
             <div class="form-group row">
                 <div class="col-sm-3" style="text-align:right;">
                     @Html.LabelFor(model => model.EmployeeDetails.EmailID, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+                    <!--<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>-->
                 </div>
                 <div class="col-sm-3">
                     @Html.EditorFor(model => model.EmployeeDetails.EmailID, new { htmlAttributes = new { @class = "form-control" } })
@@ -428,7 +435,15 @@
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.WorkingStatus, "", new { @class = "text-danger" })
                 </div>
 
-                <!--Org Removed-->
+                <div class="col-sm-3" style="text-align:right;">
+                    @Html.LabelFor(model => model.EmployeeDetails.Organisation, htmlAttributes: new { @class = "form-control-label" })
+                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+                </div>
+                <div class="col-sm-3">
+                    @Html.DropDownListFor(model => model.EmployeeDetails.OrganisationId, new SelectList(Model.Organisations, "Id", "Name"), new { @class = "form-control requiredField" })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.OrganisationId, "", new { @class = "text-danger" })
+                </div>
+
             </div>
             <div class="line"></div>
 
@@ -481,25 +496,6 @@
             </div>
             <div class="line"></div>
 
-            <div class="form-group row">
-                @Html.LabelFor(model => model.EmployeeDetails.PrimaryExpertise, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.PrimaryExpertise, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PrimaryExpertise, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.Discipline, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-3">
-                    @Html.DropDownListFor(model => model.EmployeeDetails.DisciplineId, new SelectList(Model.Disciplines, "Id", "Name"), new { @class = "form-control requiredField" })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DisciplineId, "", new { @class = "text-danger" })
-                </div>
-
-            </div>
-            <div class="line"></div>
-
             <!-- Parent Org Dates removed-->
 
             <div class="form-group row">
@@ -512,10 +508,13 @@
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.DateofJoiningDGH, "", new { @class = "text-danger" })
                 </div>
 
-                @Html.LabelFor(model => model.EmployeeDetails.DeputationPeriod, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <div class="col-sm-3 form-control-label" style="text-align:right;">
+                    <text style="font-weight:bold;display:inline;">Job / </text>@Html.LabelFor(model => model.EmployeeDetails.PrimaryExpertise, htmlAttributes: new { @class = "form-control-label" })
+                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+                </div>
                 <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.DeputationPeriod, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DeputationPeriod, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.EmployeeDetails.PrimaryExpertise, new { htmlAttributes = new { @class = "form-control requiredField" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PrimaryExpertise, "", new { @class = "text-danger" })
                 </div>
             </div>
             <div class="line"></div>
@@ -628,7 +627,7 @@
                             <thead>
                                 <tr>
                                     <th>Department<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
-                                    <th>HoD<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
+                                    <th>Reporting<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
                                     <th>From</th>
                                     <th>To</th>
                                     <th>Action</th>
@@ -669,15 +668,6 @@
                     @Html.EditorFor(model => model.EmployeeDetails.CurrentBasicPay, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.CurrentBasicPay, "", new { @class = "text-danger" })
                 </div>
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.DGHLevel, htmlAttributes: new { @class = "form-control-label" })
-                    <!-- Not Mandatory as of now until this is clarified that DGH levels will be separate records independent of Organisation  -->
-                    <!--<p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p>-->
-                </div>
-                <div class="col-sm-3">
-                    @Html.DropDownListFor(model => model.EmployeeDetails.LevelId, new SelectList(Model.Levels, "Id", "Name"), new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DGHLevel, "", new { @class = "text-danger" })
-                </div>
                 @*Filter Levels on basis of DGH ---> Done in Controller*@
             </div>
             <div class="line"></div>
@@ -706,10 +696,13 @@
         $("#contactDetails").hide();
         $("#professionalDetails").hide();
         $("#postingDetails").hide();
+        $("#@Html.IdFor(model => model.EmployeeDetails.DeputedLocation)").children('option[value=""]').remove();
+        $("#@Html.IdFor(model => model.EmployeeDetails.DeputedLocation)").prepend('<option value="">--Select Deputed Location--</option>').find('option[value="@Html.ValueFor(model => model.EmployeeDetails.DeputedLocation)"]').attr('selected', 'selected');
+        $("#@Html.IdFor(model => model.EmployeeDetails.OrganisationId)").prepend('<option value="">--Select Organisation--</option>').find('option[value="@Html.ValueFor(model => model.EmployeeDetails.OrganisationId)"]').attr('selected', 'selected');
         $("#@Html.IdFor(model => model.PromotionDetails[0].DesignationId)").prepend('<option value="">--Select Designation--</option>').find('option[value="@Html.ValueFor(model => model.PromotionDetails[0].DesignationId)"]').attr('selected', 'selected');
         $("#@Html.IdFor(model => model.PromotionDetails[0].PayScaleId)").prepend('<option value="">--Select PayScale--</option>').find('option[value="@Html.ValueFor(model => model.PromotionDetails[0].PayScaleId)"]').attr('selected', 'selected');
         $("#@Html.IdFor(model => model.EmployeeDetails.DisciplineId)").prepend('<option value="">--Select Discipline--</option>').find('option[value="@Html.ValueFor(model => model.EmployeeDetails.DisciplineId)"]').attr('selected', 'selected');
-        $("#@Html.IdFor(model => model.EmployeeDetails.LevelId)").prepend('<option value="">--Select DGH Level--</option>').prepend('<option value="">--Select DGH Level--</option>').find('option[value="@Html.ValueFor(model => model.EmployeeDetails.LevelId)"]').attr('selected', 'selected');
+        $("#@Html.IdFor(model => model.EmployeeDetails.LevelId)").prepend('<option value="">--Select DGH Level--</option>').find('option[value="@Html.ValueFor(model => model.EmployeeDetails.LevelId)"]').attr('selected', 'selected');
         sessionStorage.clear();
         $('#overlay').fadeOut();
 
@@ -722,15 +715,9 @@
         );
         $.validator.addMethod("indianPAN",function(value, element) {
             // RegEx Match
-            return value.match(/[a-zA-Z]{3}[PCHFATBLJG]{1}[a-zA-Z]{1}[0-9]{4}[a-zA-Z]{1}$/);
+            return value.match(/[a-zA-Z]{3}[PCHFATBLJG]{1}[a-zA-Z]{1}[0-9]{4}[a-zA-Z]{1}$|^$/);
             },
             "Please enter a valid PAN"
-        );
-        $.validator.addMethod("indianPassport",function(value, element) {
-            // RegEx Match
-            return value.match(/^[A-Z]{1}[0-9]{7}$|^$/);
-            },
-            "Please enter a valid Passport number"
         );
 		// Accept a value from a file input based on a required mimetype
 		$.validator.addMethod( "accept", function( value, element, param ) {
@@ -790,7 +777,7 @@
         );
 
         //jQuery Validation on the form
-        var v = $("#consultantForm").validate({
+        var v = $("#contractualForm").validate({
             rules: {
                 '@Html.NameFor(model => model.EmployeeDetails.FirstName)': {
                     required: true,
@@ -801,51 +788,39 @@
                     accept: "image/*",
                     filesize: 500000
                 },
-                '@Html.NameFor(model => model.EmployeeDetails.PANNumber)': {
-                    indianPAN: true
-                    },
-                '@Html.NameFor(model => model.EmployeeDetails.PassportNumber)': {
-                    indianPassport: true
+                '@Html.NameFor(model => model.EmployeeDetails.UANNumber)': {
+                    required: true,
+                    digits: true,
+                    minlength: 12,
+                    maxlength: 12
                 },
+                '@Html.NameFor(model => model.EmployeeDetails.PANNumber)': {
+                    indianPAN: true,
+                    required: true
+                    },
                 '@Html.NameFor(model => model.AadhaarPart1)': {
                     digits: true,
-                    required:true,
                     minlength: 4,
                     maxlength: 4
                 },
                 '@Html.NameFor(model => model.AadhaarPart2)': {
                     digits: true,
-                    required:true,
                     minlength: 4,
                     maxlength: 4
                 },
                 '@Html.NameFor(model => model.AadhaarPart3)': {
                     digits: true,
-                    required:true,
                     minlength: 4,
                     maxlength: 4
                 },
-                '@Html.NameFor(model => model.EmployeeDetails.MarriageDate)':  {
-                    australianDate :true,
-                    required: function (element) {
-                        return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.MaritalStatus)']:checked").val() == 'Married';
-                        }
-                },
-                '@Html.NameFor(model => model.EmployeeDetails.PassportValidity)':  {
-                    australianDate :true,
-                    required: function (element) {
-                        return $("#@Html.IdFor(model => model.EmployeeDetails.PassportNumber)").val().match(/^[A-Z]{1}[0-9]{7}$/);
-                        }
-                },
                 '@Html.NameFor(model => model.EmployeeDetails.EmailID)':  {
-                    required: true,
                     email: true,
                 },
                  '@Html.NameFor(model => model.EmployeeDetails.AlternateEmailID)':  {
                     email: true
                 },
                 '@Html.NameFor(model => model.EmployeeDetails.MobileNumber)':  {
-                    required: true,
+                    required:true,
                     digits: true,
                     minlength: 10,
                     maxlength: 10
@@ -863,26 +838,17 @@
                 },
                 '@Html.NameFor(model => model.EmployeeDetails.DateOfSeparation)':  {
                     required: function(element) {
-                        return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.WorkingStatus)']:checked").val() == 'False';
+                        return $("input:radio[name='@Html.NameFor(model => model.EmployeeDetails.WorkingStatus)']:checked").val() == 'False';
                         },
                     australianDate :true
                 },
                 '@Html.NameFor(model => model.EmployeeDetails.ReasonForLeaving)':  {
                     required: function(element) {
-                        return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.WorkingStatus)']:checked").val() == 'False';
+                        return $("input:radio[name='@Html.NameFor(model => model.EmployeeDetails.WorkingStatus)']:checked").val() == 'False';
                         }
                 }
             },
             messages: {
-            '@Html.NameFor(model => model.AadhaarPart1)': {
-                    required:"Required"
-                },
-             '@Html.NameFor(model => model.AadhaarPart2)': {
-                    required:"Required"
-                },
-              '@Html.NameFor(model => model.AadhaarPart3)': {
-                    required:"Required"
-                },
                 'file': {
                     accept: "Please select a valid image file",
                     filesize: "File should be smaller than 500KB"
@@ -1067,16 +1033,15 @@
                 {
                     australianDate:true
                 });
-            $('#PastExperiences_' + newExperience + '__Organisation').rules('add',
+            $('#PastExperiences_' + newExperience + '__Organisation').addClass("requiredField").rules('add',
              {
                 required: true
              });
-             $('#PastExperiences_' + newExperience + '__Position').rules('add',
+             $('#PastExperiences_' + newExperience + '__Position').addClass("requiredField").rules('add',
              {
                 required: true
              });
         });
-
 
         //Add new row to Posting table
         $("#addPosting").click(function () {
@@ -1087,7 +1052,6 @@
             }
             var newPosting = sessionStorage.postingCount;
             var departmentNames = '<option selected="selected" value="">Select Department</option>';
-            var hodNames = '<option selected="selected" value="">Select HOD</option>';
             @if (Model.Departments.Count() != 0)
             {
             foreach(var department in Model.Departments)
@@ -1097,19 +1061,10 @@
             </text>
             }
             }
-            @if (Model.HoDs.Count() != 0)
-            {
-            foreach(var hod in Model.HoDs)
-            {
-            <text>
-            hodNames +='<option value="@hod.Id">@hod.Employee.FirstName' + ' @hod.Employee.LastName</option>';
-            </text>
-            }
-            }
             var rowHtml = '<tr id="postingRow' + newPosting + '"> \
                            <td><input value="@Model.EmployeeDetails.Id" id="PostingDetails_' + newPosting + '__EmployeeId" name="PostingDetails[' + newPosting + '].EmployeeId" type="hidden" class="requiredField"> \
                            <select class="form-control" id="PostingDetails_' + newPosting + '__DepartmentId" name="PostingDetails[' + newPosting + '].DepartmentId" style="width:100px;">' + departmentNames + '</select></td> \
-                           <td><select class="form-control" id="PostingDetails_' + newPosting + '__HODId" name="PostingDetails[' + newPosting + '].HODId" style="width:100px;">' + hodNames + '</select></td> \
+                           <td><input class="form-control text-box single-line" id="PostingDetails_' + newPosting + '__Reporting" name="PostingDetails[' + newPosting + '].Reporting" type="text" value=""></td> \
                            <td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Posting From must be a date." id="PostingDetails_' + newPosting + '__From" name="PostingDetails[' + newPosting + '].From" type="text" value=""></td> \
                            <td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Posting Till must be a date." id="PostingDetails_' + newPosting + '__To" name="PostingDetails[' + newPosting + '].To" type="text" value=""></td> \
                            <td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#postingRow' + newPosting + '">Delete</button></td></tr>';
@@ -1132,7 +1087,7 @@
              {
                 required: true
              });
-             $('#PostingDetails_' + newPosting + '__HODId').addClass("requiredField").rules('add',
+             $('#PostingDetails_' + newPosting + '__Reporting').addClass("requiredField").rules('add',
              {
                 required: true
              });
@@ -1165,16 +1120,6 @@
             }
         });
 
-        // Activating Passport Validity based on Passport Number Status
-        $(document).on('propertychange change click keyup input paste', 'input[type="text"][name="@Html.NameFor(model=>model.EmployeeDetails.PassportNumber)"]', function () {
-            if (this.value.match(/^[A-Z]{1}[0-9]{7}$/)) {
-                 $('#@Html.IdFor(model=>model.EmployeeDetails.PassportValidity)').removeAttr('disabled');
-            }
-            else {
-                $('#@Html.IdFor(model=>model.EmployeeDetails.PassportValidity)').val(null).attr('disabled', 'disabled').removeClass("is-invalid");
-            }
-         });
-
         // Activate fields based on working status
         $(document).on('change', 'input[type="radio"][name="@Html.NameFor(model=>model.EmployeeDetails.WorkingStatus)"]', function () {
              if (this.value == 'False') {
@@ -1195,8 +1140,8 @@
           if (0 == $("#@Html.IdFor(model => model.TelephoneExtensions.Number)").val()) {
               $("#@Html.IdFor(model => model.TelephoneExtensions.Number)").val(9999);
           }
-          var formUrl = $('#consultantForm').attr('action');
-          var formData = new FormData(document.getElementById('consultantForm'));
+          var formUrl = $('#contractualForm').attr('action');
+          var formData = new FormData(document.getElementById('contractualForm'));
           $.ajax({
             url: formUrl,
             type: 'POST',
@@ -1217,7 +1162,7 @@
                 $('#formContent').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
             }
           });
-          //console.log($("#consultantForm").serialize());
+          //console.log($("#contractualForm").serialize());
           $('#overlay').fadeOut();
       }
     });

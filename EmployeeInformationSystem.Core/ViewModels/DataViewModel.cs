@@ -23,6 +23,7 @@ namespace EmployeeInformationSystem.Core.ViewModels
 
         [StringLength(4, MinimumLength = 4 , ErrorMessage = "Aadhaar Number must be of 12 characters")]
         public string AadhaarPart3 { get; set; }
+        public List<PastExperience> PastExperiences { get; set; }
         public List<PostingDetail> PostingDetails { get; set; }
         public List<PromotionDetail> PromotionDetails { get; set; }
         public List<QualificationDetail> QualificationDetails { get; set; }

@@ -1,0 +1,198 @@
+﻿@model EmployeeInformationSystem.Core.Models.EmployeeDetail
+
+@section CustomStyles{
+    @Styles.Render("~/Content/bootstrap-select")
+    @Styles.Render("~/Content/gijgo")
+    <style>
+        #overlay {
+            position: absolute;
+            justify-content: left;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(130, 130, 130, 0.5);
+        }
+    </style>
+}
+@section DataManage{
+    show
+}
+@if (ViewBag.Target == "View")
+{
+    @section ViewEmployee{
+        class="active"
+    }
+}
+else
+{
+    @section EditEmployee{
+        class="active"
+    }
+}
+
+<div id="overlay" style="display:none;text-align:center;">
+    <img src="~/Content/img/spinner.gif" style="resize:inherit;" />
+    <br />
+</div>
+
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">@ViewBag.Target Employee Data</h2>
+    </div>
+</header>
+<!-- Forms Section-->
+<section class="forms">
+    <div class="container-fluid" style="position:relative">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card" id="AddDataForm">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Select Employee</h3>
+                    </div>
+
+                    <div class="card-body ml-4">
+                        <div class="form-inline">
+                            <div class="form-group col-4">
+                                <input id="radioNameSearch" type="radio" value="name" name="radioEmployeeOption" class="radio-template">
+                                <label for="radioNameSearch">Search using Name</label>
+                            </div>
+                            <div class="form-group col-8">
+                                <select name="selectEmployeeOption" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
+                                    <option value="" selected>--Select Employee Name--</option>
+                                    @foreach (var employee in ViewBag.Employees)
+                                    {
+                                        <option value="@employee.Id" data-employeetype="@employee.EmployeeType">@employee.FirstName @employee.LastName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="form-inline">
+                            <div class="form-group col-4">
+                                <input id="radioCodeSearch" type="radio" value="code" name="radioEmployeeOption" class="radio-template">
+                                <label for="radioCodeSearch">Search using Employee Code/CPF</label>
+                            </div>
+                            <div class="form-group col-8">
+                                <select name="selectEmployeeOption" class="form-control selectEmployeeOption" id="selectEmployeeByCode" style="min-width:80%;" data-live-search="true">
+                                    <option value="" selected>--Select Employee Code--</option>
+                                    @foreach (var employee in ViewBag.Employees)
+                                    {
+                                        <option value="@employee.Id" data-employeetype="@employee.EmployeeType">@employee.EmployeeCode</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="form-inline">
+                            <div class="form-group col-4">
+                                <input id="radioMobileSearch" type="radio" value="mobile" name="radioEmployeeOption" class="radio-template">
+                                <label for="radioMobileSearch">Search using Mobile Number</label>
+                            </div>
+                            <div class="form-group col-8">
+                                <select name="selectEmployeeOption" class="form-control selectEmployeeOption" id="selectEmployeeByMobile" style="min-width:80%;" data-live-search="true">
+                                    <option value="" selected>--Select Employee Mobile Number--</option>
+                                    @foreach (var employee in ViewBag.Employees)
+                                    {
+                                        if (null != employee.MobileNumber)
+                                        {
+                                            <option value="@employee.Id" data-employeetype="@employee.EmployeeType">@employee.MobileNumber</option>
+                                        }
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <br /><br />
+                        <div class="form-group col-4 ">
+                            <button type="submit" class="form-control btn btn-primary" id="continueBtn" disabled>Continue</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/bootstrap-select")
+    @Scripts.Render("~/bundles/gijgo")
+    <script>
+        $(document).ready(function () {
+            $('select').prop('disabled', true).selectpicker({
+                liveSearchStyle: "contains"
+            });
+
+            $('input[type="radio"][name="radioEmployeeOption"').change(function () {
+                $('select').prop('disabled', true).val("");
+                $('#continueBtn').prop('disabled', true);
+                switch (this.value) {
+                    case "name":
+                        $("#selectEmployeeByName").prop('disabled', false);
+                        break;
+                    case "code":
+                        $("#selectEmployeeByCode").prop('disabled', false);
+                        break;
+                    case "mobile":
+                        $("#selectEmployeeByMobile").prop('disabled', false);
+                        break;
+                }
+                $('select').selectpicker('refresh');
+            });
+
+
+            $(document).on('propertychange change click keyup input paste', 'select', function () {
+                if (this.value != "") {
+                    $('#continueBtn').prop('disabled', false);
+                } else {
+                    $('#continueBtn').prop('disabled', true);
+                }
+            });
+
+            $('#continueBtn').click(function () {
+                var EmployeeId = null;
+                EmployeeId = $("select:enabled").val();
+                if ("" != EmployeeId) {
+                    @if(ViewBag.Target == "View")
+                    {
+                    <text>
+                    window.location.href = '@Url.Action("ViewEmployee", "EmployeeData")?EmployeeId=' + EmployeeId;
+                    </text>
+                    }
+                    else
+                    {
+                    <text>
+                    $('#overlay').fadeIn();
+                    var employeeType = $("select:enabled").find(':selected').data('employeetype');
+                    var targetPage = "Contractual";
+                    if (employeeType == "Deputationist") {
+                        targetPage = "Deputationist";
+                    } else if (employeeType == "Advisor" || employeeType == "Consultant") {
+                        targetPage = "Consultant";
+                    }
+                    if ('NA' != targetPage) {
+                        $.ajax({
+                            url: '@Url.Action("AjaxAdd", "EmployeeData")?targetPage=' + targetPage + '&mode=Edit&EmployeeId=' + EmployeeId,
+                            success: function (result) {
+                                $('#AddDataForm').html(result);
+                            },
+                            error: function () {
+                                $('#AddDataForm').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                            },
+                            fail: function (xhr, textStatus, errorThrown) {
+                                $('#AddDataForm').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                            }
+                        });
+                    }
+                    </text>
+                    }
+                } else {
+                    alert("No Employee Selected !!");
+                }
+
+            });
+        });
+    </script>
+}

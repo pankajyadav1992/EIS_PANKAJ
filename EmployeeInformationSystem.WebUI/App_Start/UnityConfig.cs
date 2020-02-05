@@ -54,6 +54,7 @@ namespace EmployeeInformationSystem.WebUI
             container.RegisterType<IRepository<Organisation>, SQLRepository<Organisation>>();
             container.RegisterType<IRepository<PayScale>, SQLRepository<PayScale>>();
             container.RegisterType<IRepository<Degree>, SQLRepository<Degree>>();
+            container.RegisterType<IRepository<PastExperience>, SQLRepository<PastExperience>>();
             container.RegisterType<IRepository<PostingDetail>, SQLRepository<PostingDetail>>();
             container.RegisterType<IRepository<PromotionDetail>, SQLRepository<PromotionDetail>>();
             container.RegisterType<IRepository<QualificationDetail>, SQLRepository<QualificationDetail>>();
