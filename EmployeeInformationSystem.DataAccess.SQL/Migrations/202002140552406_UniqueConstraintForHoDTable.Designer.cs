@@ -6,14 +6,14 @@ namespace EmployeeInformationSystem.DataAccess.SQL.Migrations
     using System.Data.Entity.Migrations.Infrastructure;
     using System.Resources;
     
-    [GeneratedCode("EntityFramework.Migrations", "6.3.0")]
-    public sealed partial class AddedHoDTable : IMigrationMetadata
+    [GeneratedCode("EntityFramework.Migrations", "6.4.0")]
+    public sealed partial class UniqueConstraintForHoDTable : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(AddedHoDTable));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(UniqueConstraintForHoDTable));
         
         string IMigrationMetadata.Id
         {
-            get { return "201912200706227_AddedHoDTable"; }
+            get { return "202002140552406_UniqueConstraintForHoDTable"; }
         }
         
         string IMigrationMetadata.Source

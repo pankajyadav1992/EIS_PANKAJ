@@ -70,7 +70,7 @@
                                     <option value="" selected>--Select Employee Name--</option>
                                     @foreach (var employee in ViewBag.Employees)
                                     {
-                                        <option value="@employee.Id" data-employeetype="@employee.EmployeeType">@employee.FirstName @employee.LastName</option>
+                                        <option value="@employee.Id" data-employeetype="@employee.EmployeeType">@employee.GetFullName</option>
                                     }
                                 </select>
                             </div>

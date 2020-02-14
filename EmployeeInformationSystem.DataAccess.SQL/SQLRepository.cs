@@ -34,17 +34,19 @@ namespace EmployeeInformationSystem.DataAccess.SQL
             {
                 _context.SaveChanges();
             }
-            catch (DbEntityValidationException dbEx)
+            catch (Exception ex)
             {
-                foreach (var validationErrors in dbEx.EntityValidationErrors)
-                {
-                    foreach (var validationError in validationErrors.ValidationErrors)
-                    {
-                        Trace.TraceInformation("Property: {0} Error: {1}",
-                                                validationError.PropertyName,
-                                                validationError.ErrorMessage);
-                    }
-                }
+                throw;
+                //foreach (var validationErrors in dbEx.EntityValidationErrors)
+                //{
+                //    foreach (var validationError in validationErrors.ValidationErrors)
+                //    {
+                //        Trace.TraceInformation("Property: {0} Error: {1}",
+                //                                validationError.PropertyName,
+                //                                validationError.ErrorMessage);
+                //    }
+                //}
+                // DbEntityValidationException dbEx
             }
         }
 

@@ -40,6 +40,12 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="Oracle.ManagedDataAccess, Version=4.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.19.6.0\lib\net40\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess.EntityFramework, Version=6.122.19.1, Culture=neutral, PublicKeyToken=89b483f429c47342, processorArchitecture=MSIL">
+      <HintPath>..\packages\Oracle.ManagedDataAccess.EntityFramework.19.6.0\lib\net45\Oracle.ManagedDataAccess.EntityFramework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
@@ -52,57 +58,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\201912181102070_Initial.cs" />
-    <Compile Include="Migrations\201912181102070_Initial.designer.cs">
-      <DependentUpon>201912181102070_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\202002120950327_Initial.cs" />
+    <Compile Include="Migrations\202002120950327_Initial.designer.cs">
+      <DependentUpon>202002120950327_Initial.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201912191016535_UpdatedEmployeeKeyId.cs" />
-    <Compile Include="Migrations\201912191016535_UpdatedEmployeeKeyId.designer.cs">
-      <DependentUpon>201912191016535_UpdatedEmployeeKeyId.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201912200706227_AddedHoDTable.cs" />
-    <Compile Include="Migrations\201912200706227_AddedHoDTable.designer.cs">
-      <DependentUpon>201912200706227_AddedHoDTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201912240724323_CompositeUniqueKey_ReOrderKey.cs" />
-    <Compile Include="Migrations\201912240724323_CompositeUniqueKey_ReOrderKey.designer.cs">
-      <DependentUpon>201912240724323_CompositeUniqueKey_ReOrderKey.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\201912241019592_NullableInts.cs" />
-    <Compile Include="Migrations\201912241019592_NullableInts.designer.cs">
-      <DependentUpon>201912241019592_NullableInts.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001030933223_UpdatedIntToString.cs" />
-    <Compile Include="Migrations\202001030933223_UpdatedIntToString.designer.cs">
-      <DependentUpon>202001030933223_UpdatedIntToString.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001160641221_UpdatedQualificationTable.cs" />
-    <Compile Include="Migrations\202001160641221_UpdatedQualificationTable.designer.cs">
-      <DependentUpon>202001160641221_UpdatedQualificationTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001161018458_MandatedOrganisationLevel.cs" />
-    <Compile Include="Migrations\202001161018458_MandatedOrganisationLevel.designer.cs">
-      <DependentUpon>202001161018458_MandatedOrganisationLevel.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001211030245_AddedReportingForContractual.cs" />
-    <Compile Include="Migrations\202001211030245_AddedReportingForContractual.designer.cs">
-      <DependentUpon>202001211030245_AddedReportingForContractual.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001220619522_AddedFieldsForContractualEmployees.cs" />
-    <Compile Include="Migrations\202001220619522_AddedFieldsForContractualEmployees.designer.cs">
-      <DependentUpon>202001220619522_AddedFieldsForContractualEmployees.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001241012362_AddedNamePastExperience.cs" />
-    <Compile Include="Migrations\202001241012362_AddedNamePastExperience.designer.cs">
-      <DependentUpon>202001241012362_AddedNamePastExperience.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001241112484_AddedNamePastExperience1.cs" />
-    <Compile Include="Migrations\202001241112484_AddedNamePastExperience1.designer.cs">
-      <DependentUpon>202001241112484_AddedNamePastExperience1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202001241147178_MandatedFieldsPastExp.cs" />
-    <Compile Include="Migrations\202001241147178_MandatedFieldsPastExp.designer.cs">
-      <DependentUpon>202001241147178_MandatedFieldsPastExp.cs</DependentUpon>
+    <Compile Include="Migrations\202002140552406_UniqueConstraintForHoDTable.cs" />
+    <Compile Include="Migrations\202002140552406_UniqueConstraintForHoDTable.designer.cs">
+      <DependentUpon>202002140552406_UniqueConstraintForHoDTable.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -119,44 +81,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201912181102070_Initial.resx">
-      <DependentUpon>201912181102070_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202002120950327_Initial.resx">
+      <DependentUpon>202002120950327_Initial.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201912191016535_UpdatedEmployeeKeyId.resx">
-      <DependentUpon>201912191016535_UpdatedEmployeeKeyId.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201912200706227_AddedHoDTable.resx">
-      <DependentUpon>201912200706227_AddedHoDTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201912240724323_CompositeUniqueKey_ReOrderKey.resx">
-      <DependentUpon>201912240724323_CompositeUniqueKey_ReOrderKey.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201912241019592_NullableInts.resx">
-      <DependentUpon>201912241019592_NullableInts.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001030933223_UpdatedIntToString.resx">
-      <DependentUpon>202001030933223_UpdatedIntToString.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001160641221_UpdatedQualificationTable.resx">
-      <DependentUpon>202001160641221_UpdatedQualificationTable.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001161018458_MandatedOrganisationLevel.resx">
-      <DependentUpon>202001161018458_MandatedOrganisationLevel.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001211030245_AddedReportingForContractual.resx">
-      <DependentUpon>202001211030245_AddedReportingForContractual.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001220619522_AddedFieldsForContractualEmployees.resx">
-      <DependentUpon>202001220619522_AddedFieldsForContractualEmployees.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001241012362_AddedNamePastExperience.resx">
-      <DependentUpon>202001241012362_AddedNamePastExperience.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001241112484_AddedNamePastExperience1.resx">
-      <DependentUpon>202001241112484_AddedNamePastExperience1.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202001241147178_MandatedFieldsPastExp.resx">
-      <DependentUpon>202001241147178_MandatedFieldsPastExp.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202002140552406_UniqueConstraintForHoDTable.resx">
+      <DependentUpon>202002140552406_UniqueConstraintForHoDTable.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

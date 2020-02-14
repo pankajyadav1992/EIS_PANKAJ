@@ -1,0 +1,159 @@
+﻿@{
+    ViewBag.Title = "Master Data Management";
+}
+
+@section CustomStyles{
+    <style>
+        #overlay {
+            position: absolute;
+            justify-content: left;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(130, 130, 130, 0.5);
+        }
+    </style>
+
+}
+@section Admin{
+    class="active"
+}
+
+<div id="overlay" style="display:none;text-align:center;">
+    <img src="~/Content/img/spinner.gif" style="resize:inherit;" />
+    <br />
+</div>
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Master Data Management</h2>
+    </div>
+</header>
+<!-- Forms Section-->
+<section class="forms">
+    <div class="container-fluid" style="position:relative">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-close">
+                            <div class="dropdown">
+                                <button type="button" id="closeCard1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
+                                <div aria-labelledby="closeCard1" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
+                            </div>
+                        </div>
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Bulk Upload Employee Data</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-inline">
+
+                                <form action="@Url.Action("AjaxBulkUpload", "MasterData")" method="post" enctype="multipart/form-data" id="fileUploadForm">
+                                    <div class="form-group">
+                                        <label for="fileUpload" class="col-sm-3 form-control-label">Upload File</label>
+                                        <div class="col-sm-9">
+                                            <input id="fileUpload" type="file" class="form-control-file">
+                                        </div>
+                                    </div>
+                                </form>
+
+
+                            </div>
+                            <div class="text-center">
+                                <div class="invalid-feedback" id="fileUploadError" style="display:none;">Please select an Excel file</div>
+                            </div>
+                            <br />
+                            <div class="text-center" >
+                                <div id="uploadStatus" style="display:none;"></div>
+                            </div>
+                            <br />
+                            <div></div>
+                            <div class="text-center">
+                                <button type="submit" class="form-control btn btn-primary" style="width:50%;" id="continueBtn" disabled>Continue</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-close">
+                            <div class="dropdown">
+                                <button type="button" id="closeCard2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
+                                <div aria-labelledby="closeCard2" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
+                            </div>
+                        </div>
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Manage Access Roles</h3>
+                        </div>
+                        <div class="card-body">
+                            <h1>Coming Soon</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card" id="AddDataForm">
+                    <div class="card-header d-flex align-items-center">
+                        <h3 class="h4">Manage Master Data</h3>
+                    </div>
+
+                    <div class="card-body mx-auto">
+                        <h1>Coming Soon</h1>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+             $("#fileUpload").change(function () {
+                 var fileExtension = ['xls', 'xlsx'];
+                 if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                     $("#fileUploadError").show();
+                     $('#continueBtn').attr('disabled', true);
+                 } else {
+                     $("#fileUploadError").hide();
+                     $('#continueBtn').removeAttr('disabled');
+                 }
+             });
+
+            $('#continueBtn').click(function () {
+                $('#overlay').fadeIn();
+                var formData = new FormData();
+                var formUrl = $('#fileUploadForm').attr('action');
+                formData.append('file', $('#fileUpload')[0].files[0]);
+                $.ajax({
+                    url: formUrl,  
+                    type: 'POST',
+                    data: formData,
+                    success: function (result) {
+                        $('#uploadStatus').html(result);
+                        },
+                    error: function () {
+                        $('#uploadStatus').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                    },
+                    fail: function (xhr, textStatus, errorThrown) {
+                        $('#uploadStatus').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                        $('#overlay').fadeOut();
+                    },
+                    complete: function () {
+                        $('#uploadStatus').show();
+                        $('#overlay').fadeOut();
+                    },
+                    cache: false,
+                    contentType: false,
+                    processData: false
+                }); 
+            });
+        });
+    </script>
+}

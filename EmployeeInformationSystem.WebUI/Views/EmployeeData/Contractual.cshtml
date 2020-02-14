@@ -201,7 +201,7 @@
 
                 @Html.LabelFor(model => model.EmployeeDetails.ProfilePhoto, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    <input type="file" id="file" name="file" class="form-control" />
+                    <input type="file" id="file" name="file" class="form-control-file" />
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.ProfilePhoto, "", new { @class = "text-danger" })
                 </div>
 

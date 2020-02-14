@@ -21,7 +21,10 @@ namespace EmployeeInformationSystem.DataAccess.SQL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+
+            //modelBuilder.HasDefaultSchema("EIS");
+
             modelBuilder.Entity<EmployeeDetail>().HasOptional(e => e.Organisation);
             modelBuilder.Entity<EmployeeDetail>().HasOptional(e => e.Discipline);
             modelBuilder.Entity<EmployeeDetail>().HasOptional(e => e.DGHLevel);
@@ -32,6 +35,7 @@ namespace EmployeeInformationSystem.DataAccess.SQL
             modelBuilder.Entity<PromotionDetail>().HasOptional(p => p.Level);
 
             modelBuilder.Entity<TelephoneExtension>().HasOptional(p => p.Employee);
+            
         }
 
         public DbSet<Degree> Degrees { get; set; }
@@ -40,6 +44,7 @@ namespace EmployeeInformationSystem.DataAccess.SQL
         public DbSet<Designation> Designations { get; set; }
         public DbSet<Discipline> Disciplines { get; set; }
         public DbSet<EmployeeDetail> EmployeeDetails { get; set; }
+        public DbSet<EmployeeAsHoD> EmployeeAsHoD { get; set; }
         public DbSet<HoD> HoDs { get; set; }
         public DbSet<Level> Levels { get; set; }
         public DbSet<Organisation> Organisations { get; set; }

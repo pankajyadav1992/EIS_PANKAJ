@@ -10,25 +10,16 @@ namespace EmployeeInformationSystem.Core.Models
 {
     public class HoD : BaseEntity
     {
+        [StringLength(450)]
+        [Index("IX_DesignationAndDepartment", 1, IsUnique = true)]
         [Required]
-        [Display(Name = "Head of Department")]
-        public string EmployeeId { get; set; }
-        public virtual EmployeeDetail Employee { get; set; }
+        [Display(Name = "Designation")]
+        public string Designation { get; set; }
 
+        [Index("IX_DesignationAndDepartment", 2, IsUnique = true)]
         [Required]
         public string DepartmentId { get; set; }
         public virtual Department Department { get; set; }
 
-        [Column(TypeName = "date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        [Display(Name = "Posting From")]
-        public DateTime? From { get; set; }
-
-        [Column(TypeName = "date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
-        [Display(Name = "Posting Till")]
-        public DateTime? To { get; set; }
     }
 }

@@ -8,23 +8,17 @@ using System.Threading.Tasks;
 
 namespace EmployeeInformationSystem.Core.Models
 {
-    public class PostingDetail: BaseEntity
+    public class EmployeeAsHoD : BaseEntity
     {
-        [Required(ErrorMessage = "Valid Employee ID is required")]
+        [Required]
+        [Display(Name = "Head of Department")]
         public string EmployeeId { get; set; }
-        public virtual EmployeeDetail Employee{get;set;}
+        public virtual EmployeeDetail Employee { get; set; }
 
-        // Nullable. Consider Linking to HoD Table??
+        [Required]
         [Display(Name = "Head of Department(HoD)")]
         public string HODId { get; set; }
         public virtual HoD HOD { get; set; }
-
-        // This is ONLY for contractual employees reporting to MoPNG & DGH
-        public string Reporting { get; set; }
-
-        [Required(ErrorMessage = "Valid Department is required")]
-        public string DepartmentId { get; set; }
-        public virtual Department Department { get; set; }
 
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
