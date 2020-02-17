@@ -645,7 +645,7 @@
                                                 @Html.HiddenFor(model => model.PostingDetails[i].EmployeeId, new { Value = Model.EmployeeDetails.Id, @class = "requiredField" })
                                                 @Html.DropDownListFor(model => model.PostingDetails[i].DepartmentId, new SelectList(Model.Departments, "Id", "Name", Model.PostingDetails[i].DepartmentId), new { @class = "form-control requiredField" })
                                             </td>
-                                            <td>@Html.DropDownListFor(model => model.PostingDetails[i].HODId, new SelectList(Model.HoDs, "Id", "Employee.GetFullName", Model.PostingDetails[i].HODId), new { @class = "form-control requiredField" })</td>
+                                            <td>@Html.EditorFor(model => model.PostingDetails[i].Reporting, new { htmlAttributes = new { @class = "form-control requiredField"} })</td>
                                             <td>@Html.EditorFor(model => model.PostingDetails[i].From, new { htmlAttributes = new { @class = "form-control FieldDate", @type = "text", @data_type = "date" } })</td>
                                             <td>@Html.EditorFor(model => model.PostingDetails[i].To, new { htmlAttributes = new { @class = "form-control FieldDate", @type = "text", @data_type = "date" } })</td>
                                             <td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#postingRow@(i)">Delete</button></td>

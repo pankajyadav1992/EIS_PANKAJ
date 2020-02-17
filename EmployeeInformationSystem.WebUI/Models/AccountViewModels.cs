@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using EmployeeInformationSystem.Core.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace EmployeeInformationSystem.WebUI.Models
@@ -64,7 +65,6 @@ namespace EmployeeInformationSystem.WebUI.Models
 
     public class RegisterViewModel
     {
-        [Required]
         [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
@@ -79,6 +79,13 @@ namespace EmployeeInformationSystem.WebUI.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        //Custom Fields
+        [Required(ErrorMessage = "Valid Employee is required for ID Creation")]
+        [Display(Name ="Employee")]
+        public string EmployeeId { get; set; }
+
+        public IEnumerable<EmployeeDetail> EmployeeList { get; set; }
     }
 
     public class ResetPasswordViewModel

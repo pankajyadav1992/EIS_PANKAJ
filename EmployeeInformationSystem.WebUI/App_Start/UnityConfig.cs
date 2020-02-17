@@ -1,9 +1,11 @@
 using EmployeeInformationSystem.Core.Contracts;
 using EmployeeInformationSystem.Core.Models;
 using EmployeeInformationSystem.DataAccess.SQL;
+using EmployeeInformationSystem.WebUI.Controllers;
 using System;
 
 using Unity;
+using Unity.Injection;
 
 namespace EmployeeInformationSystem.WebUI
 {
@@ -45,6 +47,7 @@ namespace EmployeeInformationSystem.WebUI
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
+            container.RegisterType<AccountController>(new InjectionConstructor());
             container.RegisterType<IRepository<Department>, SQLRepository<Department>>();
             container.RegisterType<IRepository<Designation>, SQLRepository<Designation>>();
             container.RegisterType<IRepository<Discipline>, SQLRepository<Discipline>>();

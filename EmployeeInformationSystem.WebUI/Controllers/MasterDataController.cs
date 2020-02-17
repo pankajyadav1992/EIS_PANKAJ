@@ -435,9 +435,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                             //Qualification details
                             string qualificationDetails = dt_.Rows[row_][columnNames.FindIndex(c => c == "Qualification")].ToString();
-                            if (qualificationDetails.Contains(','))
+                            if (!string.IsNullOrEmpty(qualificationDetails))
                             {
-                                List<string> qualificationList = qualificationDetails.Split(',').ToList();
+                                List<string> qualificationList = new List<string>();
+                                if (qualificationDetails.Contains(',')) qualificationList = qualificationDetails.Split(',').ToList();
+                                else qualificationList.Add(qualificationDetails);
                                 foreach (string qualification in qualificationList.FindAll(q => !string.IsNullOrEmpty(q)))
                                 {
                                     string degreeName = null, specialization = null;
@@ -783,7 +785,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                         //Gender
                         Gender gender = "Male" == dt_.Rows[row_][columnNames.FindIndex(c => c == "Gender")].ToString() ? Gender.Male : Gender.Female;
-                        
+
                         //PAN
                         string PAN = dt_.Rows[row_][columnNames.FindIndex(c => c == "Pan No.")].ToString();
 
@@ -840,7 +842,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                         // Numbers
                         string mobileNumber = Regex.Replace(dt_.Rows[row_][columnNames.FindIndex(c => c == "Mobile No.")].ToString(), @"[^0-9]", "");
-         
+
                         //Address
                         string residenceAddress = dt_.Rows[row_][columnNames.FindIndex(c => c == "Residential Address")].ToString();
                         string permanentAddress = dt_.Rows[row_][columnNames.FindIndex(c => c == "Permanent Address")].ToString();
@@ -853,7 +855,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         {
                             employeeToInsert = new EmployeeDetail()
                             {
-                                EmployeeCode = cpfNo,
+                                EmployeeCode = string.IsNullOrEmpty(cpfNo) ? nameString : cpfNo,
                                 Title = string.IsNullOrEmpty(title) ? null : title,
                                 FirstName = string.IsNullOrEmpty(firstName) ? null : firstName,
                                 MiddleName = string.IsNullOrEmpty(middleName) ? null : middleName,
@@ -891,14 +893,16 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         if (employeeInserted) //Add remaining data if employee successfully inserted
                         {
                             string employeeId = employeeToInsert.Id;
-                            string tempString = null ;
-                            
+                            string tempString = null;
+
 
                             //Qualification details
                             string qualificationDetails = dt_.Rows[row_][columnNames.FindIndex(c => c == "Qualification")].ToString();
-                            if (qualificationDetails.Contains(','))
+                            if (!string.IsNullOrEmpty(qualificationDetails))
                             {
-                                List<string> qualificationList = qualificationDetails.Split(',').ToList();
+                                List<string> qualificationList = new List<string>();
+                                if (qualificationDetails.Contains(',')) qualificationList = qualificationDetails.Split(',').ToList();
+                                else qualificationList.Add(qualificationDetails);
                                 foreach (string qualification in qualificationList.FindAll(q => !string.IsNullOrEmpty(q)))
                                 {
                                     string degreeName = null, specialization = null;
@@ -989,7 +993,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                     From = dojDGH
                                 });
                                 log.Info("Added Promotion : " + designationName + ", for Employee CPF: " + cpfNo);
-                               
+
                             }
 
                             // Posting Details
@@ -1010,7 +1014,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                             // Reporting Officer
                             string reportingOfficer = dt_.Rows[row_][columnNames.FindIndex(c => c == "Reporting")].ToString();
-                           
+
                             PostingDetailContext.Insert(new PostingDetail()
                             {
                                 EmployeeId = employeeId,
