@@ -16,15 +16,19 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "CPF Number/Employee Code")]
         public string EmployeeCode { get; set; }
 
+        [StringLength(1000)]
         public string Title { get; set; }
 
+        [StringLength(1000)]
         [Required(ErrorMessage = "Valid First Name is required")]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Middle Name")]
         public string MiddleName { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Last  Name")]
         public string LastName { get; set; }
 
@@ -41,69 +45,76 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Date of Birth")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? DateOfBirth { get; set; }
 
         [Display(Name = "Date of Superannuation")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? DateOfSuperannuation { get; set; }
 
         [Display(Name = "Date of Joining parent organisation")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? DateofJoiningParentOrg { get; set; }
 
         [Display(Name = "Date of Relieving from Last Office")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? DateofRelievingLastOffice { get; set; }
 
         //Make required in View Model
         [Display(Name = "Date of Joining DGH")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? DateofJoiningDGH { get; set; }
 
         [Display(Name = "Date of Leaving DGH")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? DateofLeavingDGH { get; set; }
 
         [Display(Name = "Reason for Leaving DGH")]
         public Nullable<ReasonForLeaving> ReasonForLeaving { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Deputation/Engagement Period")]
         public string DeputationPeriod { get; set; }
 
         [Display(Name = "Seating Location")]
         public Nullable<SeatingLocation> SeatingLocation { get; set; }
 
+        [StringLength(20)]
         [Display(Name = "Mobile Number")]
         [RegularExpression(@"^(\d{10})$", ErrorMessage = "Please enter valid mobile number")]
         public string MobileNumber { get; set; }
 
+        [StringLength(100)]
         [RegularExpression(@"^\d+$", ErrorMessage = "Please enter valid contact number")]
         [Display(Name = "Residence Phone Number")]
         public string ResidenceNumber { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Residence Address")]
         public string ResidenceAddress { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Permanent Address")]
         public string PermanentAddress { get; set; }
 
+        [StringLength(100)]
         [Display(Name = "EMail ID")]
         public string EmailID { get; set; }
 
         [Display(Name = "Blood Group")]
         public Nullable<BloodGroup> BloodGroup { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Profile Photo")]
         public string ProfilePhoto { get; set; }
 
@@ -113,7 +124,7 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Date of Separation from DGH")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? DateOfSeparation { get; set; }
 
         [Required(ErrorMessage = "Valid Gender is required")]
@@ -127,6 +138,7 @@ namespace EmployeeInformationSystem.Core.Models
         public string DisciplineId { get; set; }
         public Discipline Discipline { get; set; }
 
+        [StringLength(2000)]
         [Display(Name = "Primary Expertise")]
         public string PrimaryExpertise { get; set; }
 
@@ -135,6 +147,7 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "DGH Level")]
         public virtual Level DGHLevel { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Current Basic Pay")]
         public string CurrentBasicPay { get; set; }
 
@@ -148,15 +161,17 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Aadhaar Number")]
         public string AadhaarNumer { get; set; }
 
+        [StringLength(50)]
         [Display(Name = "Passport Number")]
         public string PassportNumber { get; set; }
 
         [Display(Name = "Passport Validity")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? PassportValidity { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Vehicle Number")]
         public string VehicleNumber { get; set; }
 
@@ -166,16 +181,19 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Marriage Date")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? MarriageDate { get; set; }
 
+        [StringLength(100)]
         [Display(Name = "Alternate EMail ID")]
         public string AlternateEmailID { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Emergency Contact Person")]
         public string EmergencyPerson { get; set; }
 
 
+        [StringLength(100)]
         [RegularExpression(@"^\d+$", ErrorMessage = "Please enter valid contact number")]
         [Display(Name = "Emergency Phone Number")]
         public string EmergencyContact { get; set; }

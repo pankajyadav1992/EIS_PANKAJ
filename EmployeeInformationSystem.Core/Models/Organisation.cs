@@ -16,6 +16,7 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Organisation Name")]
         public string Name { get; set; }
 
+        [StringLength(1000)]
         [Display(Name = "Head Office address")]
         public string HeadOffice { get; set; }
     }

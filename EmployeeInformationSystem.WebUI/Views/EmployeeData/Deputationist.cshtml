@@ -81,7 +81,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
         @Html.HiddenFor(model => model.EmployeeDetails.Id, new { Value = @Model.EmployeeDetails.Id })
-        @Html.HiddenFor(model => model.EmployeeDetails.CreatedAt, new { Value = @Model.EmployeeDetails.CreatedAt })
+        @Html.HiddenFor(model => model.EmployeeDetails.CreatedAt, new { Value = @Model.EmployeeDetails.CreatedAt.ToString() })
 
         <!-- id will be unique, but class name will be same -->
         <div id="personalDetails" class="setup-content">
@@ -287,7 +287,7 @@
                                         <tr id="dependentRow@(i)">
                                             <td>
                                                 @Html.HiddenFor(model => model.DependentDetails[i].Id, new { Value = Model.DependentDetails[i].Id })
-                                                @Html.HiddenFor(model => model.DependentDetails[i].CreatedAt, new { Value = Model.DependentDetails[i].CreatedAt })
+                                                @Html.HiddenFor(model => model.DependentDetails[i].CreatedAt, new { Value = Model.DependentDetails[i].CreatedAt.ToString() })
                                                 @Html.HiddenFor(model => model.DependentDetails[i].EmployeeId, new { Value = @Model.EmployeeDetails.Id, @class = "requiredField" })
                                                 @Html.EditorFor(model => model.DependentDetails[i].DependentName, new { htmlAttributes = new { @class = "form-control required" } })
                                             </td>
@@ -465,7 +465,7 @@
                                         <tr id="qualificationRow@(i)">
                                             <td>
                                                 @Html.HiddenFor(model => model.QualificationDetails[i].Id, new { Value = Model.QualificationDetails[i].Id })
-                                                @Html.HiddenFor(model => model.QualificationDetails[i].CreatedAt, new { Value = Model.QualificationDetails[i].CreatedAt })
+                                                @Html.HiddenFor(model => model.QualificationDetails[i].CreatedAt, new { Value = Model.QualificationDetails[i].CreatedAt.ToString() })
                                                 @Html.HiddenFor(model => model.QualificationDetails[i].EmployeeId, new { Value = Model.EmployeeDetails.Id, @class = "requiredField" })
                                                 @Html.DropDownListFor(model => model.QualificationDetails[i].DegreeId, new SelectList(Model.Degrees, "Id", "Name", Model.QualificationDetails[i].DegreeId), new { @class = "form-control requiredField" })
                                             </td>
@@ -586,7 +586,7 @@
                                 <tr>
                                     <th>Designation<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
                                     <th>PayScale</th>
-                                    <th>Level</th>
+                                    <th style="min-width:150px;">Level</th>
                                     @* Filter Levels on Basis of Organisation*@
                                     <th>From</th>
                                     <th>To</th>
@@ -601,7 +601,7 @@
                                         <tr id="promotionRow@(i)">
                                             <td>
                                                 @Html.HiddenFor(model => model.PromotionDetails[i].Id, new { Value = Model.PromotionDetails[i].Id })
-                                                @Html.HiddenFor(model => model.PromotionDetails[i].CreatedAt, new { Value = Model.PromotionDetails[i].CreatedAt })
+                                                @Html.HiddenFor(model => model.PromotionDetails[i].CreatedAt, new { Value = Model.PromotionDetails[i].CreatedAt.ToString() })
                                                 @Html.HiddenFor(model => model.PromotionDetails[i].EmployeeId, new { Value = Model.EmployeeDetails.Id, @class = "requiredField" })
                                                 @Html.DropDownListFor(model => model.PromotionDetails[i].DesignationId, new SelectList(Model.Designations, "Id", "Name", Model.PromotionDetails[i].DesignationId), new { @class = "form-control requiredField" })
                                             </td>
@@ -643,7 +643,7 @@
                                         <tr id="postingRow@(i)">
                                             <td>
                                                 @Html.HiddenFor(model => model.PostingDetails[i].Id, new { Value = Model.PostingDetails[i].Id })
-                                                @Html.HiddenFor(model => model.PostingDetails[i].CreatedAt, new { Value = Model.PostingDetails[i].CreatedAt  })
+                                                @Html.HiddenFor(model => model.PostingDetails[i].CreatedAt, new { Value = Model.PostingDetails[i].CreatedAt.ToString() })
                                                 @Html.HiddenFor(model => model.PostingDetails[i].EmployeeId, new { Value = Model.EmployeeDetails.Id, @class = "requiredField" })
                                                 @Html.DropDownListFor(model => model.PostingDetails[i].DepartmentId, new SelectList(Model.Departments, "Id", "Name", Model.PostingDetails[i].DepartmentId), new { @class = "form-control requiredField" })
                                             </td>
@@ -698,7 +698,7 @@
         $('[data-type="date"]').each(function () {
             $(this).datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
+                format: 'dd-MM-yyyy'
             });
         });
 
@@ -717,7 +717,7 @@
             // RegEx Match
             return value.match(/^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$|^$/);
             },
-            "Please enter a date in the format dd/mm/yyyy."
+            "Please enter a date in the format dd-MM-yyyy."
         );
         $.validator.addMethod("indianPAN",function(value, element) {
             // RegEx Match
@@ -977,7 +977,7 @@
             $('#dependentTable tbody').append(rowHtml);
             $('#DependentDetails_' + newDependent + '__DateofBirth').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
+                format: 'dd-MM-yyyy'
             }).rules('add',
                 {
                     australianDate:true
@@ -1025,14 +1025,14 @@
             $('#qualificationTable tbody').append(rowHtml);
             $('#QualificationDetails_' + newQualification + '__From').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
+                format: 'dd-MM-yyyy'
             }).rules('add',
                 {
                     australianDate:true
                 });
             $('#QualificationDetails_' + newQualification + '__To').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
+                format: 'dd-MM-yyyy'
             }).rules('add',
                 {
                     australianDate:true
@@ -1081,14 +1081,14 @@
             $('#postingTable tbody').append(rowHtml);
             $('#PostingDetails_' + newPosting + '__From').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
+                format: 'dd-MM-yyyy'
             }).rules('add',
                 {
                     australianDate:true
                 });
             $('#PostingDetails_' + newPosting + '__To').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
+                format: 'dd-MM-yyyy'
             }).rules('add',
                 {
                     australianDate:true
@@ -1136,14 +1136,14 @@
             $('#promotionTable tbody').append(rowHtml);
             $('#PromotionDetails_' + newPromotion + '__From').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
+                format: 'dd-MM-yyyy'
             }).rules('add',
                 {
                     australianDate:true
                 });
             $('#PromotionDetails_' + newPromotion + '__To').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd/mm/yyyy'
+                format: 'dd-MM-yyyy'
             }).rules('add',
                 {
                     australianDate:true
@@ -1186,7 +1186,7 @@
             if (this.value.match(/^[A-Z]{1}[0-9]{7}$/)) {
                  $('#@Html.IdFor(model=>model.EmployeeDetails.PassportValidity)').removeAttr('disabled');
             }
-            else {
+            else if (this.value == "") {
                 $('#@Html.IdFor(model=>model.EmployeeDetails.PassportValidity)').val(null).attr('disabled', 'disabled').removeClass("is-invalid");
             }
          });
@@ -1264,10 +1264,13 @@
             },
             fail: function (xhr, textStatus, errorThrown) {
                 $('#formContent').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+             },
+            complete: function () {
+                        $('#overlay').fadeOut();
             }
           });
           //console.log($("#deputationistForm").serialize());
-          $('#overlay').fadeOut();
+          //$('#overlay').fadeOut();
       }
     });
 });

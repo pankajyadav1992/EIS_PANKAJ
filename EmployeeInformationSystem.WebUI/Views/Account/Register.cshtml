@@ -1,41 +1,83 @@
 ﻿@model EmployeeInformationSystem.WebUI.Models.RegisterViewModel
+
 @{
-    ViewBag.Title = "Register";
+    Layout = null;
 }
 
-<h2>@ViewBag.Title.</h2>
-
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "registerUser" }))
 {
+
     @Html.AntiForgeryToken()
-    <h4>Create a new account.</h4>
-    <hr />
     @Html.ValidationSummary("", new { @class = "text-danger" })
-    <div class="form-group">
-        @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
-            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+    <div class="form-group row">
+        @Html.LabelFor(m => m.EmployeeName, new { @class = "col-3 form-control-label" })
+        <div class="col-9">
+            @Html.TextBoxFor(m => m.EmployeeName, new { @class = "form-control", @readonly = "readonly" })
         </div>
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+
+    <div class="form-group row">
+        @Html.LabelFor(m => m.UserId, new { @class = "col-3 form-control-label" })
+        <div class="col-9">
+            @Html.TextBoxFor(m => m.UserId, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+    </div>
+
+    <div class="form-group row">
+        @Html.LabelFor(m => m.Email, new { @class = "col-3 form-control-label" })
+        <div class="col-9">
+            @if (null == Model.Email)
+            {
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+            }
+            else
+            {
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", @readonly = "readonly" })
+            }
+        </div>
+    </div>
+    <div class="form-group row">
+        @Html.LabelFor(m => m.Password, new { @class = "col-3 form-control-label" })
+        <div class="col-9">
             @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
         </div>
     </div>
-    <div class="form-group">
-        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-        <div class="col-md-10">
+    <div class="form-group row">
+        @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-3 form-control-label" })
+        <div class="col-9">
             @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
         </div>
     </div>
-    <div class="form-group">
-        <div class="col-md-offset-2 col-md-10">
-            <input type="submit" class="btn btn-default" value="Register" />
+
+    <div class="form-group row">
+        <label class="col-3 form-control-label">Application Access Roles</label>
+        <div class="col-9">
+            <div class="row">
+                <div class="col-6">
+                    @Html.CheckBoxFor(m => m.AddEmployee, new { @class = "checkbox-template" }) Add Employee
+                </div>
+                <div class="col-6">
+                    @Html.CheckBoxFor(m => m.ViewEmployee, new { @class = "checkbox-template" }) View Employee
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-6">
+                    @Html.CheckBoxFor(m => m.EditEmployee, new { @class = "checkbox-template" }) Edit Employee
+                </div>
+                <div class="col-6">
+                    @Html.CheckBoxFor(m => m.DeleteEmployee, new { @class = "checkbox-template" }) Delete Employee
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    @Html.CheckBoxFor(m => m.Admin, new { @class = "checkbox-template" }) Admin
+                </div>
+                <div class="col-6">
+                    @Html.CheckBoxFor(m => m.GenerateReports, new { @class = "checkbox-template" }) Reports
+                </div>
+            </div>
         </div>
     </div>
-}
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
 }

@@ -10,7 +10,7 @@ using System.Web.Mvc;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
-    public class EmployeeDataController : Controller
+    public class EmployeeDataController : BaseController
     {
         IRepository<EmployeeDetail> EmployeeDetailContext;
         IRepository<Discipline> DisciplineContext;
@@ -59,13 +59,21 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             DepartmentContext = departmentContext;
             QualificationDetailContext = qualificationDetailContext;
             TelephoneExtensionContext = telephoneExtensionContext;
+
+            //Setting Parameters for Page
+            base.SetGlobalParameters();
+            ViewBag.UserName = UserName;
+            ViewBag.ProfilePhoto = ProfilePicture;
+            ViewBag.Role = Role;
         }
 
+        [Authorize(Roles= "Add")]
         public ActionResult AddEmployee()
         {
             return View();
         }
 
+        [Authorize(Roles = "Add,Edit")]
         public ActionResult AjaxAdd(string targetPage, string mode, string EmployeeId)
         {
             // Empty ViewModel & Select List
@@ -147,6 +155,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return View(targetPage, viewModel);
         }
 
+        [Authorize(Roles = "Add")]
         [HttpPost]
         public ActionResult AjaxAdd(DataViewModel viewModel, HttpPostedFileBase file)
         {
@@ -258,6 +267,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
         }
 
+        [Authorize(Roles = "Edit")]
         public ActionResult EditEmployee()
         {
             List<EmployeeDetail> employees = EmployeeDetailContext.Collection().ToList();
@@ -267,6 +277,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return View("SelectEmployee");
         }
 
+        [Authorize(Roles = "Edit")]
         [HttpPost]
         public ActionResult AjaxEdit(DataViewModel viewModel, HttpPostedFileBase file)
         {
@@ -428,6 +439,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         }
 
 
+        [Authorize(Roles = "View")]
         public ActionResult ViewEmployee(string EmployeeId)
         {
             ViewBag.Target = "View";
@@ -459,6 +471,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
         }
 
+        [Authorize(Roles = "Delete")]
         public ActionResult DeleteEmployee(string EmployeeId)
         {
             ViewBag.Target = "Delete";
@@ -490,6 +503,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
         }
 
+        [Authorize(Roles = "Delete")]
         public ActionResult AjaxDelete(string EmployeeId)
         {
             string returnText = "<div class=\"alert alert-danger\" role=\"alert\"> An Error has occured </div>";
@@ -568,6 +582,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return Content(returnText);
         }
 
+        [Authorize(Roles = "Add,Edit")]
         public JsonResult GetOrganisationDependentInfo(string organisationId, string infoType)
         {
             List<IdNamePair> idNamePairs = new List<IdNamePair>();

@@ -3,6 +3,7 @@
 }
 
 @section CustomStyles{
+    @Styles.Render("~/Content/bootstrap-select")
     <style>
         #overlay {
             position: absolute;
@@ -65,7 +66,7 @@
                                 <div class="invalid-feedback" id="fileUploadError" style="display:none;">Please select an Excel file</div>
                             </div>
                             <br />
-                            <div class="text-center" >
+                            <div class="text-center">
                                 <div id="uploadStatus" style="display:none;"></div>
                             </div>
                             <br />
@@ -79,17 +80,25 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="card">
-                        <div class="card-close">
-                            <div class="dropdown">
-                                <button type="button" id="closeCard2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="dropdown-toggle"><i class="fa fa-ellipsis-v"></i></button>
-                                <div aria-labelledby="closeCard2" class="dropdown-menu dropdown-menu-right has-shadow"><a href="#" class="dropdown-item remove"> <i class="fa fa-times"></i>Close</a><a href="#" class="dropdown-item edit"> <i class="fa fa-gear"></i>Edit</a></div>
-                            </div>
-                        </div>
                         <div class="card-header d-flex align-items-center">
-                            <h3 class="h4">Manage Access Roles</h3>
+                            <h3 class="h4">Manage User Ids</h3>
                         </div>
-                        <div class="card-body">
-                            <h1>Coming Soon</h1>
+                        <div class="card-body mx-auto">
+                            <div class="form-group row">
+                                <label for="selectEmployeeByNameId" class="form-control-label">Select Employee</label>
+                                <div class="ml-3">
+                                    <select class="form-control selectEmployeeOption" id="selectEmployeeByNameId" style="min-width:80%;" data-live-search="true">
+                                        <option value="" selected>--Select Employee Name/CPF No.--</option>
+                                        @foreach (var employee in ViewBag.Employees)
+                                        {
+                                            <option value="@employee.Id">@employee.GetFullName, CPF No.:  @employee.EmployeeCode</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="form-control btn btn-primary" style="width:50%;" id="manageUserID" disabled>Continue</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -98,7 +107,7 @@
 
         <div class="row">
             <div class="col-lg-12">
-                <div class="card" id="AddDataForm">
+                <div class="card">
                     <div class="card-header d-flex align-items-center">
                         <h3 class="h4">Manage Master Data</h3>
                     </div>
@@ -107,24 +116,118 @@
                         <h1>Coming Soon</h1>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
 
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="userModalCenter" tabindex="-1" role="dialog" aria-labelledby="userModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" id="modalContent">
+                <div></div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalCenterTitle">Create New User ID</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    ...
+                </div>
+                <div class="modal-footer" id="modalFooter">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Register" id="registerUserBtn" />
+                </div>
             </div>
         </div>
     </div>
 </section>
 @section Scripts{
+    @Scripts.Render("~/bundles/bootstrap-select")
     <script>
         $(document).ready(function () {
-             $("#fileUpload").change(function () {
-                 var fileExtension = ['xls', 'xlsx'];
-                 if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
-                     $("#fileUploadError").show();
-                     $('#continueBtn').attr('disabled', true);
-                 } else {
-                     $("#fileUploadError").hide();
-                     $('#continueBtn').removeAttr('disabled');
-                 }
-             });
+            $('#selectEmployeeByNameId').selectpicker({
+                liveSearchStyle: "contains"
+            });
+
+            $(document).on('propertychange change click keyup input paste', '#selectEmployeeByNameId', function () {
+                if (this.value != "") {
+                    $('#manageUserID').prop('disabled', false);
+                } else {
+                    $('#manageUserID').prop('disabled', true);
+                }
+            });
+
+            $('#manageUserID').click(function () {
+                var EmployeeId = null;
+                EmployeeId = $("#selectEmployeeByNameId:enabled").val();
+                if ("" != EmployeeId) {
+                    $.ajax({
+                    url: '@Url.Action("Register", "Account")?EmployeeId=' + EmployeeId,
+                    success: function (result) {
+                        $('#modalBody').html(result);
+                    },
+                    error: function () {
+                        $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                    },
+                    fail: function (xhr, textStatus, errorThrown) {
+                        $('#modalBody').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                    },
+                    complete: function () {
+                        $('#userModalCenter').modal('show');
+                    }
+                    });
+                } else {
+                    alert("No Employee Selected !!");
+                }
+            });
+
+            $(document).on("click", "#registerUserBtn", function () {
+                $('#overlay').fadeIn();
+                var formUrl = $('#registerUser').attr('action');
+                var formData = new FormData(document.getElementById('registerUser'));
+                $.ajax({
+                    url: formUrl,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if ('Success' == result) {
+                            $('#modalBody').html('<div class="alert alert-success" role="alert"> Successfully created user ID </div >');
+                            $("#registerUserBtn").fadeOut();
+                            
+                        } else {
+                            $('#modalBody').html(result);
+                        }
+                    },
+                    error: function () {
+                        $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                        $("#registerUserBtn").fadeOut();
+                    },
+                    fail: function (xhr, textStatus, errorThrown) {
+                        $('#modalBody').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                        $("#registerUserBtn").fadeOut();
+                     },
+                    complete: function () {
+                        $('#overlay').fadeOut();
+                    }
+                });
+            });
+
+
+            $("#fileUpload").change(function () {
+                var fileExtension = ['xls', 'xlsx'];
+                if ($.inArray($(this).val().split('.').pop().toLowerCase(), fileExtension) == -1) {
+                    $("#fileUploadError").show();
+                    $('#continueBtn').attr('disabled', true);
+                } else {
+                    $("#fileUploadError").hide();
+                    $('#continueBtn').removeAttr('disabled');
+                }
+            });
 
             $('#continueBtn').click(function () {
                 $('#overlay').fadeIn();
@@ -132,12 +235,12 @@
                 var formUrl = $('#fileUploadForm').attr('action');
                 formData.append('file', $('#fileUpload')[0].files[0]);
                 $.ajax({
-                    url: formUrl,  
+                    url: formUrl,
                     type: 'POST',
                     data: formData,
                     success: function (result) {
                         $('#uploadStatus').html(result);
-                        },
+                    },
                     error: function () {
                         $('#uploadStatus').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
                     },
@@ -152,7 +255,7 @@
                     cache: false,
                     contentType: false,
                     processData: false
-                }); 
+                });
             });
         });
     </script>

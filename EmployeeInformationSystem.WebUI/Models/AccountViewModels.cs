@@ -49,10 +49,11 @@ namespace EmployeeInformationSystem.WebUI.Models
 
     public class LoginViewModel
     {
-        [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+
+        //Custom Fields
+        [Required(ErrorMessage = "Valid User ID is required")]
+        [Display(Name = "User ID")]
+        public string UserId { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -81,11 +82,21 @@ namespace EmployeeInformationSystem.WebUI.Models
         public string ConfirmPassword { get; set; }
 
         //Custom Fields
-        [Required(ErrorMessage = "Valid Employee is required for ID Creation")]
-        [Display(Name ="Employee")]
-        public string EmployeeId { get; set; }
+        [Required(ErrorMessage = "Valid User ID is required")]
+        [Display(Name = "User ID")]
+        public string UserId { get; set; }
 
-        public IEnumerable<EmployeeDetail> EmployeeList { get; set; }
+        [Display(Name = "Employee Name")]
+        public string EmployeeName { get; set; }
+
+        // Managing Roles & Claims
+        public bool Admin { get; set; }
+        public bool AddEmployee { get; set; }
+        public bool ViewEmployee { get; set; }
+        public bool EditEmployee { get; set; }
+        public bool DeleteEmployee { get; set; }
+        public bool GenerateReports { get; set; }
+
     }
 
     public class ResetPasswordViewModel

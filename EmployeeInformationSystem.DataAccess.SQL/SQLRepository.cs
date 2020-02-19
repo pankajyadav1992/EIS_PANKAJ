@@ -52,14 +52,14 @@ namespace EmployeeInformationSystem.DataAccess.SQL
 
         public void Insert(T t)
         {
-            t.LastUpdateAt = DateTimeOffset.Now;
+            t.LastUpdateAt = DateTime.Now;
             _dbset.Add(t);
         }
 
         public void Update(T t)
         {
             _dbset.Attach(t);
-            t.LastUpdateAt = DateTimeOffset.Now;
+            t.LastUpdateAt = DateTime.Now;
             _context.Entry(t).State = EntityState.Modified;
         }
 

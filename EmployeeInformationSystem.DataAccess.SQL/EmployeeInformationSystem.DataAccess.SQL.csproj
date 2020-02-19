@@ -58,13 +58,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext.cs" />
-    <Compile Include="Migrations\202002120950327_Initial.cs" />
-    <Compile Include="Migrations\202002120950327_Initial.designer.cs">
-      <DependentUpon>202002120950327_Initial.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202002140552406_UniqueConstraintForHoDTable.cs" />
-    <Compile Include="Migrations\202002140552406_UniqueConstraintForHoDTable.designer.cs">
-      <DependentUpon>202002140552406_UniqueConstraintForHoDTable.cs</DependentUpon>
+    <Compile Include="Migrations\202002190929045_Initial.cs" />
+    <Compile Include="Migrations\202002190929045_Initial.designer.cs">
+      <DependentUpon>202002190929045_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -81,11 +77,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202002120950327_Initial.resx">
-      <DependentUpon>202002120950327_Initial.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202002140552406_UniqueConstraintForHoDTable.resx">
-      <DependentUpon>202002140552406_UniqueConstraintForHoDTable.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202002190929045_Initial.resx">
+      <DependentUpon>202002190929045_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

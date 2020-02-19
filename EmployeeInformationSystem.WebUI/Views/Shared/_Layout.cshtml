@@ -49,7 +49,7 @@
 
 
                             <!-- Logout    -->
-                            <li class="nav-item"><a href="@Url.Action("Login","Home")" class="nav-link logout"> <span class="d-none d-sm-inline">Logout</span><i class="fa fa-sign-out"></i></a></li>
+                            <li class="nav-item"><a href="@Url.Action("LogOut","Account")" class="nav-link logout"> <span class="d-none d-sm-inline">Logout</span><i class="fa fa-sign-out"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -60,35 +60,75 @@
             <nav class="side-navbar">
                 <!-- Sidebar Header-->
                 <div class="sidebar-header d-flex align-items-center">
-                    <div class="avatar"><img src="~/Content/img/no-profile-pic-icon.jpg" alt="..." class="img-fluid rounded-circle"></div>
+                    <div class="avatar"><img src="@ViewBag.ProfilePhoto" alt="..." class="img-fluid rounded-circle"></div>
                     <div class="title">
-                        <h1 class="h4">Administrator</h1>
-                        <p>Data Admin</p>
+                        <h1 class="h4">@ViewBag.UserName</h1>
+                        <p>@ViewBag.Role</p>
                     </div>
                 </div>
                 <!-- Sidebar Navidation Menus--><span class="heading">Main</span>
-                                                <ul class="list-unstyled">
-                                                    <li @RenderSection("Home", required: false)><a href="@Url.Action("Index", "Home")"> <i class="icon-home"></i>Home </a></li>
-                                                    <li>
-                                                        <a href="#DataManageDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-database"></i>Employee Data</a>
-                                                        <ul id="DataManageDropdown" class="collapse list-unstyled @RenderSection("DataManage",required:false)">
-                                                            <li @RenderSection("AddEmployee", required: false)><a href="@Url.Action("AddEmployee", "EmployeeData")"><i class="fa fa-user-plus"></i>Add Employee</a></li>
-                                                            <li @RenderSection("ViewEmployee", required: false)><a href="@Url.Action("ViewEmployee", "EmployeeData")"><i class="fa fa-address-card"></i>View Employee</a></li>
-                                                            <li @RenderSection("EditEmployee", required: false)><a href="@Url.Action("EditEmployee", "EmployeeData")"><i class="fa fa-edit"></i>Update Record</a></li>
-                                                            <li @RenderSection("DeleteEmployee", required: false)><a href="@Url.Action("DeleteEmployee", "EmployeeData")"><i class="fa fa-trash"></i>Delete Record</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#GenerateReportsDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-bar-chart"></i>Generate Reports</a>
-                                                        <ul id="GenerateReportsDropdown" class="collapse list-unstyled ">
-                                                            <li><a href="#"><i class="fa fa-user-circle"></i>Active Employess</a></li>
-                                                            <li><a href="#"><i class="fa fa-times-rectangle"></i>Inactive Employees</a></li>
-                                                            <li><a href="#"><i class="fa fa-users"></i>All Employees</a></li>
-                                                        </ul>
-                                                    </li>
-                                                    <li><span class="heading">Administrator Section</span></li>
-                                                    <li @RenderSection("Admin", required: false)><a href="@Url.Action("Index", "MasterData")"> <i class="fa fa-key"></i>Master Data </a></li>
-                                                </ul>
+                <ul class="list-unstyled">
+                    <li @RenderSection("Home", required: false)><a href="@Url.Action("Index", "Home")"> <i class="icon-home"></i>Home </a></li>
+                    <li>
+                        <a href="#DataManageDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-database"></i>Employee Data</a>
+                        <ul id="DataManageDropdown" class="collapse list-unstyled @RenderSection("DataManage",required:false)">
+                            @if (Request.IsAuthenticated && User.IsInRole("Add"))
+                            {
+                                <li @RenderSection("AddEmployee", required: false)><a href="@Url.Action("AddEmployee", "EmployeeData")"><i class="fa fa-user-plus"></i>Add Employee</a></li>
+                            }
+                            else
+                            {
+                                <li @RenderSection("AddEmployee", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-user-plus"></i>Add Employee</a></li>
+                            }
+
+                            @if (Request.IsAuthenticated && User.IsInRole("View"))
+                            {
+                                <li @RenderSection("ViewEmployee", required: false)><a href="@Url.Action("ViewEmployee", "EmployeeData")"><i class="fa fa-address-card"></i>View Employee</a></li>
+                            }
+                            else
+                            {
+                                <li @RenderSection("ViewEmployee", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-address-card"></i>View Employee</a></li>
+                            }
+
+                            @if (Request.IsAuthenticated && User.IsInRole("Edit"))
+                            {
+                                <li @RenderSection("EditEmployee", required: false)><a href="@Url.Action("EditEmployee", "EmployeeData")"><i class="fa fa-edit"></i>Update Record</a></li>
+                            }
+                            else
+                            {
+                                <li @RenderSection("EditEmployee", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-edit"></i>Update Record</a></li>
+                            }
+
+                            @if (Request.IsAuthenticated && User.IsInRole("Delete"))
+                            {
+                                <li @RenderSection("DeleteEmployee", required: false)><a href="@Url.Action("DeleteEmployee", "EmployeeData")"><i class="fa fa-trash"></i>Delete Record</a></li>
+                            }
+                            else
+                            {
+                                <li @RenderSection("DeleteEmployee", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-trash"></i>Delete Record</a></li>
+                            }
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#GenerateReportsDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-bar-chart"></i>Generate Reports</a>
+                        <ul id="GenerateReportsDropdown" class="collapse list-unstyled ">
+                            <li><a href="#"><i class="fa fa-user-circle"></i>Active Employess</a></li>
+                            <li><a href="#"><i class="fa fa-times-rectangle"></i>Inactive Employees</a></li>
+                            <li><a href="#"><i class="fa fa-users"></i>All Employees</a></li>
+                        </ul>
+                    </li>
+                    <li><span class="heading">Administrator Section</span></li>
+                    @if (Request.IsAuthenticated && User.IsInRole("Admin"))
+                    {
+                        <li @RenderSection("Admin", required: false)><a href="@Url.Action("Index", "MasterData")"> <i class="fa fa-key"></i>Master Data </a></li>
+                    }
+                    else
+                    {
+                        <li @RenderSection("Admin", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"> <i class="fa fa-key"></i>Master Data </a></li>
+                    }
+
+
+                </ul>
             </nav>
             <div class="content-inner">
                 @RenderBody()
@@ -106,6 +146,28 @@
                     </div>
                 </footer>
             </div>
+            
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Error</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            You are not authorised to view this module!
+                            Please contact HR Team for authorisation.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <!-- JavaScript files-->

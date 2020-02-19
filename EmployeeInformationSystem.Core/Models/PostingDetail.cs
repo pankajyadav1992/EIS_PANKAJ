@@ -20,6 +20,7 @@ namespace EmployeeInformationSystem.Core.Models
         public virtual HoD HOD { get; set; }
 
         // This is ONLY for contractual employees reporting to MoPNG & DGH
+        [StringLength(1000)]
         public string Reporting { get; set; }
 
         [Required(ErrorMessage = "Valid Department is required")]
@@ -28,13 +29,13 @@ namespace EmployeeInformationSystem.Core.Models
 
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         [Display(Name = "Posting From")]
         public DateTime? From { get; set; }
 
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         [Display(Name = "Posting Till")]
         public DateTime? To { get; set; }
     }

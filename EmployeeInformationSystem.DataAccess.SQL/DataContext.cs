@@ -10,10 +10,10 @@ namespace EmployeeInformationSystem.DataAccess.SQL
 {
     public class DataContext: DbContext
     {
-        public DataContext(): base("name=DefaultConnection")
+        public DataContext(): base("name=OracleConnection")
         {
             //Caution: This deletes all the existing data in case of migrations
-            //Database.SetInitializer<DataContext>(new DropCreateDatabaseIfModelChanges<DataContext>());
+            //Database.SetInitializer<DataContext>(new DropDatabaseIfModelChanges<DataContext>());
 
             //For Production
             Database.SetInitializer<DataContext>(null);
@@ -23,7 +23,7 @@ namespace EmployeeInformationSystem.DataAccess.SQL
         {
             base.OnModelCreating(modelBuilder);
 
-            //modelBuilder.HasDefaultSchema("EIS");
+            modelBuilder.HasDefaultSchema("EIS");
 
             modelBuilder.Entity<EmployeeDetail>().HasOptional(e => e.Organisation);
             modelBuilder.Entity<EmployeeDetail>().HasOptional(e => e.Discipline);

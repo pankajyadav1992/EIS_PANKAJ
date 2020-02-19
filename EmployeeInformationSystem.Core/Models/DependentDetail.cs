@@ -14,6 +14,7 @@ namespace EmployeeInformationSystem.Core.Models
         public string EmployeeId { get; set; }
         public virtual EmployeeDetail Employee { get; set; }
 
+        [StringLength(1000)]
         [Required(ErrorMessage ="Valid Dependent Name is required")]
         [Display(Name ="Dependent Name")]
         public string DependentName { get; set; }
@@ -21,9 +22,10 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Date of Birth")]
         [Column(TypeName = "date")]
         [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? DateofBirth { get; set; }
 
+        [StringLength(1000)]
         public string Relationship { get; set; }
     }
 }

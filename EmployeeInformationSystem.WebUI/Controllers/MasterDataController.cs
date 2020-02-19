@@ -12,7 +12,8 @@ using System.Text.RegularExpressions;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
-    public class MasterDataController : Controller
+    [Authorize(Roles ="Admin")]
+    public class MasterDataController : BaseController
     {
         IRepository<EmployeeDetail> EmployeeDetailContext;
         IRepository<Discipline> DisciplineContext;
@@ -63,19 +64,28 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             DepartmentContext = departmentContext;
             QualificationDetailContext = qualificationDetailContext;
             TelephoneExtensionContext = telephoneExtensionContext;
+
+            //Setting Parameters for Page
+            base.SetGlobalParameters();
+            ViewBag.UserName = UserName;
+            ViewBag.ProfilePhoto = ProfilePicture;
+            ViewBag.Role = Role;
+
         }
 
 
         // GET: MasterData
         public ActionResult Index()
         {
+            List<EmployeeDetail> employees = EmployeeDetailContext.Collection().ToList();
+            ViewBag.Employees = employees;
             return View();
         }
 
         [HttpPost]
         public ActionResult AjaxBulkUpload(HttpPostedFileBase file)
         {
-            var returnText = "Nothing Recieved";
+            var returnText = " < div class=\"alert alert-danger\" role=\"alert\"> Nothing Recieved </div>";
             int inserted = 0, skipped = 0, failed = 0;
             if (null != file && 0 < file.ContentLength)
             {
@@ -87,7 +97,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 IExcelDataReader reader = null;
 
                 var extension = Path.GetExtension(file.FileName).ToLower();
-                returnText = "Successfully Recieved";
+                returnText = "Successfully Recieved correct file";
 
                 if (".xls" == extension)
                 {
@@ -99,15 +109,18 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("File", "This file format is not supported");
-                    returnText = "Wrong Format";
+                    returnText = "<div class=\"alert alert-danger\" role=\"alert\"> Wrong File Format uploaded!</div>";
                     return Content(returnText);
                 }
-                //int fieldcount = reader.FieldCount;
-                //int rowcount = reader.RowCount;
 
                 DataTable dt_ = new DataTable();
                 dt_ = reader.AsDataSet().Tables[0];
+
+                if("Dep, Consultants, Associates" != dt_.TableName)
+                {
+                    returnText = "<div class=\"alert alert-danger\" role=\"alert\"> Wrong File Format uploaded! </div>";
+                    return Content(returnText);
+                }
 
                 // Get Column names
                 List<string> columnNames = new List<string>();
@@ -292,13 +305,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         string primaryExpertise = dt_.Rows[row_][columnNames.FindIndex(c => c == "Primary Expertise")].ToString();
 
                         //PAN
-                        string PAN = dt_.Rows[row_][columnNames.FindIndex(c => c == "PAN No")].ToString();
+                        string PAN = Regex.Replace(dt_.Rows[row_][columnNames.FindIndex(c => c == "PAN No")].ToString(), @"(\s+|-)", "").ToUpper();
 
                         //Aadhaar
                         string Aadhaar = Regex.Replace(dt_.Rows[row_][columnNames.FindIndex(c => c == "Aadhar Number")].ToString(), @"(\s+|-)", "");
 
                         //Passport
-                        string passport = dt_.Rows[row_][columnNames.FindIndex(c => c == "Passport No")].ToString();
+                        string passport = Regex.Replace(dt_.Rows[row_][columnNames.FindIndex(c => c == "Passport No")].ToString(), @"(\s+|-)", "").ToUpper();
 
                         //Vehicle Number
                         string vehicleNumber = dt_.Rows[row_][columnNames.FindIndex(c => c == "Vehicle No")].ToString();
@@ -667,7 +680,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 PromotionDetailContext.Commit();
                 PostingDetailContext.Commit();
 
-
+                // STAFF Employees Table
                 dt_ = reader.AsDataSet().Tables[1];
 
                 // Get Column names
@@ -683,6 +696,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                     //Employee Code
                     string cpfNo = dt_.Rows[row_][columnNames.FindIndex(c => c == "Emp ID")].ToString();
+
+                    // If empty, pass Name
+                    if (string.IsNullOrEmpty(cpfNo))cpfNo = dt_.Rows[row_][columnNames.FindIndex(c => c == "Name")].ToString(); ;
+
 
                     EmployeeDetail employeeToInsert = !string.IsNullOrEmpty(cpfNo) ? (EmployeeDetailContext.Collection().FirstOrDefault(e => e.EmployeeCode == cpfNo)) : null;
                     bool employeeInserted = false;
@@ -787,7 +804,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         Gender gender = "Male" == dt_.Rows[row_][columnNames.FindIndex(c => c == "Gender")].ToString() ? Gender.Male : Gender.Female;
 
                         //PAN
-                        string PAN = dt_.Rows[row_][columnNames.FindIndex(c => c == "Pan No.")].ToString();
+                        string PAN = Regex.Replace(dt_.Rows[row_][columnNames.FindIndex(c => c == "Pan No.")].ToString(), @"(\s+|-)", "").ToUpper();
 
                         //Aadhaar
                         string Aadhaar = Regex.Replace(dt_.Rows[row_][columnNames.FindIndex(c => c == "Aadhaar No.")].ToString(), @"(\s+|-)", "");
@@ -1032,11 +1049,12 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 PromotionDetailContext.Commit();
                 PostingDetailContext.Commit();
 
-                returnText = returnText + " & Inserted: " + inserted.ToString() + ", Skipped: " + skipped.ToString() + ", Failed: " + failed.ToString();
+                returnText = "<div class=\"alert alert-success\" role=\"alert\"> "  + returnText + " & Inserted: <b>" + inserted.ToString() + "</b>, Skipped: <b>" + skipped.ToString() + "</b>, Failed: <b>" + failed.ToString() + "</b> employee records</div>";
                 reader.Close();
                 reader.Dispose();
             }
             return Content(returnText);
         }
+
     }
 }

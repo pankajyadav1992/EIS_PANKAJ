@@ -26,6 +26,7 @@ namespace EmployeeInformationSystem.Core.Models
          * Else just fill in text name as in case of "Pantry"
          * Handle this relationship in code manipulation
         */
+        [StringLength(1000)]
         public string CurrentOwner { get; set; }
     }
 }

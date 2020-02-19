@@ -18,7 +18,7 @@
     <AssemblyName>EmployeeInformationSystem.WebUI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -226,6 +226,7 @@
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="App_Start\UnityMvcActivator.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployeeDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -253,6 +254,7 @@
     <Content Include="Content\icons-reference\fonts\dashboard.svg" />
     <Content Include="Content\icons-reference\icons-reference.html" />
     <Content Include="Content\icons-reference\styles.css" />
+    <Content Include="Content\img\bg.jpg" />
     <Content Include="Content\img\dgh_transparent.png" />
     <Content Include="Content\img\favicon.ico" />
     <Content Include="Content\img\multiselect-switch.png" />
@@ -586,8 +588,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
@@ -620,7 +620,6 @@
     <Content Include="Scripts\old_js\popper-utils.js.map" />
     <Content Include="Views\EmployeeData\AddEmployee.cshtml" />
     <Content Include="Views\EmployeeData\Deputationist.cshtml" />
-    <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\EmployeeData\Success.cshtml" />
     <Content Include="Views\EmployeeData\ViewEmployee.cshtml" />
     <Content Include="Views\EmployeeData\Consultant.cshtml" />
@@ -644,6 +643,7 @@
     <Folder Include="Content\profile_pics\" />
     <Folder Include="Content\vendor\font-awesome\less\" />
     <Folder Include="Content\vendor\font-awesome\scss\" />
+    <Folder Include="Views\Base\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -694,7 +694,9 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55818</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:55818/</IISUrl>
+          <IISUrl>http://localhost/EIS</IISUrl>
+          <OverrideIISAppRootUrl>True</OverrideIISAppRootUrl>
+          <IISAppRootUrl>http://localhost/EIS</IISAppRootUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

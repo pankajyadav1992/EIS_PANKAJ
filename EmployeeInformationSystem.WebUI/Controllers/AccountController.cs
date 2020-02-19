@@ -9,6 +9,8 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using EmployeeInformationSystem.WebUI.Models;
+using EmployeeInformationSystem.Core.Models;
+using EmployeeInformationSystem.Core.Contracts;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
@@ -17,15 +19,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IRepository<EmployeeDetail> EmployeeDetailContext;
 
-        public AccountController()
+        public AccountController(IRepository<EmployeeDetail> employeeDetailContext)
         {
-        }
-
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            this.EmployeeDetailContext = employeeDetailContext;
         }
 
         public ApplicationSignInManager SignInManager
@@ -34,9 +32,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
             }
-            private set 
-            { 
-                _signInManager = value; 
+            private set
+            {
+                _signInManager = value;
             }
         }
 
@@ -75,7 +73,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            var result = await SignInManager.PasswordSignInAsync(model.UserId, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -120,7 +118,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             // If a user enters incorrect codes for a specified amount of time then the user account 
             // will be locked out for a specified amount of time. 
             // You can configure the account lockout settings in IdentityConfig
-            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent:  model.RememberMe, rememberBrowser: model.RememberBrowser);
+            var result = await SignInManager.TwoFactorSignInAsync(model.Provider, model.Code, isPersistent: model.RememberMe, rememberBrowser: model.RememberBrowser);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -137,9 +135,25 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         //
         // GET: /Account/Register
         [AllowAnonymous]
-        public ActionResult Register()
+        public ActionResult Register(string EmployeeId)
         {
-            return View();
+            EmployeeDetail employee = null;
+            if (null != EmployeeId)
+            {
+                employee = EmployeeDetailContext.Find(EmployeeId, true);
+            }
+            if (null == EmployeeId || null == employee)
+            {
+                return Content("<div class=\"alert alert-danger\" role=\"alert\"> Employee not found!</div>");
+            }
+            else
+            {
+                RegisterViewModel registerViewModel = new RegisterViewModel();
+                registerViewModel.Email = !string.IsNullOrEmpty(employee.EmailID) ? employee.EmailID : null;
+                registerViewModel.UserId = employee.EmployeeCode;
+                registerViewModel.EmployeeName = employee.GetFullName;
+                return View(registerViewModel);
+            }
         }
 
         //
@@ -151,23 +165,31 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.UserId, Email = model.Email};
                 var result = await UserManager.CreateAsync(user, model.Password);
+
+                // Add Custom claims to the user
+                if (model.Admin) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
+                if (model.AddEmployee) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Add"));
+                if (model.ViewEmployee) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "View"));
+                if (model.EditEmployee) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Edit"));
+                if (model.DeleteEmployee) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Delete"));
+                if (model.GenerateReports) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Reports"));
+
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
+                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
                     // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
                     // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
                     // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    return Content("Success");
                 }
                 AddErrors(result);
             }
-
             // If we got this far, something failed, redisplay form
             return View(model);
         }
@@ -390,6 +412,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult LogOff()
+        {
+            AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            return RedirectToAction("Index", "Home");
+        }
+
+        // CUSTOM: /Account/LogOut
+        public ActionResult LogOut()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             return RedirectToAction("Index", "Home");
