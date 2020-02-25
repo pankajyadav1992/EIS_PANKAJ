@@ -168,6 +168,7 @@
                     url: '@Url.Action("Register", "Account")?EmployeeId=' + EmployeeId,
                     success: function (result) {
                         $('#modalBody').html(result);
+                        $("#registerUserBtn").show();
                     },
                     error: function () {
                         $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');

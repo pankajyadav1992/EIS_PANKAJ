@@ -30,7 +30,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         select employee.FirstName + " " + employee.LastName).FirstOrDefault() ?? "Anonymous";
             ProfilePicture = (from employee in _localEmployeeContext.Collection()
                               where employee.EmployeeCode == UserId
-                              select employee.ProfilePhoto).FirstOrDefault() ?? "./Content/img/no-profile-pic-icon.jpg";
+                              select employee.ProfilePhoto).FirstOrDefault() ?? "/EIS/Content/img/no-profile-pic-icon.jpg";
         }
     }
 }
