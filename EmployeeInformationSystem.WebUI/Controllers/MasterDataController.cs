@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    //[Authorize(Roles ="Admin")]
     public class MasterDataController : BaseController
     {
         IRepository<EmployeeDetail> EmployeeDetailContext;
@@ -116,7 +116,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 DataTable dt_ = new DataTable();
                 dt_ = reader.AsDataSet().Tables[0];
 
-                if("Dep, Consultants, Associates" != dt_.TableName)
+                if ("Dep, Consultants, Associates" != dt_.TableName)
                 {
                     returnText = "<div class=\"alert alert-danger\" role=\"alert\"> Wrong File Format uploaded! </div>";
                     return Content(returnText);
@@ -209,10 +209,27 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                             case "Deputationist": employeeType = EmployeeType.Deputationist; break;
                             case "Consultant": employeeType = EmployeeType.Consultant; break;
                             case "Adviser": employeeType = EmployeeType.Advisor; break;
+                            case "Trainee Officer": employeeType = EmployeeType.TraineeOfficer; break;
                         }
 
                         //Status
                         Boolean status = "Working" == dt_.Rows[row_][columnNames.FindIndex(c => c == "Status")].ToString() ? true : false;
+
+                        ReasonForLeaving reasonForSeparation = ReasonForLeaving.Others;
+
+                        if (!status)
+                        {
+                            switch (dt_.Rows[row_][columnNames.FindIndex(c => c == "Reason of Separation")].ToString())
+                            {
+                                case "Contract Expired": reasonForSeparation = ReasonForLeaving.ContractExpired; break;
+                                case "Demise": reasonForSeparation = ReasonForLeaving.Demise; break;
+                                case "Repatriation": reasonForSeparation = ReasonForLeaving.Repatriation; break;
+                                case "Resignation": reasonForSeparation = ReasonForLeaving.Resignation; break;
+                                case "Superannuation": reasonForSeparation = ReasonForLeaving.Superannuation; break;
+                                case "Termination": reasonForSeparation = ReasonForLeaving.Termination; break;
+                                case "Transfer": reasonForSeparation = ReasonForLeaving.Repatriation; break;
+                            }
+                        }
 
                         // Basic Pay
                         string currentBasicPay = dt_.Rows[row_][columnNames.FindIndex(c => c == "Basic Pay")].ToString();
@@ -340,8 +357,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 string[] subNames = nameString.Split('.');
                                 if (1 == subNames[0].Length)
                                 {
-                                    firstName = subNames[0] + '.';
-                                    if (1 == subNames[1].Length && 2 < subNames.Length) middleName = subNames[1] + '.';
+                                    firstName = subNames[0].Trim() + '.';
+                                    if (1 == subNames[1].Length && 2 < subNames.Length) middleName = subNames[1].Trim() + '.';
                                 }
                                 else firstName = subNames[1] + '.';
                                 lastName = subNames[subNames.Length - 1];
@@ -403,8 +420,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 MaritalStatus = maritalStatus,
                                 MarriageDate = marriageDate,
                                 EmergencyContact = string.IsNullOrEmpty(emergencyContact) ? null : emergencyContact,
-                                EmergencyPerson = string.IsNullOrEmpty(emergencyPerson) ? null : emergencyPerson
+                                EmergencyPerson = string.IsNullOrEmpty(emergencyPerson) ? null : emergencyPerson,
                             };
+                            if (!status) employeeToInsert.ReasonForLeaving = reasonForSeparation;
                             EmployeeDetailContext.Insert(employeeToInsert);
                             log.Info("Successfully inserted Employee with CPF:" + cpfNo);
                             inserted++;
@@ -441,6 +459,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 {
                                     telephoneExtension.EmployeeId = employeeId;
                                     telephoneExtension.CurrentOwner = null;
+                                    TelephoneExtensionContext.Update(telephoneExtension);
                                     log.Info("Update Telephone no. :" + extensionNumber + " for Employee CPF:" + cpfNo);
                                 }
                                 else log.Info("Skipped Telephone no. :" + extensionNumber + " for Employee CPF:" + cpfNo);
@@ -455,8 +474,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 else qualificationList.Add(qualificationDetails);
                                 foreach (string qualification in qualificationList.FindAll(q => !string.IsNullOrEmpty(q)))
                                 {
-                                    string degreeName = null, specialization = null;
+                                    string degreeName = null, specialization = null, duration = null;
                                     tempString = qualification.Trim();
+                                    if (tempString.Contains('<'))
+                                    {
+                                        duration = tempString.ToUpper().Split('<', '>')[1];
+                                        tempString = Regex.Replace(tempString, "(\\<.*\\>)", "");
+                                    }
                                     if (tempString.Contains('('))
                                     {
                                         degreeName = tempString.ToUpper().Substring(0, tempString.IndexOf('('));
@@ -482,7 +506,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                     {
                                         EmployeeId = employeeId,
                                         DegreeId = degreeId,
-                                        Specialization = string.IsNullOrEmpty(specialization) ? null : specialization
+                                        Specialization = string.IsNullOrEmpty(specialization) ? null : specialization,
+                                        Duration = string.IsNullOrEmpty(duration) ? null : duration
                                     });
                                 }
                             }
@@ -611,6 +636,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                             //Department
                             string departmentName = dt_.Rows[row_][columnNames.FindIndex(c => c == "Department")].ToString();
+                            if (string.IsNullOrEmpty(departmentName)) departmentName = "Not Available"; // BUG FIX for empty departments
                             string departmentId = (from department in DepartmentContext.Collection()
                                                    where department.Name == departmentName
                                                    select department.Id).FirstOrDefault();
@@ -698,7 +724,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     string cpfNo = dt_.Rows[row_][columnNames.FindIndex(c => c == "Emp ID")].ToString();
 
                     // If empty, pass Name
-                    if (string.IsNullOrEmpty(cpfNo))cpfNo = dt_.Rows[row_][columnNames.FindIndex(c => c == "Name")].ToString(); ;
+                    if (string.IsNullOrEmpty(cpfNo)) cpfNo = dt_.Rows[row_][columnNames.FindIndex(c => c == "Name")].ToString(); ;
 
 
                     EmployeeDetail employeeToInsert = !string.IsNullOrEmpty(cpfNo) ? (EmployeeDetailContext.Collection().FirstOrDefault(e => e.EmployeeCode == cpfNo)) : null;
@@ -728,7 +754,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         string organisationId = (from organisation in OrganisationContext.Collection()
                                                  where organisation.Name == organisationName
                                                  select organisation.Id).FirstOrDefault();
-                        if (null == organisationId && "Not Applicable" != organisationName)
+                        if (null == organisationId && "Not Applicable" != organisationName && !string.IsNullOrEmpty(organisationName))
                         {
                             Organisation newOrganisation = new Organisation() { Name = organisationName };
                             OrganisationContext.Insert(newOrganisation);
@@ -922,8 +948,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 else qualificationList.Add(qualificationDetails);
                                 foreach (string qualification in qualificationList.FindAll(q => !string.IsNullOrEmpty(q)))
                                 {
-                                    string degreeName = null, specialization = null;
+                                    string degreeName = null, specialization = null, duration = null;
                                     tempString = qualification.Trim();
+                                    if (tempString.Contains('<'))
+                                    {
+                                        duration = tempString.ToUpper().Split('<', '>')[1];
+                                        tempString = Regex.Replace(tempString, "(\\<.*\\>)", "");
+                                    }
                                     if (tempString.Contains('('))
                                     {
                                         degreeName = tempString.ToUpper().Substring(0, tempString.IndexOf('('));
@@ -949,7 +980,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                     {
                                         EmployeeId = employeeId,
                                         DegreeId = degreeId,
-                                        Specialization = string.IsNullOrEmpty(specialization) ? null : specialization
+                                        Specialization = string.IsNullOrEmpty(specialization) ? null : specialization,
+                                        Duration = string.IsNullOrEmpty(duration) ? null : duration
                                     });
                                 }
                             }
@@ -1017,6 +1049,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                             //Department
                             string departmentName = dt_.Rows[row_][columnNames.FindIndex(c => c == "Department")].ToString();
+                            if (string.IsNullOrEmpty(departmentName)) departmentName = "Not Available"; // BUG FIX for empty departments
                             string departmentId = (from department in DepartmentContext.Collection()
                                                    where department.Name == departmentName
                                                    select department.Id).FirstOrDefault();
@@ -1027,15 +1060,15 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 DepartmentContext.Commit();
                                 departmentId = newDepartment.Id;
                                 log.Info("Added Department : " + departmentName);
-                            }
-
+                            }                       
+                            
                             // Reporting Officer
                             string reportingOfficer = dt_.Rows[row_][columnNames.FindIndex(c => c == "Reporting")].ToString();
 
                             PostingDetailContext.Insert(new PostingDetail()
                             {
                                 EmployeeId = employeeId,
-                                DepartmentId = departmentId,
+                                DepartmentId =  departmentId,
                                 Reporting = reportingOfficer,
                                 From = dojDGH
                             });
@@ -1049,7 +1082,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 PromotionDetailContext.Commit();
                 PostingDetailContext.Commit();
 
-                returnText = "<div class=\"alert alert-success\" role=\"alert\"> "  + returnText + " & Inserted: <b>" + inserted.ToString() + "</b>, Skipped: <b>" + skipped.ToString() + "</b>, Failed: <b>" + failed.ToString() + "</b> employee records</div>";
+                returnText = "<div class=\"alert alert-success\" role=\"alert\"> " + returnText + " & Inserted: <b>" + inserted.ToString() + "</b>, Skipped: <b>" + skipped.ToString() + "</b>, Failed: <b>" + failed.ToString() + "</b> employee records</div>";
                 reader.Close();
                 reader.Dispose();
             }

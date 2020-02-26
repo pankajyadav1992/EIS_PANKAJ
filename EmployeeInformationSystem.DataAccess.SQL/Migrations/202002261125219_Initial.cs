@@ -291,6 +291,7 @@
                         Id = c.String(nullable: false, maxLength: 128),
                         EmployeeId = c.String(nullable: false, maxLength: 128),
                         DegreeId = c.String(nullable: false, maxLength: 128),
+                        Duration = c.String(maxLength: 1000),
                         Specialization = c.String(maxLength: 1000),
                         Grade = c.String(maxLength: 1000),
                         Class = c.String(maxLength: 1000),

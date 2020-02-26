@@ -19,6 +19,9 @@ namespace EmployeeInformationSystem.Core.Models
         public virtual Degree Degree { get; set; }
 
         [StringLength(1000)]
+        public string Duration { get; set; }
+
+        [StringLength(1000)]
         public string Specialization{ get; set; }
 
         [StringLength(1000)]
