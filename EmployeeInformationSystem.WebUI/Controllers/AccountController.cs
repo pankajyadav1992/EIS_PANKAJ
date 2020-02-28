@@ -11,6 +11,8 @@ using Microsoft.Owin.Security;
 using EmployeeInformationSystem.WebUI.Models;
 using EmployeeInformationSystem.Core.Models;
 using EmployeeInformationSystem.Core.Contracts;
+using EmployeeInformationSystem.DataAccess.SQL;
+using Unity;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
@@ -19,11 +21,16 @@ namespace EmployeeInformationSystem.WebUI.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private IRepository<EmployeeDetail> EmployeeDetailContext;
+        private IRepository<EmployeeDetail> EmployeeDetailContext = new SQLRepository<EmployeeDetail>(new DataContext());
 
-        public AccountController(IRepository<EmployeeDetail> employeeDetailContext)
+        public AccountController()
         {
-            this.EmployeeDetailContext = employeeDetailContext;
+        }
+
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
+        {
+            UserManager = userManager;
+            SignInManager = signInManager;
         }
 
         public ApplicationSignInManager SignInManager

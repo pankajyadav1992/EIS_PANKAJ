@@ -346,34 +346,53 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         string nameString = dt_.Rows[row_][columnNames.FindIndex(c => c == "Name")].ToString();
                         string title = nameString.Contains('.') ? nameString.Substring(0, nameString.IndexOf('.')) : null;
                         string firstName = null, middleName = null, lastName = null;
+                        bool containsTitle = false;
 
                         if (string.IsNullOrEmpty(title) || title.Length < 2 || title.Contains(' ')) title = (gender == Gender.Male) ? "Mr." : (maritalStatus == MaritalStatus.Married ? "Mrs." : "Ms.");
-                        else title += ".";
+                        else
+                        {
+                            title += ".";
+                            containsTitle = true;
+                        }
 
                         try
                         {
-                            if (1 < nameString.Count(c => c == '.'))
+                            nameString = Regex.Replace(nameString.Trim().ToUpper(), @"\.", ". ");
+                            if (nameString.Contains(' '))
                             {
-                                string[] subNames = nameString.Split('.');
-                                if (1 == subNames[0].Length)
+                                string[] subNames = nameString.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                                for (int i = containsTitle ? 1 : 0; i < subNames.Length - 1; i++)
                                 {
-                                    firstName = subNames[0].Trim() + '.';
-                                    if (1 == subNames[1].Length && 2 < subNames.Length) middleName = subNames[1].Trim() + '.';
+                                    if (1 == subNames[i].Length) subNames[i] += ".";
+                                    if (string.IsNullOrEmpty(firstName)) firstName = subNames[i];
+                                    else middleName = middleName + (!string.IsNullOrEmpty(middleName) ? " " : "") + subNames[i];
                                 }
-                                else firstName = subNames[1] + '.';
-                                lastName = subNames[subNames.Length - 1];
-                            }
-                            else if (0 < nameString.Count(c => c == ' '))
-                            {
-
-                                string[] subNames = nameString.Split(' ');
-                                int startIndex = 0;
-                                if (subNames[0].Contains('.') && 2 != subNames[0].Length) startIndex++;
-                                firstName = subNames[startIndex];
-                                for (int i = startIndex + 1; i < subNames.Length - 1; i++) middleName = (!string.IsNullOrEmpty(middleName) ? middleName + " " : "") + subNames[i];
                                 lastName = subNames[subNames.Length - 1];
                             }
                             else firstName = nameString;
+
+                            //if (1 < nameString.Count(c => c == '.'))
+                            //{
+                            //    string[] subNames = nameString.Split('.');
+                            //    if (1 == subNames[0].Length)
+                            //    {
+                            //        firstName = subNames[0].Trim() + '.';
+                            //        if (1 == subNames[1].Length && 2 < subNames.Length) middleName = subNames[1].Trim() + '.';
+                            //    }
+                            //    else firstName = subNames[1] + '.';
+                            //    lastName = subNames[subNames.Length - 1];
+                            //}
+                            //else if (0 < nameString.Count(c => c == ' '))
+                            //{
+
+                            //    string[] subNames = nameString.Split(' ');
+                            //    int startIndex = 0;
+                            //    if (subNames[0].Contains('.') && 2 != subNames[0].Length) startIndex++;
+                            //    firstName = subNames[startIndex];
+                            //    for (int i = startIndex + 1; i < subNames.Length - 1; i++) middleName = (!string.IsNullOrEmpty(middleName) ? middleName + " " : "") + subNames[i];
+                            //    lastName = subNames[subNames.Length - 1];
+                            //}
+                            //else firstName = nameString;
                         }
                         catch (Exception ex)
                         {
@@ -848,34 +867,53 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         string nameString = dt_.Rows[row_][columnNames.FindIndex(c => c == "Name")].ToString();
                         string title = nameString.Contains('.') ? nameString.Substring(0, nameString.IndexOf('.')) : null;
                         string firstName = null, middleName = null, lastName = null;
+                        bool containsTitle = false;
 
                         if (string.IsNullOrEmpty(title) || title.Length < 2 || title.Contains(' ')) title = (gender == Gender.Male) ? "Mr." : (maritalStatus == MaritalStatus.Married ? "Mrs." : "Ms.");
-                        else title += ".";
+                        else
+                        {
+                            title += ".";
+                            containsTitle = true;
+                        }
 
                         try
                         {
-                            if (1 < nameString.Count(c => c == '.'))
+                            nameString = Regex.Replace(nameString.Trim().ToUpper(), @"\.", ". ");
+                            if (nameString.Contains(' '))
                             {
-                                string[] subNames = nameString.Split('.');
-                                if (1 == subNames[0].Length)
+                                string[] subNames = nameString.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                                for (int i = containsTitle ? 1 : 0; i < subNames.Length - 1; i++)
                                 {
-                                    firstName = subNames[0] + '.';
-                                    if (1 == subNames[1].Length && 2 < subNames.Length) middleName = subNames[1] + '.';
+                                    if (1 == subNames[i].Length) subNames[i] += ".";
+                                    if (string.IsNullOrEmpty(firstName)) firstName = subNames[i];
+                                    else middleName = middleName + (!string.IsNullOrEmpty(middleName) ? " " : "") + subNames[i];
                                 }
-                                else firstName = subNames[1] + '.';
-                                lastName = subNames[subNames.Length - 1];
-                            }
-                            else if (0 < nameString.Count(c => c == ' '))
-                            {
-
-                                string[] subNames = nameString.Split(' ');
-                                int startIndex = 0;
-                                if (subNames[0].Contains('.') && 2 != subNames[0].Length) startIndex++;
-                                firstName = subNames[startIndex];
-                                for (int i = startIndex + 1; i < subNames.Length - 1; i++) middleName = (!string.IsNullOrEmpty(middleName) ? middleName + " " : "") + subNames[i];
                                 lastName = subNames[subNames.Length - 1];
                             }
                             else firstName = nameString;
+
+                            //if (1 < nameString.Count(c => c == '.'))
+                            //{
+                            //    string[] subNames = nameString.Split('.');
+                            //    if (1 == subNames[0].Length)
+                            //    {
+                            //        firstName = subNames[0] + '.';
+                            //        if (1 == subNames[1].Length && 2 < subNames.Length) middleName = subNames[1] + '.';
+                            //    }
+                            //    else firstName = subNames[1] + '.';
+                            //    lastName = subNames[subNames.Length - 1];
+                            //}
+                            //else if (0 < nameString.Count(c => c == ' '))
+                            //{
+
+                            //    string[] subNames = nameString.Split(' ');
+                            //    int startIndex = 0;
+                            //    if (subNames[0].Contains('.') && 2 != subNames[0].Length) startIndex++;
+                            //    firstName = subNames[startIndex];
+                            //    for (int i = startIndex + 1; i < subNames.Length - 1; i++) middleName = (!string.IsNullOrEmpty(middleName) ? middleName + " " : "") + subNames[i];
+                            //    lastName = subNames[subNames.Length - 1];
+                            //}
+                            //else firstName = nameString;
                         }
                         catch (Exception ex)
                         {
@@ -1060,15 +1098,15 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 DepartmentContext.Commit();
                                 departmentId = newDepartment.Id;
                                 log.Info("Added Department : " + departmentName);
-                            }                       
-                            
+                            }
+
                             // Reporting Officer
                             string reportingOfficer = dt_.Rows[row_][columnNames.FindIndex(c => c == "Reporting")].ToString();
 
                             PostingDetailContext.Insert(new PostingDetail()
                             {
                                 EmployeeId = employeeId,
-                                DepartmentId =  departmentId,
+                                DepartmentId = departmentId,
                                 Reporting = reportingOfficer,
                                 From = dojDGH
                             });

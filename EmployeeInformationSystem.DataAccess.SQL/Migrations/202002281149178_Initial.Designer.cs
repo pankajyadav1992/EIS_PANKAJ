@@ -13,7 +13,7 @@ namespace EmployeeInformationSystem.DataAccess.SQL.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202002261125219_Initial"; }
+            get { return "202002281149178_Initial"; }
         }
         
         string IMigrationMetadata.Source
