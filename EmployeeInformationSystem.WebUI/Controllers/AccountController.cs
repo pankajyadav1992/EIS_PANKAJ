@@ -21,16 +21,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
-        private IRepository<EmployeeDetail> EmployeeDetailContext = new SQLRepository<EmployeeDetail>(new DataContext());
+        private IRepository<EmployeeDetail> EmployeeDetailContext;
 
-        public AccountController()
+        public AccountController(IRepository<EmployeeDetail> employeeDetailContext)
         {
-        }
-
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
+            this.EmployeeDetailContext = employeeDetailContext;
         }
 
         public ApplicationSignInManager SignInManager

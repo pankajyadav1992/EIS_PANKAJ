@@ -34,19 +34,23 @@ namespace EmployeeInformationSystem.DataAccess.SQL
             {
                 _context.SaveChanges();
             }
-            catch (Exception ex)
+            //catch (Exception ex)
+            //{
+            //    throw;
+
+            //}
+
+            catch (DbEntityValidationException dbEx)
             {
-                throw;
-                //foreach (var validationErrors in dbEx.EntityValidationErrors)
-                //{
-                //    foreach (var validationError in validationErrors.ValidationErrors)
-                //    {
-                //        Trace.TraceInformation("Property: {0} Error: {1}",
-                //                                validationError.PropertyName,
-                //                                validationError.ErrorMessage);
-                //    }
-                //}
-                // DbEntityValidationException dbEx
+                foreach (var validationErrors in dbEx.EntityValidationErrors)
+                {
+                    foreach (var validationError in validationErrors.ValidationErrors)
+                    {
+                        Trace.TraceInformation("Property: {0} Error: {1}",
+                                                validationError.PropertyName,
+                                                validationError.ErrorMessage);
+                    }
+                }
             }
         }
 
@@ -71,7 +75,7 @@ namespace EmployeeInformationSystem.DataAccess.SQL
                 try { tToReturn = _dbset.AsNoTracking().Single(t => t.Id == Id); }
                 catch { tToReturn = null; }
             }
-            else tToReturn= _dbset.Find(Id);
+            else tToReturn = _dbset.Find(Id);
             return tToReturn;
         }
 

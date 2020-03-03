@@ -445,6 +445,7 @@
                                     <th style="min-width:100px;" class="text-center">Class</th>
                                     <th style="min-width:150px;" class="text-center">Institute</th>
                                     <th style="min-width:150px;" class="text-center">University</th>
+                                    <th style="min-width:100px;" class="text-center">Duration</th>
                                     <th style="min-width:150px;" class="text-center">From</th>
                                     <th style="min-width:100px;" class="text-center">To</th>
                                     <th style="min-width:100px;" class="text-center">Action</th>
@@ -467,6 +468,7 @@
                                             <td>@Html.EditorFor(model => model.QualificationDetails[i].Class, new { htmlAttributes = new { @class = "form-control" } })</td>
                                             <td>@Html.EditorFor(model => model.QualificationDetails[i].Institution, new { htmlAttributes = new { @class = "form-control" } })</td>
                                             <td>@Html.EditorFor(model => model.QualificationDetails[i].University, new { htmlAttributes = new { @class = "form-control" } })</td>
+                                            <td>@Html.EditorFor(model => model.QualificationDetails[i].Duration, new { htmlAttributes = new { @class = "form-control" } })</td>
                                             <td>@Html.EditorFor(model => model.QualificationDetails[i].From, new { htmlAttributes = new { @class = "form-control FieldDate", @type = "text", @data_type = "date" } })</td>
                                             <td>@Html.EditorFor(model => model.QualificationDetails[i].To, new { htmlAttributes = new { @class = "form-control FieldDate", @type = "text", @data_type = "date" } })</td>
                                             <td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#qualificationRow@(i)">Delete</button></td>
@@ -1011,6 +1013,7 @@
                            <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Class" name="QualificationDetails[' + newQualification + '].Class" type="text" value=""></td> \
                            <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Institution" name="QualificationDetails[' + newQualification + '].Institution" type="text" value=""></td> \
                            <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__University" name="QualificationDetails[' + newQualification + '].University" type="text" value=""></td> \
+                           <td><input class="form-control text-box single-line" id="QualificationDetails_' + newQualification + '__Duration" name="QualificationDetails[' + newQualification + '].Duration" type="text" value=""></td> \
                            <td><input class="form-control text-box single-line" data-val="true" data-val-date="The field From must be a date." id="QualificationDetails_' + newQualification + '__From" name="QualificationDetails[' + newQualification + '].From" type="text" value=""></td> \
                            <td><input class="form-control text-box single-line" data-val="true" data-val-date="The field Date of Passing must be a date." id="QualificationDetails_' + newQualification + '__To" name="QualificationDetails[' + newQualification + '].To" type="text" value=""></td> \
                            <td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#qualificationRow' + newQualification + '" data-nullifyitem="#QualificationDetails_' + newQualification + '__EmployeeId">Delete</button></td></tr>';

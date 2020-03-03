@@ -10,6 +10,9 @@
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
+            var historyContextFactory = GetHistoryContextFactory("Oracle.ManagedDataAccess.Client");
+            SetHistoryContextFactory("Oracle.ManagedDataAccess.Client",
+                                     (dbc, schema) => historyContextFactory.Invoke(dbc, "EIS"));
         }
 
         protected override void Seed(EmployeeInformationSystem.DataAccess.SQL.DataContext context)

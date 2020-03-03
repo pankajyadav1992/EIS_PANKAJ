@@ -62,10 +62,10 @@
                             }
                             <input type="button" class="btn btn-info float-right" value="Show All" id="togggleAll" />
                             @if ("Delete" == ViewBag.Target)
-                            {<button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#exampleModal" style="margin-right:15px;">
+                            {<button type="button" class="btn btn-danger float-right" data-toggle="modal" data-target="#deleteModal" style="margin-right:15px;">
                                     Delete Employee
                                 </button>
-                             }
+                            }
                         </div>
 
                     </div>
@@ -383,6 +383,7 @@
                                                                         <th style="min-width:100px;" class="text-center">Class</th>
                                                                         <th style="min-width:150px;" class="text-center">Institute</th>
                                                                         <th style="min-width:150px;" class="text-center">University</th>
+                                                                        <th style="min-width:100px;" class="text-center">Duration</th>
                                                                         <th style="min-width:150px;" class="text-center">From</th>
                                                                         <th style="min-width:100px;" class="text-center">To</th>
                                                                     </tr>
@@ -397,6 +398,7 @@
                                                                             <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].Class)</td>
                                                                             <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].Institution)</td>
                                                                             <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].University)</td>
+                                                                            <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].Duration)</td>
                                                                             <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].From)</td>
                                                                             <td class="text-center">@Html.DisplayFor(model => Model.QualificationDetails[i].To)</td>
                                                                         </tr>
@@ -613,7 +615,14 @@
                                                                 <thead>
                                                                     <tr>
                                                                         <th>Department</th>
-                                                                        <th>HoD</th>
+                                                                        @if (Model.EmployeeDetails.EmployeeType == EmployeeInformationSystem.Core.Models.EmployeeType.ContractualDGHStaff || Model.EmployeeDetails.EmployeeType == EmployeeInformationSystem.Core.Models.EmployeeType.ContractualMoPNGStaff)
+                                                                        {
+                                                                            <th>Reporting</th>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <th>HoD</th>
+                                                                        }
                                                                         <th>From</th>
                                                                         <th>To</th>
                                                                     </tr>
@@ -623,7 +632,14 @@
                                                                     {
                                                                         <tr>
                                                                             <td>@Html.DisplayFor(model => Model.PostingDetails[i].Department.Name)</td>
-                                                                            <td>@Html.DisplayFor(model => Model.PostingDetails[i].HOD.Designation)</td>
+                                                                            @if (Model.EmployeeDetails.EmployeeType == EmployeeInformationSystem.Core.Models.EmployeeType.ContractualDGHStaff || Model.EmployeeDetails.EmployeeType == EmployeeInformationSystem.Core.Models.EmployeeType.ContractualMoPNGStaff)
+                                                                            {
+                                                                                <td>@Html.DisplayFor(model => Model.PostingDetails[i].Reporting)</td>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <td>@Html.DisplayFor(model => Model.PostingDetails[i].HOD.Designation)</td>
+                                                                            }
                                                                             <td>@Html.DisplayFor(model => Model.PostingDetails[i].From)</td>
                                                                             <td>@Html.DisplayFor(model => Model.PostingDetails[i].To)</td>
                                                                         </tr>
@@ -672,11 +688,11 @@
     </div>
 </section>
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Confirm Deletion</h5>
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -713,7 +729,7 @@
         {
             <text>
             $("#confirmDelete").click(function () {
-                $("#exampleModal").modal('hide');
+                $("#deleteModal").modal('hide');
                 $('#overlay').fadeIn();
                 $.ajax({
                         url: '@Url.Action("AjaxDelete", "EmployeeData")?EmployeeId=' + "@Model.EmployeeDetails.Id",

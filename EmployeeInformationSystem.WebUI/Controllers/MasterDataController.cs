@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
-    //[Authorize(Roles ="Admin")]
+    [Authorize(Roles ="Admin")]
     public class MasterDataController : BaseController
     {
         IRepository<EmployeeDetail> EmployeeDetailContext;
@@ -830,6 +830,22 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         //Status
                         Boolean status = "Working" == dt_.Rows[row_][columnNames.FindIndex(c => c == "Status")].ToString() ? true : false;
 
+                        ReasonForLeaving reasonForSeparation = ReasonForLeaving.Others;
+
+                        if (!status)
+                        {
+                            switch (dt_.Rows[row_][columnNames.FindIndex(c => c == "Reason of Separation")].ToString())
+                            {
+                                case "Contract Expired": reasonForSeparation = ReasonForLeaving.ContractExpired; break;
+                                case "Demise": reasonForSeparation = ReasonForLeaving.Demise; break;
+                                case "Repatriation": reasonForSeparation = ReasonForLeaving.Repatriation; break;
+                                case "Resignation": reasonForSeparation = ReasonForLeaving.Resignation; break;
+                                case "Superannuation": reasonForSeparation = ReasonForLeaving.Superannuation; break;
+                                case "Termination": reasonForSeparation = ReasonForLeaving.Termination; break;
+                                case "Transfer": reasonForSeparation = ReasonForLeaving.Repatriation; break;
+                            }
+                        }
+
                         /*
                          * Dates Section
                          */
@@ -960,6 +976,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 EmergencyPerson = string.IsNullOrEmpty(emergencyPerson) ? null : emergencyPerson,
                                 UANNumber = string.IsNullOrEmpty(UANNo) ? null : UANNo
                             };
+                            if (!status) employeeToInsert.ReasonForLeaving = reasonForSeparation;
                             EmployeeDetailContext.Insert(employeeToInsert);
                             log.Info("Successfully inserted Staff Employee with CPF:" + cpfNo);
                             inserted++;

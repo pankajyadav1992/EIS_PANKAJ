@@ -78,7 +78,7 @@
                             }
                             else
                             {
-                                <li @RenderSection("AddEmployee", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-user-plus"></i>Add Employee</a></li>
+                                <li @RenderSection("AddEmployee", required: false)><a href="#" data-toggle="modal" data-target="#errorModal"><i class="fa fa-user-plus"></i>Add Employee</a></li>
                             }
 
                             @if (Request.IsAuthenticated && User.IsInRole("View"))
@@ -87,7 +87,7 @@
                             }
                             else
                             {
-                                <li @RenderSection("ViewEmployee", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-address-card"></i>View Employee</a></li>
+                                <li @RenderSection("ViewEmployee", required: false)><a href="#" data-toggle="modal" data-target="#errorModal"><i class="fa fa-address-card"></i>View Employee</a></li>
                             }
 
                             @if (Request.IsAuthenticated && User.IsInRole("Edit"))
@@ -96,7 +96,7 @@
                             }
                             else
                             {
-                                <li @RenderSection("EditEmployee", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-edit"></i>Update Record</a></li>
+                                <li @RenderSection("EditEmployee", required: false)><a href="#" data-toggle="modal" data-target="#errorModal"><i class="fa fa-edit"></i>Update Record</a></li>
                             }
 
                             @if (Request.IsAuthenticated && User.IsInRole("Delete"))
@@ -105,7 +105,7 @@
                             }
                             else
                             {
-                                <li @RenderSection("DeleteEmployee", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"><i class="fa fa-trash"></i>Delete Record</a></li>
+                                <li @RenderSection("DeleteEmployee", required: false)><a href="#" data-toggle="modal" data-target="#errorModal"><i class="fa fa-trash"></i>Delete Record</a></li>
                             }
                         </ul>
                     </li>
@@ -148,11 +148,11 @@
             </div>
             
             <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Error</h5>
+                            <h5 class="modal-title" id="errorModalLabel">Error</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>

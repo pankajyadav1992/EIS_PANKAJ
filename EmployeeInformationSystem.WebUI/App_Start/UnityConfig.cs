@@ -50,12 +50,6 @@ namespace EmployeeInformationSystem.WebUI
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<IUserStore<ApplicationUser>, UserStore<ApplicationUser>>();
-            container.RegisterType<UserManager<ApplicationUser>>();
-            container.RegisterType<DbContext, ApplicationDbContext>();
-            container.RegisterType<ApplicationUserManager>();
-            container.RegisterType<AccountController>(new InjectionConstructor());
-
             container.RegisterType<IRepository<Department>, SQLRepository<Department>>();
             container.RegisterType<IRepository<Designation>, SQLRepository<Designation>>();
             container.RegisterType<IRepository<Discipline>, SQLRepository<Discipline>>();

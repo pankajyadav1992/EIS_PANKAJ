@@ -10,7 +10,7 @@ namespace EmployeeInformationSystem.DataAccess.SQL
 {
     public class DataContext: DbContext
     {
-        public DataContext(): base("name=DefaultConnection")
+        public DataContext(): base("name=OracleConnection")
         {
             //Caution: This deletes all the existing data in case of migrations
             //Database.SetInitializer<DataContext>(new DropDatabaseIfModelChanges<DataContext>());
