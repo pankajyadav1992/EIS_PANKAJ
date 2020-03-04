@@ -1,6 +1,7 @@
 ﻿using EmployeeInformationSystem.Core.Contracts;
 using EmployeeInformationSystem.Core.Models;
 using EmployeeInformationSystem.Core.ViewModels;
+using EmployeeInformationSystem.Services;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -96,11 +97,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         PromotionDetails = PromotionDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList(),
                         PostingDetails = PostingDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
                     };
-                    if (null != employee.AadhaarNumer)
+                    if (null != employee.AadhaarNumber)
                     {
-                        viewModel.AadhaarPart1 = employee.AadhaarNumer.Substring(0, 4);
-                        viewModel.AadhaarPart2 = employee.AadhaarNumer.Substring(4, 4);
-                        viewModel.AadhaarPart3 = employee.AadhaarNumer.Substring(8, 4);
+                        viewModel.AadhaarPart1 = employee.AadhaarNumber.Substring(0, 4);
+                        viewModel.AadhaarPart2 = employee.AadhaarNumber.Substring(4, 4);
+                        viewModel.AadhaarPart3 = employee.AadhaarNumber.Substring(8, 4);
                     }
                     organisationName = null != employee.Organisation ? employee.Organisation.Name : "DGH"; // Temp Bug fix to resolve issue with empty Org Names
                 }
@@ -139,18 +140,18 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 default: break;
             }
             viewModel.EmployeeType = employeeType; // Add appropiate employeeType dropdown to ViewModel
-            viewModel.Degrees = DegreeContext.Collection(); // Master Data for Degrees dropdown
-            viewModel.Disciplines = DisciplineContext.Collection(); // Master Data for Disciplines dropdown
+            viewModel.Degrees = DegreeContext.Collection().OrderBy(d => d.Name); // Master Data for Degrees dropdown
+            viewModel.Disciplines = DisciplineContext.Collection().OrderBy(d => d.Name); // Master Data for Disciplines dropdown
             /*
              * Designations, Levels, PayScales are filtered to contain only DGH Specific data.
              * The fields for other organisations are handled via separate AJAX-JSON Method
              */
-            viewModel.Designations = DesignationContext.Collection().Where(d => d.Organisation.Name == organisationName); //DGH Specific OR Org specific if for Editing
-            viewModel.Levels = LevelContext.Collection().Where(l => l.Organisation.Name == organisationName); //DGH Specific OR Org specific if for Editing
-            viewModel.PayScales = PayScaleContext.Collection().Where(p => p.Organisation.Name == organisationName); //DGH Specific OR Org specific if for Editing
-            viewModel.Organisations = OrganisationContext.Collection().Where(o => o.Name != "DGH"); // All organisations except DGH must be in dropdown
-            viewModel.Departments = DepartmentContext.Collection(); // Master Data for Departments dropdown
-            viewModel.HoDs = HoDContext.Collection(); //Add proper support for determining current HoDs based on date
+            viewModel.Designations = DesignationContext.Collection().Where(d => d.Organisation.Name == organisationName).OrderBy(d => d.Name); //DGH Specific OR Org specific if for Editing
+            viewModel.Levels = LevelContext.Collection().Where(l => l.Organisation.Name == organisationName).OrderBy(l => l.Name); //DGH Specific OR Org specific if for Editing
+            viewModel.PayScales = PayScaleContext.Collection().Where(p => p.Organisation.Name == organisationName).OrderBy(p => p.Scale); //DGH Specific OR Org specific if for Editing
+            viewModel.Organisations = OrganisationContext.Collection().Where(o => o.Name != "DGH").OrderBy(o => o.Name); // All organisations except DGH must be in dropdown
+            viewModel.Departments = DepartmentContext.Collection().OrderBy(d => d.Name); // Master Data for Departments dropdown
+            viewModel.HoDs = HoDContext.Collection().OrderBy(d => d.Designation); //Add proper support for determining current HoDs based on date
             ViewBag.Mode = mode;
             return View(targetPage, viewModel);
         }
@@ -183,7 +184,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             {
                 //Join Aadhaar string. BUG FIX: If no Aadhaar values are supplied, Don't join
                 if (null != viewModel.AadhaarPart1 && null != viewModel.AadhaarPart2 && null != viewModel.AadhaarPart3)
-                { viewModel.EmployeeDetails.AadhaarNumer = viewModel.AadhaarPart1 + viewModel.AadhaarPart2 + viewModel.AadhaarPart3; }
+                { viewModel.EmployeeDetails.AadhaarNumber = viewModel.AadhaarPart1 + viewModel.AadhaarPart2 + viewModel.AadhaarPart3; }
                 //Insert profile photo
                 if (file != null)
                 {
@@ -191,7 +192,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     file.SaveAs(Server.MapPath("//Content//profile_pics//") + viewModel.EmployeeDetails.ProfilePhoto);
                 }
                 //Insert employee first
-                EmployeeDetailContext.Insert(viewModel.EmployeeDetails);
+                EmployeeDetailContext.Insert(viewModel.EmployeeDetails, UserName);
                 EmpId = viewModel.EmployeeDetails.Id;
                 EmployeeDetailContext.Commit();
                 //Dependents next
@@ -199,7 +200,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 {
                     foreach (DependentDetail dependent in viewModel.DependentDetails.Where(d => d.EmployeeId != "TBD"))
                     {
-                        DependentDetailContext.Insert(dependent);
+                        DependentDetailContext.Insert(dependent, UserName);
                     }
                     DependentDetailContext.Commit();
                 }
@@ -209,12 +210,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 if (null == telephoneExtension && 9999 != viewModel.TelephoneExtensions.Number)
                 //Incase the telephone number is NULL, Model state is valid but it goes forward and doesn't insert anything
                 {
-                    TelephoneExtensionContext.Insert(viewModel.TelephoneExtensions);
+                    TelephoneExtensionContext.Insert(viewModel.TelephoneExtensions, UserName);
                 }
                 else if (null != telephoneExtension)
                 {
                     telephoneExtension.EmployeeId = viewModel.TelephoneExtensions.EmployeeId;
                     telephoneExtension.CurrentOwner = null;
+                    TelephoneExtensionContext.Update(telephoneExtension, UserName);
                 }
                 TelephoneExtensionContext.Commit();
                 // Qualification Details
@@ -222,7 +224,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 {
                     foreach (QualificationDetail qualification in viewModel.QualificationDetails.Where(q => q.EmployeeId != "TBD"))
                     {
-                        QualificationDetailContext.Insert(qualification);
+                        QualificationDetailContext.Insert(qualification, UserName);
                     }
                     QualificationDetailContext.Commit();
                 }
@@ -231,7 +233,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 {
                     foreach (PromotionDetail promotion in viewModel.PromotionDetails.Where(p => p.EmployeeId != "TBD"))
                     {
-                        PromotionDetailContext.Insert(promotion);
+                        PromotionDetailContext.Insert(promotion, UserName);
                     }
                     PromotionDetailContext.Commit();
                 }
@@ -240,7 +242,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 {
                     foreach (PastExperience experience in viewModel.PastExperiences.Where(p => p.EmployeeId != "TBD"))
                     {
-                        PastExperienceContext.Insert(experience);
+                        PastExperienceContext.Insert(experience, UserName);
                     }
                     PastExperienceContext.Commit();
                 }
@@ -249,7 +251,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 {
                     foreach (PostingDetail posting in viewModel.PostingDetails.Where(p => p.EmployeeId != "TBD"))
                     {
-                        PostingDetailContext.Insert(posting);
+                        PostingDetailContext.Insert(posting, UserName);
                     }
                     PostingDetailContext.Commit();
                 }
@@ -270,7 +272,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         [Authorize(Roles = "Edit")]
         public ActionResult EditEmployee()
         {
-            List<EmployeeDetail> employees = EmployeeDetailContext.Collection().ToList();
+            List<EmployeeDetail> employees = EmployeeDetailContext.Collection().OrderBy(e => e.FirstName).ToList();
             ViewBag.Employees = employees;
             ViewBag.Target = "Edit";
             ViewBag.Title = "Edit Employee";
@@ -310,7 +312,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             {
                 //Join Aadhaar string. BUG FIX: If no Aadhaar values are supplied, Don't join
                 if (null != viewModel.AadhaarPart1 && null != viewModel.AadhaarPart2 && null != viewModel.AadhaarPart3)
-                { viewModel.EmployeeDetails.AadhaarNumer = viewModel.AadhaarPart1 + viewModel.AadhaarPart2 + viewModel.AadhaarPart3; }
+                { viewModel.EmployeeDetails.AadhaarNumber = viewModel.AadhaarPart1 + viewModel.AadhaarPart2 + viewModel.AadhaarPart3; }
                 //Upadate existing profile photo
                 if (file != null)
                 {
@@ -318,7 +320,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     file.SaveAs(Server.MapPath("//Content//profile_pics//") + viewModel.EmployeeDetails.ProfilePhoto);
                 }
                 // Update Employee
-                EmployeeDetailContext.Update(viewModel.EmployeeDetails);
+                EmployeeDetailContext.Update(viewModel.EmployeeDetails, UserName);
                 EmployeeDetailContext.Commit();
 
                 //Dependents
@@ -329,8 +331,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         var existingDependent = DependentDetailContext.Find(dependent.Id, true); // Check if exists
                         if ("TBD" != dependent.EmployeeId)
                         {
-                            if (null != existingDependent) DependentDetailContext.Update(dependent); // If not TBD & exists, Update
-                            else DependentDetailContext.Insert(dependent); // If not TBD & doesn't exists, Insert
+                            if (null != existingDependent) DependentDetailContext.Update(dependent, UserName); // If not TBD & exists, Update
+                            else DependentDetailContext.Insert(dependent, UserName); // If not TBD & doesn't exists, Insert
 
                         }
                         else if (null != existingDependent) DependentDetailContext.Delete(dependent.Id); // If TBD & exists, Delete
@@ -344,7 +346,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 if (null == telephoneExtension && 9999 != viewModel.TelephoneExtensions.Number)
                 //Incase the telephone number is NULL, Model state is valid but it goes forward and doesn't insert anything
                 {
-                    TelephoneExtensionContext.Insert(viewModel.TelephoneExtensions); // Insert new Extension entry
+                    TelephoneExtensionContext.Insert(viewModel.TelephoneExtensions, UserName); // Insert new Extension entry
                 }
                 else if (null != telephoneExtension)
                 {
@@ -352,6 +354,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     {
                         telephoneExtension.EmployeeId = viewModel.TelephoneExtensions.EmployeeId;
                         telephoneExtension.CurrentOwner = null;
+                        TelephoneExtensionContext.Update(telephoneExtension, UserName);
                     }
                     else if (9999 == viewModel.TelephoneExtensions.Number && telephoneExtension.EmployeeId == viewModel.TelephoneExtensions.EmployeeId)
                     {
@@ -368,8 +371,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         var existingQualification = QualificationDetailContext.Find(qualification.Id, true); // Check if exists
                         if ("TBD" != qualification.EmployeeId)
                         {
-                            if (null != existingQualification) QualificationDetailContext.Update(qualification); // If not TBD & exists, Update
-                            else QualificationDetailContext.Insert(qualification); // If not TBD & doesn't exists, Insert
+                            if (null != existingQualification) QualificationDetailContext.Update(qualification, UserName); // If not TBD & exists, Update
+                            else QualificationDetailContext.Insert(qualification, UserName); // If not TBD & doesn't exists, Insert
 
                         }
                         else if (null != existingQualification) QualificationDetailContext.Delete(qualification.Id); // If TBD & exists, Delete
@@ -384,8 +387,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         var existingPromotion = PromotionDetailContext.Find(promotion.Id, true);
                         if ("TBD" != promotion.EmployeeId)
                         {
-                            if (null != existingPromotion) PromotionDetailContext.Update(promotion); // If not TBD & exists, Update
-                            else PromotionDetailContext.Insert(promotion); // If not TBD & doesn't exists, Insert
+                            if (null != existingPromotion) PromotionDetailContext.Update(promotion, UserName); // If not TBD & exists, Update
+                            else PromotionDetailContext.Insert(promotion, UserName); // If not TBD & doesn't exists, Insert
 
                         }
                         else if (null != existingPromotion) PromotionDetailContext.Delete(promotion.Id); // If TBD & exists, Delete
@@ -400,8 +403,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         var existingExperience = PastExperienceContext.Find(experience.Id, true);
                         if ("TBD" != experience.EmployeeId)
                         {
-                            if (null != existingExperience) PastExperienceContext.Update(experience); // If not TBD & exists, Update
-                            else PastExperienceContext.Insert(experience); // If not TBD & doesn't exists, Insert
+                            if (null != existingExperience) PastExperienceContext.Update(experience, UserName); // If not TBD & exists, Update
+                            else PastExperienceContext.Insert(experience, UserName); // If not TBD & doesn't exists, Insert
 
                         }
                         else if (null != existingExperience) PastExperienceContext.Delete(experience.Id); // If TBD & exists, Delete
@@ -416,8 +419,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         var existingPosting = PostingDetailContext.Find(posting.Id, true);
                         if ("TBD" != posting.EmployeeId)
                         {
-                            if (null != existingPosting) PostingDetailContext.Update(posting); // If not TBD & exists, Update
-                            else PostingDetailContext.Insert(posting); // If not TBD & doesn't exists, Insert
+                            if (null != existingPosting) PostingDetailContext.Update(posting, UserName); // If not TBD & exists, Update
+                            else PostingDetailContext.Insert(posting, UserName); // If not TBD & doesn't exists, Insert
 
                         }
                         else if (null != existingPosting) PostingDetailContext.Delete(posting.Id); // If TBD & exists, Delete
@@ -446,7 +449,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             ViewBag.Title = "View Employee";
             if (null == EmployeeId)
             {
-                List<EmployeeDetail> employees = EmployeeDetailContext.Collection().ToList();
+                List<EmployeeDetail> employees = EmployeeDetailContext.Collection().OrderBy(e => e.FirstName).ToList();
                 ViewBag.Employees = employees;
                 return View("SelectEmployee");
             }
@@ -478,7 +481,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             ViewBag.Title = "Delete Employee";
             if (null == EmployeeId)
             {
-                List<EmployeeDetail> employees = EmployeeDetailContext.Collection().ToList();
+                List<EmployeeDetail> employees = EmployeeDetailContext.Collection().OrderBy(e => e.FirstName).ToList();
                 ViewBag.Employees = employees;
                 return View("SelectEmployee");
             }
@@ -591,6 +594,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 case "payscale":
                     idNamePairs = (from payscale in PayScaleContext.Collection()
                                    where payscale.OrganisationId == organisationId
+                                   orderby payscale.Scale
                                    select new IdNamePair
                                    {
                                        Id = payscale.Id,
@@ -599,11 +603,12 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     break;
                 case "level":
                     idNamePairs = LevelContext.Collection().Where(l =>
-                    l.OrganisationId == organisationId).Select(l => new IdNamePair { Id = l.Id, Name = l.Name }).ToList();
+                    l.OrganisationId == organisationId).Select(l => new IdNamePair { Id = l.Id, Name = l.Name }).OrderBy(l => l.Name).ToList();
                     break;
                 case "designation":
                     idNamePairs = (from designation in DesignationContext.Collection()
                                    where designation.OrganisationId == organisationId
+                                   orderby designation.Name
                                    select new IdNamePair()
                                    {
                                        Id = designation.Id,

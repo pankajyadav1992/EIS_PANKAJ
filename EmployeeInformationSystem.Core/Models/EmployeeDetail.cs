@@ -159,7 +159,7 @@ namespace EmployeeInformationSystem.Core.Models
         // Enable Length control at UI
         [StringLength(12, MinimumLength = 12, ErrorMessage = "Aadhaar Number must be of 12 characters")]
         [Display(Name = "Aadhaar Number")]
-        public string AadhaarNumer { get; set; }
+        public string AadhaarNumber { get; set; }
 
         [StringLength(50)]
         [Display(Name = "Passport Number")]
@@ -223,8 +223,11 @@ namespace EmployeeInformationSystem.Core.Models
 
     public enum EmployeeType
     {
+        [Display(Name = "Deputationist")]
         Deputationist,
+        [Display(Name = "Advisor")]
         Advisor,
+        [Display(Name = "Consultant")]
         Consultant,
         [Display(Name = "Contractual - DGH Staff")]
         ContractualDGHStaff,
@@ -232,6 +235,7 @@ namespace EmployeeInformationSystem.Core.Models
         ContractualMoPNGStaff,
         [Display(Name = "Trainee Officer")]
         TraineeOfficer,
+        [Display(Name = "Others")]
         Others
     }
 
@@ -251,6 +255,7 @@ namespace EmployeeInformationSystem.Core.Models
         VFloor,
         [Display(Name = "SDC Bhubneshwar")]
         SDC_BBSR,
+        [Display(Name = "Trainee Officer")]
         Others
     }
 

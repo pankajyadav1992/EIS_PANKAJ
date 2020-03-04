@@ -1,4 +1,6 @@
-﻿@section CustomStyles{
+﻿@using EmployeeInformationSystem.Services;
+
+@section CustomStyles{
     <style>
         #overlay {
             position: absolute;
@@ -92,7 +94,7 @@
 
                                             <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.EmployeeType):</h5>
                                             <div class="col-sm-3">
-                                                @Html.DisplayFor(model => model.EmployeeDetails.EmployeeType)
+                                                @Model.EmployeeDetails.EmployeeType.GetDisplayName()
                                             </div>
                                         </div>
 
@@ -126,8 +128,7 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <h5 class="title col-sm-3" style="        text-align: right;
-">
+                                            <h5 class="title col-sm-3" style="text-align: right;">
                                                 @Html.DisplayNameFor(model => model.EmployeeDetails.MaritalStatus):
                                             </h5>
                                             <div class="col-sm-3">
@@ -152,7 +153,7 @@
 
                                             <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.BloodGroup):</h5>
                                             <div class="col-sm-3">
-                                                @Html.DisplayFor(model => model.EmployeeDetails.BloodGroup)
+                                                @Model.EmployeeDetails.BloodGroup.GetDisplayName()
                                             </div>
                                         </div>
                                         @{
@@ -184,7 +185,7 @@
                                             <div class="form-group row">
                                                 <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.DeputedLocation):</h5>
                                                 <div class="col-sm-3">
-                                                    @Html.DisplayFor(model => model.EmployeeDetails.DeputedLocation)
+                                                    @Model.EmployeeDetails.DeputedLocation.GetDisplayName()
                                                 </div>
 
 
@@ -321,7 +322,7 @@
                                         <div class="form-group row">
                                             <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.SeatingLocation):</h5>
                                             <div class="col-sm-3">
-                                                @Html.DisplayFor(model => model.EmployeeDetails.SeatingLocation)
+                                                @Model.EmployeeDetails.SeatingLocation.GetDisplayName()
                                             </div>
 
 
@@ -472,7 +473,7 @@
 
                                             <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.ReasonForLeaving):</h5>
                                             <div class="col-sm-3">
-                                                @Html.DisplayFor(model => model.EmployeeDetails.ReasonForLeaving)
+                                                @Model.EmployeeDetails.ReasonForLeaving.GetDisplayName()
                                             </div>
                                         </div>
 

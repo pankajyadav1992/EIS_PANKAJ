@@ -54,16 +54,18 @@ namespace EmployeeInformationSystem.DataAccess.SQL
             }
         }
 
-        public void Insert(T t)
+        public void Insert(T t, string username = "Admin")
         {
             t.LastUpdateAt = DateTime.Now;
+            t.LastUpdateBy = username;
             _dbset.Add(t);
         }
 
-        public void Update(T t)
+        public void Update(T t, string username = "Admin")
         {
             _dbset.Attach(t);
             t.LastUpdateAt = DateTime.Now;
+            t.LastUpdateBy = username;
             _context.Entry(t).State = EntityState.Modified;
         }
 

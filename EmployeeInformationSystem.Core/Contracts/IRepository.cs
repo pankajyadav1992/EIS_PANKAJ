@@ -13,7 +13,7 @@ namespace EmployeeInformationSystem.Core.Contracts
         void Commit();
         void Delete(string Id);
         T Find(string Id, Boolean asNoTracking = false);
-        void Insert(T t);
-        void Update(T t);
+        void Insert(T t, string username = "Admin");
+        void Update(T t, string username = "Admin");
     }
 }
