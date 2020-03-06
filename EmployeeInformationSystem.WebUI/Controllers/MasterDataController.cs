@@ -12,7 +12,7 @@ using System.Text.RegularExpressions;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class MasterDataController : BaseController
     {
         IRepository<EmployeeDetail> EmployeeDetailContext;
@@ -77,7 +77,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         // GET: MasterData
         public ActionResult Index()
         {
-            List<EmployeeDetail> employees = EmployeeDetailContext.Collection().ToList();
+            List<EmployeeDetail> employees = EmployeeDetailContext.Collection().OrderBy(e => e.FirstName).ToList();
             ViewBag.Employees = employees;
             return View();
         }
@@ -370,29 +370,6 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 lastName = subNames[subNames.Length - 1];
                             }
                             else firstName = nameString;
-
-                            //if (1 < nameString.Count(c => c == '.'))
-                            //{
-                            //    string[] subNames = nameString.Split('.');
-                            //    if (1 == subNames[0].Length)
-                            //    {
-                            //        firstName = subNames[0].Trim() + '.';
-                            //        if (1 == subNames[1].Length && 2 < subNames.Length) middleName = subNames[1].Trim() + '.';
-                            //    }
-                            //    else firstName = subNames[1] + '.';
-                            //    lastName = subNames[subNames.Length - 1];
-                            //}
-                            //else if (0 < nameString.Count(c => c == ' '))
-                            //{
-
-                            //    string[] subNames = nameString.Split(' ');
-                            //    int startIndex = 0;
-                            //    if (subNames[0].Contains('.') && 2 != subNames[0].Length) startIndex++;
-                            //    firstName = subNames[startIndex];
-                            //    for (int i = startIndex + 1; i < subNames.Length - 1; i++) middleName = (!string.IsNullOrEmpty(middleName) ? middleName + " " : "") + subNames[i];
-                            //    lastName = subNames[subNames.Length - 1];
-                            //}
-                            //else firstName = nameString;
                         }
                         catch (Exception ex)
                         {
@@ -907,29 +884,6 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 lastName = subNames[subNames.Length - 1];
                             }
                             else firstName = nameString;
-
-                            //if (1 < nameString.Count(c => c == '.'))
-                            //{
-                            //    string[] subNames = nameString.Split('.');
-                            //    if (1 == subNames[0].Length)
-                            //    {
-                            //        firstName = subNames[0] + '.';
-                            //        if (1 == subNames[1].Length && 2 < subNames.Length) middleName = subNames[1] + '.';
-                            //    }
-                            //    else firstName = subNames[1] + '.';
-                            //    lastName = subNames[subNames.Length - 1];
-                            //}
-                            //else if (0 < nameString.Count(c => c == ' '))
-                            //{
-
-                            //    string[] subNames = nameString.Split(' ');
-                            //    int startIndex = 0;
-                            //    if (subNames[0].Contains('.') && 2 != subNames[0].Length) startIndex++;
-                            //    firstName = subNames[startIndex];
-                            //    for (int i = startIndex + 1; i < subNames.Length - 1; i++) middleName = (!string.IsNullOrEmpty(middleName) ? middleName + " " : "") + subNames[i];
-                            //    lastName = subNames[subNames.Length - 1];
-                            //}
-                            //else firstName = nameString;
                         }
                         catch (Exception ex)
                         {

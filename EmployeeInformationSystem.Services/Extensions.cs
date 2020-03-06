@@ -26,12 +26,6 @@ namespace EmployeeInformationSystem.Services
                 string displayName = displayAttribute?.GetName();
 
                 return displayName ?? enumValue.ToString();
-
-                //return enumValue.GetType()?
-                //            .GetMember(enumValue.ToString())?
-                //            .First()?
-                //            .GetCustomAttribute<DisplayAttribute>()?
-                //            .Name;
             }
         }
     }

@@ -456,6 +456,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             EmployeeDetail employee = EmployeeDetailContext.Find(EmployeeId);
             if (null != employee)
             {
+                ManipulateData manipulateData = new ManipulateData();
                 DataViewModel viewModel = new DataViewModel()
                 {
                     EmployeeDetails = employee,
@@ -466,6 +467,12 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     PromotionDetails = PromotionDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList(),
                     PostingDetails = PostingDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
                 };
+                ViewBag.Vintage = "Not Available";
+                if (employee.DateofJoiningDGH.HasValue)
+                {
+                    if(employee.WorkingStatus) ViewBag.Vintage = manipulateData.DateDifference(DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
+                    else if(employee.DateOfSeparation.HasValue) ViewBag.Vintage = manipulateData.DateDifference(employee.DateOfSeparation ?? DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
+                }
                 return View(viewModel);
             }
             else

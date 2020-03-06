@@ -111,10 +111,10 @@
                     </li>
                     <li>
                         <a href="#GenerateReportsDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-bar-chart"></i>Generate Reports</a>
-                        <ul id="GenerateReportsDropdown" class="collapse list-unstyled ">
-                            <li><a href="#"><i class="fa fa-user-circle"></i>Active Employess</a></li>
-                            <li><a href="#"><i class="fa fa-times-rectangle"></i>Inactive Employees</a></li>
-                            <li><a href="#"><i class="fa fa-users"></i>All Employees</a></li>
+                        <ul id="GenerateReportsDropdown" class="collapse list-unstyled @RenderSection("Reports", required: false) ">
+                            <li @RenderSection("ActiveEmployees", required: false)><a href="@Url.Action("ActiveEmployees", "Reports")"><i class="fa fa-user-circle"></i>Active Employess</a></li>
+                            <li @RenderSection("InActiveEmployees", required: false)><a href="@Url.Action("InActiveEmployees", "Reports")"><i class="fa fa-times-rectangle"></i>Inactive Employees</a></li>
+                            <li @RenderSection("AllEmployees", required: false)><a href="@Url.Action("AllEmployees", "Reports")"><i class="fa fa-users"></i>All Employees</a></li>
                         </ul>
                     </li>
                     <li><span class="heading">Administrator Section</span></li>

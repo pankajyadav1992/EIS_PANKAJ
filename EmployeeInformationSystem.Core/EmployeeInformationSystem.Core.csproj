@@ -92,6 +92,7 @@
     <Compile Include="Models\TelephoneExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DataViewModel.cs" />
+    <Compile Include="ViewModels\ReportsViewModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

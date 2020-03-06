@@ -105,12 +105,9 @@
                                             </div>
 
 
-                                            <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.ProfilePhoto):</h5>
+                                            <h5 class="title col-sm-3" style="text-align:right;">Vintage:</h5>
                                             <div class="col-sm-3">
-                                                @if (null != @Model.EmployeeDetails.ProfilePhoto)
-                                                {
-                                                    <img class="img-thumbnail" style="height:100px" src="~/Content/profile_pics/@Model.EmployeeDetails.ProfilePhoto" alt="No Image" />
-                                                }
+                                                @ViewBag.Vintage
                                             </div>
                                         </div>
 
