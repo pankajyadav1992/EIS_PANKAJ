@@ -71,5 +71,32 @@ namespace EmployeeInformationSystem.Services
             return year + (1 == year ? " Year, " : " Years, ") + month + (1 == month ? " Month, " : " Months, ") + day + (1 == day ? " Day " : " Days");
         }
 
+        public List<string> GetColumnList(string infoType)
+        {
+            List<string> columns = new List<string>();
+            switch (infoType)
+            {
+                case "personalDetails":
+                    columns.AddRange(new List<string>() { "CPF Number/Employee Code", "Employee Category", "Name", "Vintage",
+                        "Date of Birth", "Date of Superannuation", "Marital Status", "Marriage Date", "Gender","Blood Group",
+                    "Passport Number", "Passport Validity", "UAN Number", "Deputed Location", "PAN Number", "Aadhaar Number", "Dependent Details"});
+                    break;
+                case "contactDetails":
+                    columns.AddRange(new List<string>() { "EMail ID", "Alternate EMail ID", "Mobile Number", "Residence Phone Number",
+                        "Residence Address", "Permanent Address", "Emergency Contact Person", "Emergency Phone Number",
+                        "Seating Location", "Telephone Extension" });
+                    break;
+                case "professionalDetails":
+                    columns.AddRange(new List<string>() { "Working Status", "Organisation", "Qualification Details", "Primary Expertise",
+                    "Discipline", "Date of Joining parent organisation", "Date of Relieving from Last Office", "Date of Joining DGH",
+                    "Deputation/Engagement Period", "Date of Separation from DGH", "Reason for Leaving DGH"});
+                    break;
+                case "promotionDetails":
+                    columns.AddRange(new List<string>() { "Promotion Details", "Posting Details", "Current Basic Pay", "DGH Level" });
+                    break;
+            }
+            return columns;
+        }
+
     }
 }

@@ -1,0 +1,156 @@
+﻿@model EmployeeInformationSystem.Core.ViewModels.ReportSelectionViewModel
+
+@section CustomStyles{
+    @Styles.Render("~/Content/bootstrap-select")
+    @Styles.Render("~/Content/gijgo")
+    <style>
+        #overlay {
+            position: absolute;
+            justify-content: left;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(130, 130, 130, 0.5);
+        }
+    </style>
+
+}
+@section Reports{
+    show
+}
+
+@section ActiveEmployees{
+    class="active"
+}
+<div id="overlay" style="display:none;text-align:center;">
+    <img src="~/Content/img/spinner.gif" style="resize:inherit;" />
+    <br />
+</div>
+<!-- Page Header-->
+<header class="page-header bg-success text-white">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Generate Reports -  Active Employees</h2>
+    </div>
+</header>
+<!-- Forms Section-->
+<section class="forms">
+    <div class="container-fluid" style="position:relative">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Select Parameters</h3>
+                        </div>
+                        <div class="card-body">
+                            @using (Html.BeginForm("ActiveEmployees", "Reports", FormMethod.Post, new { @class = "form-horizontal", @id = "reportSelectionForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                    <div class="col-sm-5">
+                                        @Html.ListBoxFor(model => model.Categories, Model.AllCategories, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Departments, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                    <div class="col-sm-5">
+                                        @Html.ListBoxFor(model => model.Departments, Model.AllDepartments, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-3 form-control-label">Custom Columns</label>
+                                    <div class="col-sm-5">
+                                        <div class="i-checks">
+                                            <input id="checkboxCustom1" type="checkbox" value="" checked="" class="checkbox-template">
+                                            <label for="checkboxCustom1">Personal Details</label>
+                                        </div>
+                                        <div class="i-checks">
+                                            <input id="checkboxCustom2" type="checkbox" value="" checked="" class="checkbox-template">
+                                            <label for="checkboxCustom2">Contact Details</label>
+                                        </div>
+                                        <div class="i-checks">
+                                            <input id="checkboxCustom3" type="checkbox" value="" checked="" class="checkbox-template">
+                                            <label for="checkboxCustom3">Professional Details</label>
+                                        </div>
+                                        <div class="i-checks">
+                                            <input id="checkboxCustom4" type="checkbox" value="" checked="" class="checkbox-template">
+                                            <label for="checkboxCustom4">Promotion Details</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="userModalCenter" tabindex="-1" role="dialog" aria-labelledby="userModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content" id="modalContent">
+                <div></div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="userModalCenterTitle">Create New User ID</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    ...
+                </div>
+                <div class="modal-footer" id="modalFooter">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <input type="submit" class="btn btn-primary" value="Register" id="registerUserBtn" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/bootstrap-select")
+    @Scripts.Render("~/bundles/gijgo")
+    <script>
+        $(document).ready(function () {
+            //$('.selectpicker').selectpicker('render');
+            $('[data-type="date"]').each(function () {
+                $(this).datepicker({
+                    uiLibrary: 'bootstrap',
+                    format: 'dd-MM-yyyy'
+                });
+            });
+        });
+    </script>
+}

@@ -136,7 +136,7 @@ namespace EmployeeInformationSystem.Core.Models
 
         //Nullable
         public string DisciplineId { get; set; }
-        public Discipline Discipline { get; set; }
+        public virtual Discipline Discipline { get; set; }
 
         [StringLength(2000)]
         [Display(Name = "Primary Expertise")]

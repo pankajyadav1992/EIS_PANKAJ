@@ -135,7 +135,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     employeeType.Add(new SelectListItem() { Text = "Contractual - DGH Staff", Value = "3" });
                     employeeType.Add(new SelectListItem() { Text = "Contractual - MoPNG Staff", Value = "4" });
                     employeeType.Add(new SelectListItem() { Text = "Trainee Officer", Value = "5" });
-                    employeeType.Add(new SelectListItem() { Text = "Others", Value = "5" });
+                    employeeType.Add(new SelectListItem() { Text = "Others", Value = "6" });
                     break;
                 default: break;
             }

@@ -74,8 +74,12 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public ActionResult ActiveEmployees()
         {
+            ReportSelectionViewModel reportSelection = new ReportSelectionViewModel() { AllDepartments = (from department in DepartmentContext.Collection()
+                                                                                                          orderby department.Name
+                                                                                                          select new SelectListItem() { Value = department.Id, Text = department.Name}).AsEnumerable<SelectListItem>()};
             ViewBag.Title = "Reports | Active Employees";
-            return View("SelectEmployees");
+            
+            return View("ReportSelection", reportSelection);
         }
     }
 }

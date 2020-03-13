@@ -92,9 +92,15 @@
     <Compile Include="Models\TelephoneExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\DataViewModel.cs" />
+    <Compile Include="ViewModels\ReportSelectionViewModel.cs" />
     <Compile Include="ViewModels\ReportsViewModel.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EmployeeInformationSystem.Services\EmployeeInformationSystem.Services.csproj">
+      <Project>{01C6BEBE-1B46-4240-B700-0EF58343E5E2}</Project>
+      <Name>EmployeeInformationSystem.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />

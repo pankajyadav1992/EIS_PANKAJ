@@ -647,7 +647,8 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Reports\SelectEmployees.cshtml" />
+    <Content Include="Views\Reports\ReportSelection.cshtml" />
+    <Content Include="Views\MasterData\TempView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
