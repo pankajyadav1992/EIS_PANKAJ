@@ -283,16 +283,8 @@
     <Content Include="Content\vendor\chart.js\Chart.bundle.min.js" />
     <Content Include="Content\vendor\chart.js\Chart.js" />
     <Content Include="Content\vendor\chart.js\Chart.min.js" />
-    <Content Include="Content\vendor\datatable\css\buttons.dataTables.min.css" />
-    <Content Include="Content\vendor\datatable\css\jquery.dataTables.min.css" />
-    <Content Include="Content\vendor\datatable\js\buttons.flash.min.js" />
-    <Content Include="Content\vendor\datatable\js\buttons.html5.min.js" />
-    <Content Include="Content\vendor\datatable\js\buttons.print.min.js" />
-    <Content Include="Content\vendor\datatable\js\dataTables.buttons.min.js" />
-    <Content Include="Content\vendor\datatable\js\jquery.dataTables.min.js" />
-    <Content Include="Content\vendor\datatable\js\jszip.min.js" />
-    <Content Include="Content\vendor\datatable\js\pdfmake.min.js" />
-    <Content Include="Content\vendor\datatable\js\vfs_fonts.js" />
+    <Content Include="Content\vendor\datatable\css\datatables.min.css" />
+    <Content Include="Content\vendor\datatable\js\datatables.min.js" />
     <Content Include="Content\vendor\font-awesome\css\font-awesome.css" />
     <Content Include="Content\vendor\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\vendor\font-awesome\fonts\fontawesome-webfont.svg" />
@@ -648,7 +640,7 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Reports\ReportSelection.cshtml" />
-    <Content Include="Views\MasterData\TempView.cshtml" />
+    <Content Include="Views\Reports\GeneratedReportView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

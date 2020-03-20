@@ -37,10 +37,11 @@ namespace EmployeeInformationSystem.WebUI
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap-select").Include(
                         "~/Content/vendor/bootstrap-select/js/bootstrap-select.min.js"));
+            
+            bundles.Add(new ScriptBundle("~/bundles/datatable").Include(
+                        "~/Content/vendor/datatable/js/datatables.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/datatable").IncludeDirectory("~/Content/vendor/datatable/js/", "*.js", true));
-
-            //bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
+             //bundles.Add(new ScriptBundle("~/bundles/jqueryval").Include(
             //            "~/Scripts/jquery.validate*"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
@@ -63,9 +64,7 @@ namespace EmployeeInformationSystem.WebUI
                       "~/Content/css/custom.css"));
             bundles.Add(new StyleBundle("~/Content/gijgo").Include("~/Content/vendor/gijgo/css/gijgo.min.css"));
             bundles.Add(new StyleBundle("~/Content/bootstrap-select").Include("~/Content/vendor/bootstrap-select/css/bootstrap-select.min.css"));
-            bundles.Add(new StyleBundle("~/Content/datatable").Include(
-                "~/Content/vendor/datatable/css/buttons.dataTables.min.css",
-                "~/Content/vendor/datatable/css/jquery.dataTables.min.css"));
+            bundles.Add(new StyleBundle("~/Content/datatable").Include("~/Content/vendor/datatable/css/datatables.min.css"));
         }
     }
 }

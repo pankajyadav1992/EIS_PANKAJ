@@ -700,7 +700,7 @@
         $('[data-type="date"]').each(function () {
             $(this).datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd-MM-yyyy'
+                format: 'dd-mm-yyyy'
             });
         });
 
@@ -720,7 +720,7 @@
             // RegEx Match
             return value.match(/^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$|^$/);
             },
-            "Please enter a date in the format dd-MM-yyyy."
+            "Please enter a date in the format dd-mm-yyyy."
         );
         $.validator.addMethod("indianPAN",function(value, element) {
             // RegEx Match
@@ -971,7 +971,7 @@
             $('#dependentTable tbody').append(rowHtml);
             $('#DependentDetails_' + newDependent + '__DateofBirth').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd-MM-yyyy'
+                format: 'dd-mm-yyyy'
             }).rules('add',
                 {
                     australianDate:true
@@ -1020,14 +1020,14 @@
             $('#qualificationTable tbody').append(rowHtml);
             $('#QualificationDetails_' + newQualification + '__From').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd-MM-yyyy'
+                format: 'dd-mm-yyyy'
             }).rules('add',
                 {
                     australianDate:true
                 });
             $('#QualificationDetails_' + newQualification + '__To').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd-MM-yyyy'
+                format: 'dd-mm-yyyy'
             }).rules('add',
                 {
                     australianDate:true
@@ -1058,14 +1058,14 @@
             $('#experienceTable tbody').append(rowHtml);
             $('#PastExperiences_' + newExperience + '__From').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd-MM-yyyy'
+                format: 'dd-mm-yyyy'
             }).rules('add',
                 {
                     australianDate:true
                 });
             $('#PastExperiences_' + newExperience + '__To').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd-MM-yyyy'
+                format: 'dd-mm-yyyy'
             }).rules('add',
                 {
                     australianDate:true
@@ -1119,14 +1119,14 @@
             $('#postingTable tbody').append(rowHtml);
             $('#PostingDetails_' + newPosting + '__From').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd-MM-yyyy'
+                format: 'dd-mm-yyyy'
             }).rules('add',
                 {
                     australianDate:true
                 });
             $('#PostingDetails_' + newPosting + '__To').datepicker({
                 uiLibrary: 'bootstrap',
-                format: 'dd-MM-yyyy'
+                format: 'dd-mm-yyyy'
             }).rules('add',
                 {
                     australianDate:true

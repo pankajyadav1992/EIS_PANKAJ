@@ -31,7 +31,7 @@ namespace EmployeeInformationSystem.Core.ViewModels
         public DateTime? To { get; set; }
 
         [Display(Name = "Departments")]
-        public IEnumerable<Department> Departments { get; set; }
+        public IEnumerable<String> Departments { get; set; }
 
         [Display(Name = "Personal Details")]
         public IEnumerable<String> PersonalDetailsColumns { get; set; }
@@ -60,7 +60,7 @@ namespace EmployeeInformationSystem.Core.ViewModels
             get
             {
                 return (from column in manipulateData.GetColumnList("personalDetails")
-                        select new SelectListItem { Value = column, Text = column }).AsEnumerable<SelectListItem>();
+                        select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
             }
         }
         public IEnumerable<SelectListItem> AllContactDetailsColumns
@@ -68,7 +68,7 @@ namespace EmployeeInformationSystem.Core.ViewModels
             get
             {
                 return (from column in manipulateData.GetColumnList("contactDetails")
-                        select new SelectListItem { Value = column, Text = column }).AsEnumerable<SelectListItem>();
+                        select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
             }
         }
         public IEnumerable<SelectListItem> AllProfessionalDetailsColumns
@@ -76,7 +76,7 @@ namespace EmployeeInformationSystem.Core.ViewModels
             get
             {
                 return (from column in manipulateData.GetColumnList("professionalDetails")
-                        select new SelectListItem { Value = column, Text = column }).AsEnumerable<SelectListItem>();
+                        select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
             }
         }
         public IEnumerable<SelectListItem> AllPromotionDetailsColumns
@@ -84,7 +84,19 @@ namespace EmployeeInformationSystem.Core.ViewModels
             get
             {
                 return (from column in manipulateData.GetColumnList("promotionDetails")
-                        select new SelectListItem { Value = column, Text = column }).AsEnumerable<SelectListItem>();
+                        select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
+            }
+        }
+
+        public Dictionary<string, string> AllColumnsKeys
+        {
+            get
+            {
+                return manipulateData.GetColumnList("personalDetails")
+                    .Concat(manipulateData.GetColumnList("contactDetails"))
+                    .Concat(manipulateData.GetColumnList("professionalDetails"))
+                    .Concat(manipulateData.GetColumnList("promotionDetails")).GroupBy(d => d.Key)
+                    .ToDictionary(d => d.Key, d => d.First().Value);
             }
         }
 

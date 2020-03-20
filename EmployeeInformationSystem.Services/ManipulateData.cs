@@ -71,28 +71,45 @@ namespace EmployeeInformationSystem.Services
             return year + (1 == year ? " Year, " : " Years, ") + month + (1 == month ? " Month, " : " Months, ") + day + (1 == day ? " Day " : " Days");
         }
 
-        public List<string> GetColumnList(string infoType)
+        public Dictionary<string, string> GetColumnList(string infoType)
         {
-            List<string> columns = new List<string>();
+            Dictionary<string, string> columns;
             switch (infoType)
             {
                 case "personalDetails":
-                    columns.AddRange(new List<string>() { "CPF Number/Employee Code", "Employee Category", "Name", "Vintage",
-                        "Date of Birth", "Date of Superannuation", "Marital Status", "Marriage Date", "Gender","Blood Group",
-                    "Passport Number", "Passport Validity", "UAN Number", "Deputed Location", "PAN Number", "Aadhaar Number", "Dependent Details"});
+                    columns = new Dictionary<string, string>()
+                    {
+                        {"EmployeeCode", "CPF Number/Employee Code" },{"EmployeeType", "Employee Category" },{"GetFullName", "Name" },{"Vintage", "Vintage" },
+                        {"DateOfBirth", "Date of Birth" },{"DateOfSuperannuation", "Date of Superannuation" }, {"MaritalStatus","Marital Status" }, {"MarriageDate","Marriage Date" }, 
+                        {"Gender","Gender" },{"BloodGroup","Blood Group"},{"PassportNumber", "Passport Number" },{"PassportValidity", "Passport Validity" },{"UANNumber", "UAN Number" }, 
+                        {"VehicleNumber", "Vehicle Number"},{"DeputedLocation", "Deputed Location" },{"PANNumber", "PAN Number" },{"AadhaarNumber", "Aadhaar Number" },{"Dependent Details", "Dependent Details"}
+                    };
+                    
                     break;
                 case "contactDetails":
-                    columns.AddRange(new List<string>() { "EMail ID", "Alternate EMail ID", "Mobile Number", "Residence Phone Number",
-                        "Residence Address", "Permanent Address", "Emergency Contact Person", "Emergency Phone Number",
-                        "Seating Location", "Telephone Extension" });
+                    columns = new Dictionary<string, string>()
+                    {
+                        {"EmailID", "EMail ID" },{"AlternateEmailID", "Alternate EMail ID" },{"MobileNumber", "Mobile Number" },{"ResidenceNumber", "Residence Phone Number" },
+                        {"ResidenceAddress", "Residence Address" },{"PermanentAddress", "Permanent Address" }, {"EmergencyPerson","Emergency Contact Person" }, {"EmergencyContact","Emergency Phone Number" },
+                        {"SeatingLocation","Seating Location" },{"Telephone Extension","Telephone Extension"}
+                    };
+
                     break;
                 case "professionalDetails":
-                    columns.AddRange(new List<string>() { "Working Status", "Organisation", "Qualification Details", "Primary Expertise",
-                    "Discipline", "Date of Joining parent organisation", "Date of Relieving from Last Office", "Date of Joining DGH",
-                    "Deputation/Engagement Period", "Date of Separation from DGH", "Reason for Leaving DGH"});
+                    columns = new Dictionary<string, string>()
+                    {
+                        {"WorkingStatus", "Working Status" },{"Organisation", "Organisation" },{"Qualification Details", "Qualification Details" },{"PrimaryExpertise", "Primary Expertise" },
+                        {"Discipline", "Discipline" },{"DateofJoiningParentOrg","Date of Joining parent organisation" }, {"DateofRelievingLastOffice","Date of Relieving from Last Office" }, {"DateofJoiningDGH","Date of Joining DGH" },
+                        {"DeputationPeriod","Deputation/Engagement Period" },{"DateofLeavingDGH","Date of Separation from DGH"}, {"ReasonForLeaving","Reason for Leaving DGH" }
+                    };
                     break;
                 case "promotionDetails":
-                    columns.AddRange(new List<string>() { "Promotion Details", "Posting Details", "Current Basic Pay", "DGH Level" });
+                    columns = new Dictionary<string, string>()
+                    {
+                        {"Promotion Details", "Promotion Details" },{"Posting Details", "Posting Details" },{"CurrentBasicPay", "Current Basic Pay" },{"DGHLevel", "DGH Level" }
+                    };
+                    break;
+                default: columns = new Dictionary<string, string>();
                     break;
             }
             return columns;

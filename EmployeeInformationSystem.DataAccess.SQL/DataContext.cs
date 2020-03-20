@@ -35,7 +35,7 @@ namespace EmployeeInformationSystem.DataAccess.SQL
             modelBuilder.Entity<PromotionDetail>().HasOptional(p => p.Level);
 
             modelBuilder.Entity<TelephoneExtension>().HasOptional(p => p.Employee);
-            
+
         }
 
         public DbSet<Degree> Degrees { get; set; }
