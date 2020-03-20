@@ -7,13 +7,13 @@ namespace EmployeeInformationSystem.DataAccess.SQL.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.4.0")]
-    public sealed partial class UpdatedAadhaarField : IMigrationMetadata
+    public sealed partial class Initial : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(UpdatedAadhaarField));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Initial));
         
         string IMigrationMetadata.Id
         {
-            get { return "202003040653351_UpdatedAadhaarField"; }
+            get { return "202003201120416_Initial"; }
         }
         
         string IMigrationMetadata.Source

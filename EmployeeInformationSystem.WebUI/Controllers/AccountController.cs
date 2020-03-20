@@ -150,10 +150,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
             else
             {
-                RegisterViewModel registerViewModel = new RegisterViewModel();
-                registerViewModel.Email = !string.IsNullOrEmpty(employee.EmailID) ? employee.EmailID : null;
-                registerViewModel.UserId = employee.EmployeeCode;
-                registerViewModel.EmployeeName = employee.GetFullName;
+                RegisterViewModel registerViewModel = new RegisterViewModel()
+                {
+                    Id = employee.Id,
+                    Email = !string.IsNullOrEmpty(employee.EmailID) ? employee.EmailID : null,
+                    UserId = employee.EmployeeCode,
+                    EmployeeName = employee.GetFullName
+                };
                 return View(registerViewModel);
             }
         }
@@ -167,7 +170,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.UserId, Email = model.Email};
+                var user = new ApplicationUser { Id= model.Id, UserName = model.UserId, Email = model.Email};
                 var result = await UserManager.CreateAsync(user, model.Password);
 
                 // Add Custom claims to the user

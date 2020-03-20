@@ -471,7 +471,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 if (employee.DateofJoiningDGH.HasValue)
                 {
                     if(employee.WorkingStatus) ViewBag.Vintage = manipulateData.DateDifference(DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
-                    else if(employee.DateOfSeparation.HasValue) ViewBag.Vintage = manipulateData.DateDifference(employee.DateOfSeparation ?? DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
+                    else if(employee.DateofLeavingDGH.HasValue) ViewBag.Vintage = manipulateData.DateDifference(employee.DateofLeavingDGH ?? DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
                 }
                 return View(viewModel);
             }

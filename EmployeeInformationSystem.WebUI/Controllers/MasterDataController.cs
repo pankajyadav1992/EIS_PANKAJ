@@ -244,6 +244,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         DateTime? dojDGH = null;
                         if (!string.IsNullOrEmpty(tempDateString)) dojDGH = Convert.ToDateTime(tempDateString);
 
+                        // DGH Seperation Date
+                        tempDateString = dt_.Rows[row_][columnNames.FindIndex(c => c == "DGH Seperation Date")].ToString() ?? null;
+                        DateTime? dosDGH = null;
+                        if (!string.IsNullOrEmpty(tempDateString)) dosDGH = Convert.ToDateTime(tempDateString);
+
                         // DOJ Parent
                         tempDateString = dt_.Rows[row_][columnNames.FindIndex(c => c == "DOJ Parent Org.")].ToString() ?? null;
                         DateTime? dojParentOrg = null;
@@ -418,7 +423,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 EmergencyContact = string.IsNullOrEmpty(emergencyContact) ? null : emergencyContact,
                                 EmergencyPerson = string.IsNullOrEmpty(emergencyPerson) ? null : emergencyPerson,
                             };
-                            if (!status) employeeToInsert.ReasonForLeaving = reasonForSeparation;
+                            if (!status)
+                            {
+                                employeeToInsert.ReasonForLeaving = reasonForSeparation;
+                                employeeToInsert.DateofLeavingDGH = dosDGH;
+                            }
                             EmployeeDetailContext.Insert(employeeToInsert);
                             log.Info("Successfully inserted Employee with CPF:" + cpfNo);
                             inserted++;
@@ -690,8 +699,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 EmployeeId = employeeId,
                                 DepartmentId = departmentId,
                                 HODId = reportingOfficerId,
-                                From = dojDGH
-                            });
+                                From = dojDGH,
+                                To = dosDGH
+                            }); ;
                         }
                         else log.Error("Skipped adding dependent data for employee CPF: " + cpfNo);
                     }

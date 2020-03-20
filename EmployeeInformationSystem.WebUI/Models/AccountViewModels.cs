@@ -82,12 +82,15 @@ namespace EmployeeInformationSystem.WebUI.Models
         public string ConfirmPassword { get; set; }
 
         //Custom Fields
+        public string Id { get; set; }
+
         [Required(ErrorMessage = "Valid User ID is required")]
         [Display(Name = "User ID")]
         public string UserId { get; set; }
 
         [Display(Name = "Employee Name")]
         public string EmployeeName { get; set; }
+
 
         // Managing Roles & Claims
         public bool Admin { get; set; }

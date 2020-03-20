@@ -11,6 +11,7 @@ using System.Web.Mvc;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
+    [Authorize(Roles = "Reports")]
     public class ReportsController : BaseController
     {
         IRepository<EmployeeDetail> EmployeeDetailContext;
@@ -372,7 +373,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                             if (employee.DateofJoiningDGH.HasValue)
                             {
                                 if (employee.WorkingStatus) dataRow["Vintage"] = manipulateData.DateDifference(DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
-                                else if (employee.DateOfSeparation.HasValue) dataRow["Vintage"] = manipulateData.DateDifference(employee.DateOfSeparation ?? DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
+                                else if (employee.DateofLeavingDGH.HasValue) dataRow["Vintage"] = manipulateData.DateDifference(employee.DateofLeavingDGH ?? DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
                             }
                             break;
                         default:

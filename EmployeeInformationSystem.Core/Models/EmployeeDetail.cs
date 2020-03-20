@@ -121,12 +121,6 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Working Status")]
         public Boolean WorkingStatus { get; set; }
 
-        [Display(Name = "Date of Separation from DGH")]
-        [Column(TypeName = "date")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
-        public DateTime? DateOfSeparation { get; set; }
-
         [Required(ErrorMessage = "Valid Gender is required")]
         public Gender Gender { get; set; }
 
