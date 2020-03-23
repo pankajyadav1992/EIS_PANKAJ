@@ -523,10 +523,10 @@
             <div class="line"></div>
 
             <div class="form-group row">
-                @Html.LabelFor(model => model.EmployeeDetails.DateOfSeparation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                @Html.LabelFor(model => model.EmployeeDetails.DateofLeavingDGH, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
                 <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.DateOfSeparation, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateOfSeparation, "", new { @class = "text-danger" })
+                    @Html.EditorFor(model => model.EmployeeDetails.DateofLeavingDGH, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
+                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateofLeavingDGH, "", new { @class = "text-danger" })
                 </div>
 
                 @Html.LabelFor(model => model.EmployeeDetails.ReasonForLeaving, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
@@ -863,7 +863,7 @@
                     maxlength: 4,
                     minlength: 4
                 },
-                '@Html.NameFor(model => model.EmployeeDetails.DateOfSeparation)':  {
+                '@Html.NameFor(model => model.EmployeeDetails.DateofLeavingDGH)':  {
                     required: function(element) {
                         return $("input:radio[name='@Html.NameFor(model=> model.EmployeeDetails.WorkingStatus)']:checked").val() == 'False';
                         },
@@ -1181,11 +1181,11 @@
         // Activate fields based on working status
         $(document).on('change', 'input[type="radio"][name="@Html.NameFor(model=>model.EmployeeDetails.WorkingStatus)"]', function () {
              if (this.value == 'False') {
-                 $('#@Html.IdFor(model=>model.EmployeeDetails.DateOfSeparation)').removeAttr('disabled');
+                 $('#@Html.IdFor(model=>model.EmployeeDetails.DateofLeavingDGH)').removeAttr('disabled');
                  $('#@Html.IdFor(model=>model.EmployeeDetails.ReasonForLeaving)').removeAttr('disabled');
             }
              else if (this.value == 'True') {
-                 $('#@Html.IdFor(model=>model.EmployeeDetails.DateOfSeparation)').val(null).attr('disabled', 'disabled').removeClass("is-invalid");
+                 $('#@Html.IdFor(model=>model.EmployeeDetails.DateofLeavingDGH)').val(null).attr('disabled', 'disabled').removeClass("is-invalid");
                   $('#@Html.IdFor(model=>model.EmployeeDetails.ReasonForLeaving)').val(null).attr('disabled','disabled').removeClass("is-invalid");
             }
          });
