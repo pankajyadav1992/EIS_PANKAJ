@@ -385,22 +385,22 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 {
                     var claims = UserManager.GetClaims(user.Id);
                     // Add/Delete Custom claims to the user
-                    if (model.Admin && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
+                    if (model.Admin && !claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
                     else if (!model.Admin && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
 
-                    if (model.AddEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Add")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Add"));
+                    if (model.AddEmployee && !claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Add")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Add"));
                     else if (!model.AddEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Add")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Add"));
 
-                    if (model.ViewEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "View")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "View"));
+                    if (model.ViewEmployee && !claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "View")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "View"));
                     else if (!model.ViewEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "View")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "View"));
 
-                    if (model.EditEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Edit")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Edit"));
+                    if (model.EditEmployee && !claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Edit")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Edit"));
                     else if (!model.EditEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Edit")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Edit"));
 
-                    if (model.DeleteEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Delete")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Delete"));
+                    if (model.DeleteEmployee && !claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Delete")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Delete"));
                     else if (!model.DeleteEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Delete")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Delete"));
 
-                    if (model.GenerateReports && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Reports")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Reports"));
+                    if (model.GenerateReports && !claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Reports")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Reports"));
                     else if (!model.GenerateReports && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Reports")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Reports"));
 
                     // Don't sign-in as this is done via Admin page
