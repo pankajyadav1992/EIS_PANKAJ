@@ -170,7 +170,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { Id= model.Id, UserName = model.UserId, Email = model.Email};
+                var user = new ApplicationUser { Id = model.Id, UserName = model.UserId, Email = model.Email };
                 var result = await UserManager.CreateAsync(user, model.Password);
 
                 // Add Custom claims to the user
@@ -183,7 +183,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+
+                    // Don't sign-in as this is done via Admin page
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
 
                     // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
                     // Send an email with this link
@@ -435,6 +437,17 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         public ActionResult ExternalLoginFailure()
         {
             return View();
+        }
+
+        // CUSTOM : Check if user exists and return appropiate function 
+        // GET: /Account/CheckUser
+        [AllowAnonymous]
+        public ActionResult CheckUser(string EmployeeId)
+        {
+            if (null == UserManager.FindById(EmployeeId))
+                return Content("Register");
+            else
+                return Content("Modify");
         }
 
         protected override void Dispose(bool disposing)

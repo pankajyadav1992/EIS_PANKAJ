@@ -138,7 +138,7 @@
                 </div>
                 <div class="modal-footer" id="modalFooter">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <input type="submit" class="btn btn-primary" value="Register" id="registerUserBtn" />
+                    <input type="submit" class="btn btn-primary" value="Register" id="manageUserBtn" />
                 </div>
             </div>
         </div>
@@ -146,7 +146,7 @@
 </section>
 @section Scripts{
     @Scripts.Render("~/bundles/bootstrap-select")
-    <script>
+<script>
         $(document).ready(function () {
             $('#selectEmployeeByNameId').selectpicker({
                 liveSearchStyle: "contains"
@@ -161,34 +161,65 @@
             });
 
             $('#manageUserID').click(function () {
-                var EmployeeId = null;
+                $('#overlay').fadeIn();
+                var EmployeeId = null, TargetUrl = null;
                 EmployeeId = $("#selectEmployeeByNameId:enabled").val();
                 if ("" != EmployeeId) {
                     $.ajax({
-                    url: '@Url.Action("Register", "Account")?EmployeeId=' + EmployeeId,
-                    success: function (result) {
-                        $('#modalBody').html(result);
-                        $("#registerUserBtn").show();
-                    },
-                    error: function () {
-                        $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
-                    },
-                    fail: function (xhr, textStatus, errorThrown) {
-                        $('#modalBody').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
-                    },
-                    complete: function () {
-                        $('#userModalCenter').modal('show');
-                    }
+                        url: '@Url.Action("CheckUser", "Account")?EmployeeId=' + EmployeeId,
+                        success: function (result) {
+                            if ("Modify" == result) {
+                                TargetUrl = '@Url.Action("ModifyAccount", "Manage")?EmployeeId=' + EmployeeId;
+                                $("#userModalCenterTitle").text("Modify existing User ID");
+                                $("#manageUserBtn").val("Modify");
+                            }
+                            else if ("Register" == result) {
+                                TargetUrl = '@Url.Action("Register", "Account")?EmployeeId=' + EmployeeId;
+                                $("#userModalCenterTitle").text("Create new User ID");
+                                $("#manageUserBtn").val("Register");
+                            } else $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                        },
+                        error: function () {
+                            $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                        },
+                        fail: function (xhr, textStatus, errorThrown) {
+                            $('#modalBody').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                        },
+                        complete: function () {
+                            console.log(TargetUrl);
+                            if (null != TargetUrl) {
+                                $.ajax({
+                                    url: TargetUrl,
+                                    success: function (result) {
+                                        $('#modalBody').html(result);
+                                        $("#manageUserBtn").show();
+                                    },
+                                    error: function () {
+                                        $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                                    },
+                                    fail: function (xhr, textStatus, errorThrown) {
+                                        $('#modalBody').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                                    },
+                                    complete: function () {
+                                        $('#userModalCenter').modal('show');
+                                    }
+                                });
+                            } else $('#userModalCenter').modal('show');
+                        }
                     });
                 } else {
                     alert("No Employee Selected !!");
                 }
+                $('#overlay').fadeOut();
             });
 
-            $(document).on("click", "#registerUserBtn", function () {
+            $(document).on("click", "#manageUserBtn", function () {
                 $('#overlay').fadeIn();
-                var formUrl = $('#registerUser').attr('action');
-                var formData = new FormData(document.getElementById('registerUser'));
+                var formUrl = $('#manageUser').attr('action');
+                var formData = new FormData(document.getElementById('manageUser'));
+                var text = null;
+                if ("register" == $('#manageUser').data('formtype')) text = "created";
+                else text = "modified";
                 $.ajax({
                     url: formUrl,
                     type: 'POST',
@@ -197,20 +228,19 @@
                     processData: false,
                     success: function (result) {
                         if ('Success' == result) {
-                            $('#modalBody').html('<div class="alert alert-success" role="alert"> Successfully created user ID </div >');
-                            $("#registerUserBtn").fadeOut();
-                            
+                            $('#modalBody').html('<div class="alert alert-success" role="alert"> Successfully '+ text +' user ID with specified roles</div >');
+                            $("#manageUserBtn").fadeOut();
                         } else {
                             $('#modalBody').html(result);
                         }
                     },
                     error: function () {
                         $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
-                        $("#registerUserBtn").fadeOut();
+                        $("#manageUserBtn").fadeOut();
                     },
                     fail: function (xhr, textStatus, errorThrown) {
                         $('#modalBody').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
-                        $("#registerUserBtn").fadeOut();
+                        $("#manageUserBtn").fadeOut();
                      },
                     complete: function () {
                         $('#overlay').fadeOut();
@@ -259,5 +289,5 @@
                 });
             });
         });
-    </script>
+</script>
 }

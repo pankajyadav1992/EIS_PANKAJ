@@ -91,7 +91,6 @@ namespace EmployeeInformationSystem.WebUI.Models
         [Display(Name = "Employee Name")]
         public string EmployeeName { get; set; }
 
-
         // Managing Roles & Claims
         public bool Admin { get; set; }
         public bool AddEmployee { get; set; }
@@ -99,7 +98,6 @@ namespace EmployeeInformationSystem.WebUI.Models
         public bool EditEmployee { get; set; }
         public bool DeleteEmployee { get; set; }
         public bool GenerateReports { get; set; }
-
     }
 
     public class ResetPasswordViewModel

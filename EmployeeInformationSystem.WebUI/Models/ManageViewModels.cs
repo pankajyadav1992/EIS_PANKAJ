@@ -83,4 +83,39 @@ namespace EmployeeInformationSystem.WebUI.Models
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
+
+    public class ModifyAccountViewModel
+    {
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "New Password")]
+        public string NewPassword { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm new password")]
+        [Compare("NewPassword", ErrorMessage = "The new password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        //Custom Fields
+        public string Id { get; set; }
+
+        [Required(ErrorMessage = "Valid User ID is required")]
+        [Display(Name = "User ID")]
+        public string UserId { get; set; }
+
+        [Display(Name = "Employee Name")]
+        public string EmployeeName { get; set; }
+
+        // Managing Roles & Claims
+        public bool Admin { get; set; }
+        public bool AddEmployee { get; set; }
+        public bool ViewEmployee { get; set; }
+        public bool EditEmployee { get; set; }
+        public bool DeleteEmployee { get; set; }
+        public bool GenerateReports { get; set; }
+    }
 }

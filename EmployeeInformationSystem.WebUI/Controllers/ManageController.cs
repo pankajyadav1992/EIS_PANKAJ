@@ -7,6 +7,9 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using EmployeeInformationSystem.WebUI.Models;
+using EmployeeInformationSystem.Core.Contracts;
+using EmployeeInformationSystem.Core.Models;
+using System.Security.Claims;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
@@ -15,6 +18,12 @@ namespace EmployeeInformationSystem.WebUI.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private IRepository<EmployeeDetail> EmployeeDetailContext;
+
+        public ManageController(IRepository<EmployeeDetail> employeeDetailContext)
+        {
+            this.EmployeeDetailContext = employeeDetailContext;
+        }
 
         public ApplicationSignInManager SignInManager
         {
@@ -311,6 +320,99 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             var result = await UserManager.AddLoginAsync(User.Identity.GetUserId(), loginInfo.Login);
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
+
+
+        //
+        // GET: /Manage/ModifyAccount
+        public ActionResult ModifyAccount(string EmployeeId)
+        {
+            EmployeeDetail employee = null;
+            var user = UserManager.FindById(EmployeeId);
+            if (null != EmployeeId)
+            {
+                employee = EmployeeDetailContext.Find(EmployeeId, true);
+            }
+            if (null == EmployeeId || null == employee || null == user)
+            {
+                return Content("<div class=\"alert alert-danger\" role=\"alert\"> Employee not found!</div>");
+            }
+            else
+            {
+                var claims = UserManager.GetClaims(user.Id);
+                ModifyAccountViewModel modifyViewModel = new ModifyAccountViewModel()
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    UserId = user.UserName,
+                    EmployeeName = employee.GetFullName,
+                    AddEmployee = claims.Any(c=> c.Type == ClaimTypes.Role && c.Value == "Add"),
+                    EditEmployee = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Edit"),
+                    DeleteEmployee = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Delete"),
+                    ViewEmployee = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "View"),
+                    GenerateReports = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Reports"),
+                    Admin = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin")
+                };
+                return View(modifyViewModel);
+            }
+        }
+
+        //
+        // POST: /Manage/ModifyAccount
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> ModifyAccount(ModifyAccountViewModel model)
+        {
+            bool passwordResetSpecified = !string.IsNullOrEmpty(model.NewPassword) && !string.IsNullOrEmpty(model.ConfirmPassword);
+            IdentityResult result = new IdentityResult();
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Modify password if specified
+            if (passwordResetSpecified)
+            {
+                string resetToken = await UserManager.GeneratePasswordResetTokenAsync(model.Id);
+                result = await UserManager.ResetPasswordAsync(model.Id, resetToken, model.NewPassword);
+            }
+
+            //var result = await UserManager.ChangePasswordAsync(User.Identity.GetUserId(), model.ConfirmPassword, model.NewPassword);
+            if (result.Succeeded || !passwordResetSpecified)
+            {
+                var user = await UserManager.FindByIdAsync(model.Id);
+                if (user != null)
+                {
+                    var claims = UserManager.GetClaims(user.Id);
+                    // Add/Delete Custom claims to the user
+                    if (model.Admin && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
+                    else if (!model.Admin && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Admin"));
+
+                    if (model.AddEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Add")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Add"));
+                    else if (!model.AddEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Add")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Add"));
+
+                    if (model.ViewEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "View")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "View"));
+                    else if (!model.ViewEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "View")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "View"));
+
+                    if (model.EditEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Edit")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Edit"));
+                    else if (!model.EditEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Edit")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Edit"));
+
+                    if (model.DeleteEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Delete")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Delete"));
+                    else if (!model.DeleteEmployee && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Delete")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Delete"));
+
+                    if (model.GenerateReports && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Reports")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Reports"));
+                    else if (!model.GenerateReports && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Reports")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Reports"));
+
+                    // Don't sign-in as this is done via Admin page
+                    //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
+                }
+                return Content("Success");
+            }
+            // Else errors
+            AddErrors(result);
+            return View(model);
+        }
+
 
         protected override void Dispose(bool disposing)
         {

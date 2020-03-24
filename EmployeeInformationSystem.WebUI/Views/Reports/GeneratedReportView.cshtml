@@ -71,7 +71,7 @@
                                     <tr>
                                         @foreach (DataColumn col in Model.Columns)
                                         {
-                                            <th>@col.ColumnName</th>
+                                        <th>@col.ColumnName <br /> <input type="text" placeholder="Search" /></th>
 
                                         }
                                     </tr>
@@ -83,7 +83,6 @@
                                             @foreach (DataColumn col in Model.Columns)
                                             {
                                                 <td class="tableRow">@row[col.ColumnName]</td>
-
                                             }
                                         </tr>
 
@@ -112,7 +111,7 @@
             });
 
             // DataTable
-            $('#reportTable').DataTable({
+            var table = $('#reportTable').DataTable({
                 "scrollX": true,
                 "scrollY": "1000px",
                 "scrollCollapse": true,
@@ -121,10 +120,46 @@
                 buttons: [
                     'copyHtml5',
                     'csvHtml5',
-                    'pdfHtml5',
+                    {
+                        extend: 'print',
+                        text: 'Print',
+                        autoPrint: false,
+                        exportOptions: {
+                            columns: ':visible',
+                        },
+                        customize: function (win) {
+                            $(win.document.body).find('table').addClass('display').css('font-size', '9px');
+                            $(win.document.body).find('tr:nth-child(odd) td').each(function (index) {
+                                $(this).css('background-color', '#D0D0D0');
+                            });
+                            $(win.document.body).find('h1').css('text-align', 'center');
+
+                            var last = null;
+                            var current = null;
+                            var bod = [];
+
+                            var css = '@@page { size: landscape; }',
+                                head = win.document.head || win.document.getElementsByTagName('head')[0],
+                                style = win.document.createElement('style');
+
+                            style.type = 'text/css';
+                            style.media = 'print';
+
+                            if (style.styleSheet)
+                            {
+                              style.styleSheet.cssText = css;
+                            }
+                            else
+                            {
+                              style.appendChild(win.document.createTextNode(css));
+                            }
+
+                            head.appendChild(style);
+                        }
+                    },
                     {
                         extend: 'excelHtml5',
-                        sheetName: 'Report - @type Employees',
+                        sheetName: '@type Employees Report',
                         title: null,
                         customize: function (xlsx) {
                             var sheet = xlsx.xl.worksheets['sheet1.xml'];
@@ -137,6 +172,16 @@
                         }
                     }
                 ]
+            });
+
+            // Apply the search
+            table.columns().eq(0).each(function (colIdx) {
+                $('input', table.column(colIdx).header()).on('keyup change', function () {
+                    table
+                        .column(colIdx)
+                        .search(this.value)
+                        .draw();
+                });
             });
 
             $('#overlay').fadeOut();
