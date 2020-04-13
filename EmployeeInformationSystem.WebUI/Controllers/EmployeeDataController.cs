@@ -103,6 +103,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         viewModel.AadhaarPart2 = employee.AadhaarNumber.Substring(4, 4);
                         viewModel.AadhaarPart3 = employee.AadhaarNumber.Substring(8, 4);
                     }
+                    // BUG FIX: For Consultants/Advisors others Empty promotion details causes page rendering to fail, initialize empty promotion detail List to be filled during EDIT
+                    if (0 == viewModel.PromotionDetails.Count && EmployeeType.Deputationist != employee.EmployeeType) viewModel.PromotionDetails.Add(new PromotionDetail());
                     organisationName = null != employee.Organisation ? employee.Organisation.Name : "DGH"; // Temp Bug fix to resolve issue with empty Org Names
                 }
                 else
