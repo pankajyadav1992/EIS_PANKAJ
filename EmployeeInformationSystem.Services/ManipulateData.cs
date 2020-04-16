@@ -80,11 +80,11 @@ namespace EmployeeInformationSystem.Services
                     columns = new Dictionary<string, string>()
                     {
                         {"EmployeeCode", "CPF Number/Employee Code" },{"EmployeeType", "Employee Category" },{"GetFullName", "Name" },{"Vintage", "Vintage" },
-                        {"DateOfBirth", "Date of Birth" },{"DateOfSuperannuation", "Date of Superannuation" }, {"MaritalStatus","Marital Status" }, {"MarriageDate","Marriage Date" }, 
-                        {"Gender","Gender" },{"BloodGroup","Blood Group"},{"PassportNumber", "Passport Number" },{"PassportValidity", "Passport Validity" },{"UANNumber", "UAN Number" }, 
+                        {"DateOfBirth", "Date of Birth" },{"DateOfSuperannuation", "Date of Superannuation" }, {"MaritalStatus","Marital Status" }, {"MarriageDate","Marriage Date" },
+                        {"Gender","Gender" },{"BloodGroup","Blood Group"},{"PassportNumber", "Passport Number" },{"PassportValidity", "Passport Validity" },{"UANNumber", "UAN Number" },
                         {"VehicleNumber", "Vehicle Number"},{"DeputedLocation", "Deputed Location" },{"PANNumber", "PAN Number" },{"AadhaarNumber", "Aadhaar Number" },{"Dependent Details", "Dependent Details"}
                     };
-                    
+
                     break;
                 case "contactDetails":
                     columns = new Dictionary<string, string>()
@@ -106,10 +106,11 @@ namespace EmployeeInformationSystem.Services
                 case "promotionDetails":
                     columns = new Dictionary<string, string>()
                     {
-                        {"Promotion Details", "Promotion Details" },{"Posting Details", "Posting Details" },{"CurrentBasicPay", "Current Basic Pay" },{"DGHLevel", "DGH Level" }
+                        {"Designation", "Designation" },{"Department", "Department" },{"Promotion Details", "Promotion Details" },{"Posting Details", "Posting Details" },{"CurrentBasicPay", "Current Basic Pay" },{"DGHLevel", "DGH Level" }
                     };
                     break;
-                default: columns = new Dictionary<string, string>();
+                default:
+                    columns = new Dictionary<string, string>();
                     break;
             }
             return columns;

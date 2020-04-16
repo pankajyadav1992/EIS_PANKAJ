@@ -376,6 +376,18 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                 else if (employee.DateofLeavingDGH.HasValue) dataRow["Vintage"] = manipulateData.DateDifference(employee.DateofLeavingDGH ?? DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
                             }
                             break;
+                        case "Designation":
+                            string designation = (from promotion in PromotionDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
+                                                  group promotion by promotion.EmployeeId into p
+                                                  select p.OrderByDescending(l => l.From).FirstOrDefault().Designation.Name).SingleOrDefault();
+                            if (!string.IsNullOrEmpty(designation)) dataRow["Designation"] = designation;
+                            break;
+                        case "Department":
+                            string department = (from posting in PostingDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
+                                                 group posting by posting.EmployeeId into p
+                                                 select p.OrderByDescending(l => l.From).FirstOrDefault().Department.Name).SingleOrDefault();
+                            if (!string.IsNullOrEmpty(department)) dataRow["Department"] = department;
+                            break;
                         default:
                             object propertyValue = employee.GetType().GetProperty(column).GetValue(employee, null);
                             if (null != propertyValue)
