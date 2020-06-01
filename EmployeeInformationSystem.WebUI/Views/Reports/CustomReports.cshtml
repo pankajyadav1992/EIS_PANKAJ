@@ -1,0 +1,107 @@
+﻿@section CustomStyles{
+    @Styles.Render("~/Content/bootstrap-select")
+    @Styles.Render("~/Content/gijgo")
+    <style>
+        #overlay {
+            position: absolute;
+            justify-content: left;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(130, 130, 130, 0.5);
+        }
+    </style>
+}
+@section Reports{
+    show
+}
+@section CustomReports{
+    class="active"
+}
+
+<div id="overlay" style="display:none;text-align:center;">
+    <img src="~/Content/img/spinner.gif" style="resize:inherit;" />
+    <br />
+</div>
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Generate Custom Reports</h2>
+    </div>
+</header>
+<!-- Forms Section-->
+<section class="forms">
+    <div class="container-fluid" style="position:relative">
+        <div class="container-fluid">
+            <div class="row" id="reportSelectionBlock">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Select Custom Report Type</h3>
+                        </div>
+
+                        <div class="card-body mx-auto">
+                            <div class="form-inline">
+                                <div class="form-group">
+                                    <select name="account" class="mr-5 form-control" style="width:500px" id="chooseReportType">
+                                        <option value="NA" selected="selected">--Select option--</option>
+                                        <option value="DeputationistVintageReport">Deputationist Vintage Report</option>
+                                    </select>
+                                </div>
+                                <div class="form-group ">
+                                    <button type="submit" class="ml-5 form-control btn btn-primary" id="continueBtn" disabled>Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" id="reportDisplayBlock" style="display:none;">
+
+            </div>
+        </div>
+    </div>
+
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/bootstrap-select")
+    @Scripts.Render("~/bundles/gijgo")
+    <script>
+        $(document).ready(function () {
+            $("#chooseReportType").change(function () {
+                var selectedOption = $(this).children("option:selected").val();
+                if ("NA" == selectedOption && !$("#continueBtn").prop('disabled')) {
+                    $('#continueBtn').attr('disabled', true);
+                } else {
+                    $('#continueBtn').removeAttr('disabled');
+                }
+            });
+            $('#continueBtn').click(function () {
+                $('#overlay').fadeIn();
+                var targetPage = $("#chooseReportType").children("option:selected").val();
+                if ('NA' != targetPage) {
+                    $.ajax({
+                        url: '@Url.Action("SelectCustomReport", "Reports")?targetPage=' + targetPage ,
+                        success: function (result) {
+                            $('#reportDisplayBlock').html(result);
+                        },
+                        error: function () {
+                            $('#reportDisplayBlock').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                        },
+                        fail: function (xhr, textStatus, errorThrown) {
+                            $('#reportDisplayBlock').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                        },
+                        complete: function () {
+                            $('#overlay').fadeOut();
+                            $("#reportSelectionBlock").slideUp();
+                            $('#reportDisplayBlock').slideDown();
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}

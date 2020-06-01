@@ -1,0 +1,89 @@
+﻿@model EmployeeInformationSystem.Core.ViewModels.ReportSelectionViewModel
+
+
+@using (Html.BeginForm("DeputationistVintageReport", "Reports", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+        <div class="col-sm-5">
+            @Html.ListBoxFor(model => model.Categories, Model.AllCategories, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+        </div>
+        <div classs="col-sm-4" style="display:none;color: red;" id="errorCategory">Please select Categories</div>
+    </div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.Departments, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+        <div class="col-sm-5">
+            @Html.ListBoxFor(model => model.Departments, Model.AllDepartments, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+        </div>
+        <div classs="col-sm-4" style="display:none;color: red;" id="errorDepartment">Please select Departments</div>
+    </div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+        <div class="col-sm-5">
+            @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+        </div>
+        <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
+    </div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+        <div class="col-sm-5">
+            @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+        </div>
+        <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-3 form-control-label">Custom Columns</label>
+        <div class="col-sm-9">
+            <div class="form-inline">
+                <input id="checkboxPersonalDetails" type="checkbox" class="checkbox-template">
+                <label for="checkboxPersonalDetails">Personal Details</label>
+                @Html.ListBoxFor(model => model.PersonalDetailsColumns, Model.AllPersonalDetailsColumns, new { @class = "form-control selectpicker ml-4", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px", @disabled = "disabled" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-9 offset-sm-3">
+            <div class="form-inline">
+                <input id="checkboxContactDetails" type="checkbox" class="checkbox-template">
+                <label for="checkboxContactDetails">Contact Details</label>
+                @Html.ListBoxFor(model => model.ContactDetailsColumns, Model.AllContactDetailsColumns, new { @class = "form-control selectpicker ml-4", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px", @disabled = "disabled" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-9 offset-sm-3">
+            <div class="form-inline">
+                <input id="checkboxProfessionalDetails" type="checkbox" class="checkbox-template">
+                <label for="checkboxProfessionalDetails">Professional Details</label>
+                @Html.ListBoxFor(model => model.ProfessionalDetailsColumns, Model.AllProfessionalDetailsColumns, new { @class = "form-control selectpicker ml-3", @data_actions_box = "true", @data_live_search = "true", @data_width = "275px", @disabled = "disabled" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-9 offset-sm-3">
+            <div class="form-inline">
+                <input id="checkboxPromotionDetails" type="checkbox" class="checkbox-template">
+                <label for="checkboxPromotionDetails">Promotion Details</label>
+                @Html.ListBoxFor(model => model.PromotionDetailsColumns, Model.AllPromotionDetailsColumns, new { @class = "form-control selectpicker ml-3", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px", @disabled = "disabled" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group row offset-sm-3">
+        <div classs="col-sm-9" style="display:none;color: red;" id="errorColumns">Please select columns</div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-9 offset-sm-3">
+            <input type="submit" value="Generate Report" class="btn btn-primary" id="reportSubmitBtn">
+        </div>
+    </div>
+}

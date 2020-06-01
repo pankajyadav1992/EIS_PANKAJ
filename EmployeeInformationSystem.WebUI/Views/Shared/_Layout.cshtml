@@ -117,6 +117,7 @@
                                                                 <li @RenderSection("ActiveEmployees", required: false)><a href="@Url.Action("ActiveEmployees", "Reports")"><i class="fa fa-user-circle"></i>Active Employess</a></li>
                                                                 <li @RenderSection("InActiveEmployees", required: false)><a href="@Url.Action("InActiveEmployees", "Reports")"><i class="fa fa-times-rectangle"></i>Inactive Employees</a></li>
                                                                 <li @RenderSection("AllEmployees", required: false)><a href="@Url.Action("AllEmployees", "Reports")"><i class="fa fa-users"></i>All Employees</a></li>
+                                                                <li @RenderSection("CustomReports", required: false)><a href="@Url.Action("CustomReports", "Reports")"><i class="fa fa-cogs"></i>Custom Reports</a></li>
                                                             </ul>
                                                         </li>
                                                     }

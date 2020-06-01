@@ -273,6 +273,18 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
         }
 
+        public ActionResult CustomReports()
+        {
+            ViewBag.Title = "Custom Reports";
+            return View();
+        }
+
+        public ActionResult SelectCustomReport(string targetPage)
+        {
+
+            return PartialView(targetPage, GetViewModel());
+        }
+
         private DataTable GetDataTable(List<EmployeeDetail> employees, ReportSelectionViewModel reportSelection)
         {
             DataTable dt_ = new DataTable("Report");
