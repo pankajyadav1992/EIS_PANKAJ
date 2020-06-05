@@ -642,6 +642,8 @@
     <Content Include="Views\Reports\ReportSelection.cshtml" />
     <Content Include="Views\Reports\GeneratedReportView.cshtml" />
     <Content Include="Views\Manage\ModifyAccount.cshtml" />
+    <Content Include="Views\Reports\CustomReports.cshtml" />
+    <Content Include="Views\Reports\DeputationistVintageReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

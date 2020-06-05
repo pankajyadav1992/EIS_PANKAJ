@@ -2,6 +2,7 @@
 using EmployeeInformationSystem.Core.Models;
 using EmployeeInformationSystem.Core.ViewModels;
 using EmployeeInformationSystem.Services;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -281,8 +282,68 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public ActionResult SelectCustomReport(string targetPage)
         {
+            return PartialView(targetPage, GetViewModel(targetPage));
+        }
 
-            return PartialView(targetPage, GetViewModel());
+        [HttpPost]
+        public ActionResult DeputationistVintageReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                ViewBag.Title = "Deputationist Vintage Report";
+                List<EmployeeDetail> employees = new List<EmployeeDetail>();
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                                                        .Where(e => e.EmployeeType == EmployeeType.Deputationist)
+                                                                                                                                        .ToList()
+                                                                                                 join posting in PostingDetailContext.Collection()
+                                                                                                                                     .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                                                     .ToList()
+                                                                                                                                      on employee.Id equals posting.EmployeeId
+                                                                                                 orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                                                 select employee).Distinct().ToList();
+                else if (!reportSelection.From.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                            .Where(e => e.EmployeeType == EmployeeType.Deputationist)
+                                                                                                            .ToList()
+                                                                      join posting in PostingDetailContext.Collection()
+                                                                                                          .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                          .ToList()
+                                                                                                           on employee.Id equals posting.EmployeeId
+                                                                      orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                      where (employee.DateofJoiningDGH <= reportSelection.To || (!employee.WorkingStatus && employee.DateofLeavingDGH < reportSelection.To)) &&
+                                                                      (posting.From <= reportSelection.To || (!posting.From.HasValue && posting.To < reportSelection.To))
+                                                                      select employee).Distinct().ToList();
+                else if (!reportSelection.To.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                              .Where(e => e.EmployeeType == EmployeeType.Deputationist)
+                                                                                                              .ToList()
+                                                                    join posting in PostingDetailContext.Collection()
+                                                                                                        .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                        .ToList()
+                                                                                                         on employee.Id equals posting.EmployeeId
+                                                                    orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                    where employee.DateofJoiningDGH >= reportSelection.From &&
+                                                                    (posting.From >= reportSelection.From || !posting.From.HasValue)
+                                                                    select employee).Distinct().ToList();
+                else employees = (from employee in EmployeeDetailContext.Collection()
+                                                                        .Where(e => e.EmployeeType == EmployeeType.Deputationist)
+                                                                        .ToList()
+                                  join posting in PostingDetailContext.Collection()
+                                                                       .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                       .ToList()
+                                                                        on employee.Id equals posting.EmployeeId
+                                  orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                  where (employee.DateofJoiningDGH >= reportSelection.From && employee.DateofJoiningDGH <= reportSelection.To) &&
+                                  ((posting.From >= reportSelection.From || !posting.From.HasValue) && (posting.To <= reportSelection.To || !posting.To.HasValue))
+                                  select employee).Distinct().ToList();
+
+                DataTable dt_ = GetDataTable(employees, reportSelection);
+
+                return View("GeneratedReportView", dt_);
+            }
         }
 
         private DataTable GetDataTable(List<EmployeeDetail> employees, ReportSelectionViewModel reportSelection)
@@ -300,6 +361,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
             if (null != reportSelection.PromotionDetailsColumns) allColumns = allColumns.Concat(reportSelection.PromotionDetailsColumns);
 
+            //In case custom reports are generated 
+            if (null != reportSelection.CustomColumns) allColumns = allColumns.Concat(reportSelection.CustomColumns);
+
             foreach (string column in allColumns)
             {
                 dtColumn = new DataColumn();
@@ -315,6 +379,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             foreach (EmployeeDetail employee in employees)
             {
                 dataRow = dt_.NewRow();
+                // Temp variables for date calculations
+                ManipulateData manipulateData = new ManipulateData();
+                DateTime VintageStartDate = (employee.DateofJoiningDGH ?? (reportSelection.From ?? DateTime.Now));
                 foreach (string column in allColumns)
                 {
                     switch (column)
@@ -381,12 +448,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                             if (!string.IsNullOrEmpty(employee.LevelId)) dataRow["DGH Level"] = employee.DGHLevel.Name;
                             break;
                         case "Vintage":
-                            ManipulateData manipulateData = new ManipulateData();
-                            if (employee.DateofJoiningDGH.HasValue)
-                            {
-                                if (employee.WorkingStatus) dataRow["Vintage"] = manipulateData.DateDifference(DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
-                                else if (employee.DateofLeavingDGH.HasValue) dataRow["Vintage"] = manipulateData.DateDifference(employee.DateofLeavingDGH ?? DateTime.Now.Date, employee.DateofJoiningDGH ?? DateTime.Now.Date);
-                            }
+                            dataRow["Vintage"] = GetCustomVintage(employee, reportSelection.From, reportSelection.To);
                             break;
                         case "Designation":
                             string designation = (from promotion in PromotionDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
@@ -400,6 +462,24 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                                  select p.OrderByDescending(l => l.From).FirstOrDefault().Department.Name).SingleOrDefault();
                             if (!string.IsNullOrEmpty(department)) dataRow["Department"] = department;
                             break;
+
+                        // Fields for Custom Reports
+                        case "Vintage1Year":
+                            dataRow["Vintage in 1 Year"] = GetCustomVintage(employee, reportSelection.From, reportSelection.To, 1);
+                            break;
+                        case "Vintage2Years":
+                            dataRow["Vintage in 2 Years"] = GetCustomVintage(employee, reportSelection.From, reportSelection.To, 2);
+                            break;
+                        case "Vintage3Years":
+                            dataRow["Vintage in 3 Years"] = GetCustomVintage(employee, reportSelection.From, reportSelection.To, 3);
+                            break;
+                        case "Vintage4Years":
+                            dataRow["Vintage in 4 Years"] = GetCustomVintage(employee, reportSelection.From, reportSelection.To, 4);
+                            break;
+                        case "Vintage5Years":
+                            dataRow["Vintage in 5 Years"] = GetCustomVintage(employee, reportSelection.From, reportSelection.To, 5);
+                            break;
+
                         default:
                             object propertyValue = employee.GetType().GetProperty(column).GetValue(employee, null);
                             if (null != propertyValue)
@@ -416,14 +496,30 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return dt_;
         }
 
-        private ReportSelectionViewModel GetViewModel()
+        private ReportSelectionViewModel GetViewModel(string customReportType = null)
         {
-            return new ReportSelectionViewModel()
-            {
-                AllDepartments = (from department in DepartmentContext.Collection()
-                                  orderby department.Name
-                                  select new SelectListItem() { Value = department.Id, Text = department.Name }).AsEnumerable<SelectListItem>()
-            };
+            ReportSelectionViewModel reportSelectionViewModel;
+            if (customReportType.IsNullOrWhiteSpace()) reportSelectionViewModel = new ReportSelectionViewModel();
+            else reportSelectionViewModel = new ReportSelectionViewModel(customReportType);
+            reportSelectionViewModel.AllDepartments = (from department in DepartmentContext.Collection()
+                                                       orderby department.Name
+                                                       select new SelectListItem() { Value = department.Id, Text = department.Name }).AsEnumerable<SelectListItem>();
+            return reportSelectionViewModel;
+        }
+
+        private string GetCustomVintage(EmployeeDetail employee, DateTime? ReportFromDate, DateTime? ReportToDate, int addOnFactor = 0)
+        {
+            ManipulateData manipulateData = new ManipulateData();
+            DateTime VintageStartDate = (employee.DateofJoiningDGH ?? (ReportFromDate ?? DateTime.Now));
+            DateTime VintageEndDate = (ReportToDate ?? DateTime.Now);
+            string vintage = "Not Available";
+
+            if (employee.WorkingStatus) vintage = manipulateData.DateDifference((VintageEndDate.AddYears(addOnFactor) > employee.DateOfSuperannuation ? employee.DateOfSuperannuation.Value : VintageEndDate.AddYears(addOnFactor)), VintageStartDate);
+            else if (employee.DateofLeavingDGH.HasValue) vintage = manipulateData.DateDifference(employee.DateofLeavingDGH.Value, VintageStartDate);
+            else if (VintageEndDate.AddYears(addOnFactor) < employee.DateOfSuperannuation) vintage = manipulateData.DateDifference(VintageEndDate.AddYears(addOnFactor), VintageStartDate);// If neither of 2 are available, use report's cutoff date
+            else if (employee.DateOfSuperannuation.HasValue) vintage = manipulateData.DateDifference(employee.DateOfSuperannuation.Value, VintageStartDate);// If nothing is available, use superannuation date
+
+            return vintage;
         }
     }
 }

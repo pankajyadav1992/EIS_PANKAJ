@@ -45,6 +45,9 @@ namespace EmployeeInformationSystem.Core.ViewModels
         [Display(Name = "Promotion Details")]
         public IEnumerable<String> PromotionDetailsColumns { get; set; }
 
+        [Display(Name = "Custom Columns")]
+        public IEnumerable<String> CustomColumns { get; set; }
+
         public IEnumerable<SelectListItem> AllCategories
         {
             get
@@ -88,6 +91,18 @@ namespace EmployeeInformationSystem.Core.ViewModels
             }
         }
 
+        // Addition for custom reports 
+        public string CustomReportType { get; set; }
+
+        public IEnumerable<SelectListItem> AllCustomColumns
+        {
+            get
+            {
+                return (from column in manipulateData.GetColumnList(this.CustomReportType)
+                        select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
+            }
+        }
+
         public Dictionary<string, string> AllColumnsKeys
         {
             get
@@ -95,10 +110,21 @@ namespace EmployeeInformationSystem.Core.ViewModels
                 return manipulateData.GetColumnList("personalDetails")
                     .Concat(manipulateData.GetColumnList("contactDetails"))
                     .Concat(manipulateData.GetColumnList("professionalDetails"))
-                    .Concat(manipulateData.GetColumnList("promotionDetails")).GroupBy(d => d.Key)
+                    .Concat(manipulateData.GetColumnList("promotionDetails"))
+                    .Concat(manipulateData.GetColumnList(this.CustomReportType))
+                    .GroupBy(d => d.Key)
                     .ToDictionary(d => d.Key, d => d.First().Value);
             }
         }
 
+        public ReportSelectionViewModel()
+        {
+            this.CustomReportType = null;
+        }
+
+        public ReportSelectionViewModel(string customReportType)
+        {
+            this.CustomReportType = customReportType;
+        }
     }
 }
