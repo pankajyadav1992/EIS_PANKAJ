@@ -212,6 +212,16 @@ namespace EmployeeInformationSystem.Core.Models
                 return _fullName;
             }
         }
+
+        [NotMapped]
+        public string GetName
+        {
+            get
+            {
+                string _Name = (this.FirstName == null ? "" : this.FirstName + " ") + (this.MiddleName == null ? "" : this.MiddleName + " ") + this.LastName ?? "";
+                return _Name;
+            }
+        }
     }
 
 
@@ -239,7 +249,7 @@ namespace EmployeeInformationSystem.Core.Models
         GroundFloor,
         [Display(Name = "I Floor")]
         IstFloor,
-        [Display(Name = "I Floor")]
+        [Display(Name = "II Floor")]
         IIndFloor,
         [Display(Name = "III Floor")]
         IIIrdFloor,

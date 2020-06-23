@@ -79,7 +79,7 @@ namespace EmployeeInformationSystem.Services
                 case "personalDetails":
                     columns = new Dictionary<string, string>()
                     {
-                        {"EmployeeCode", "CPF Number/Employee Code" },{"EmployeeType", "Employee Category" },{"GetFullName", "Name" },{"Vintage", "Vintage" },
+                        {"EmployeeCode", "CPF Number/Employee Code" },{"EmployeeType", "Employee Category" }, {"Title", "Title" }, {"GetName", "Name" },{"Vintage", "Vintage" },
                         {"DateOfBirth", "Date of Birth" },{"DateOfSuperannuation", "Date of Superannuation" }, {"MaritalStatus","Marital Status" }, {"MarriageDate","Marriage Date" },
                         {"Gender","Gender" },{"BloodGroup","Blood Group"},{"PassportNumber", "Passport Number" },{"PassportValidity", "Passport Validity" },{"UANNumber", "UAN Number" },
                         {"VehicleNumber", "Vehicle Number"},{"DeputedLocation", "Deputed Location" },{"PANNumber", "PAN Number" },{"AadhaarNumber", "Aadhaar Number" },{"Dependent Details", "Dependent Details"}
