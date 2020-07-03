@@ -153,6 +153,26 @@
                                                 @Model.EmployeeDetails.BloodGroup.GetDisplayName()
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.VehicleType):</h5>
+                                            <div class="col-sm-3">
+                                                @Html.DisplayFor(model => model.EmployeeDetails.VehicleType)
+                                            </div>
+
+
+                                            <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.VehicleCategory):</h5>
+                                            <div class="col-sm-3">
+                                                @Model.EmployeeDetails.VehicleCategory.GetDisplayName()
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.VehicleNumber):</h5>
+                                            <div class="col-sm-3">
+                                                @Html.DisplayFor(model => model.EmployeeDetails.VehicleNumber)
+                                            </div>
+                                        </div>
                                         @{
                                             var employeeTypes = new List<EmployeeInformationSystem.Core.Models.EmployeeType>() {
                                                 EmployeeInformationSystem.Core.Models.EmployeeType.Deputationist,
@@ -313,6 +333,13 @@
                                             <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.EmergencyContact):</h5>
                                             <div class="col-sm-3">
                                                 @Html.DisplayFor(model => model.EmployeeDetails.EmergencyContact)
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <h5 class="title col-sm-3" style="text-align:right;">@Html.DisplayNameFor(model => model.EmployeeDetails.EmergencyRelation):</h5>
+                                            <div class="col-sm-3">
+                                                @Html.DisplayFor(model => model.EmployeeDetails.EmergencyRelation)
                                             </div>
                                         </div>
 

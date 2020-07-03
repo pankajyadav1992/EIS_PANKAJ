@@ -84,330 +84,353 @@
         @Html.HiddenFor(model => model.EmployeeDetails.CreatedAt, new { Value = @Model.EmployeeDetails.CreatedAt.ToString() })
 
         <!-- id will be unique, but class name will be same -->
-        <div id="personalDetails" class="setup-content">
-            <div class="card-header d-flex">
-                <h3 class="h4">Personal Details</h3>
-            </div>
-            <br />
-            <!--  All fields pertaining to Personal information will be here with next button -->
+<div id="personalDetails" class="setup-content">
+    <div class="card-header d-flex">
+        <h3 class="h4">Personal Details</h3>
+    </div>
+    <br />
+    <!--  All fields pertaining to Personal information will be here with next button -->
 
-            <div class="form-group row">
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.EmployeeCode, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.EmployeeCode, new { htmlAttributes = new { @class = "form-control requiredField" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmployeeCode, "", new { @class = "text-danger" })
-                </div>
-
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.EmployeeType, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-3">
-                    @Html.DropDownListFor(model => model.EmployeeDetails.EmployeeType, new SelectList(Model.EmployeeType, "Value", "Text"), new { @class = "form-control requiredField" })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmployeeType, "", new { @class = "text-danger" })
-                </div>
-            </div>
-
-            <div class="line"></div>
-            <div class="form-group row">
-                <div class="col-sm-1" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.Title, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-1">
-                    @Html.EditorFor(model => model.EmployeeDetails.Title, new { htmlAttributes = new { @class = "form-control requiredField", @list = "TitleList" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Title, "", new { @class = "text-danger" })
-                    <datalist id="TitleList">
-                        <option>Mr.</option>
-                        <option>Mrs.</option>
-                        <option>Dr.</option>
-                    </datalist>
-                </div>
-
-                <div class="col-sm-2" style="text-align:center;">
-                    @Html.LabelFor(model => model.EmployeeDetails.FirstName, htmlAttributes: new { @class = "form-control-label" })
-                    <p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p>
-                </div>
-                <div class="col-sm-2">
-                    @Html.EditorFor(model => model.EmployeeDetails.FirstName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.FirstName, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.MiddleName, htmlAttributes: new { @class = "form-control-label col-sm-1", @style = "text-align:center;" })
-                <div class="col-sm-2">
-                    @Html.EditorFor(model => model.EmployeeDetails.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.MiddleName, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.LastName, htmlAttributes: new { @class = "form-control-label col-sm-1", @style = "text-align:center;" })
-                <div class="col-sm-2">
-                    @Html.EditorFor(model => model.EmployeeDetails.LastName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.LastName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.DateOfBirth, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.DateOfBirth, new { htmlAttributes = new { @class = "form-control requiredFieldDate", @type = "text", @data_type = "date" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateOfBirth, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.DateOfSuperannuation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.DateOfSuperannuation, new { htmlAttributes = new { @class = "form-control FieldDate", @type = "text", @data_type = "date" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.DateOfSuperannuation, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.MaritalStatus, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-3">
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, EmployeeInformationSystem.Core.Models.MaritalStatus.Married, new { @class = "radio-template requiredField", @id = "MaritalStatus_Married" }) Married&nbsp;&nbsp;
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, EmployeeInformationSystem.Core.Models.MaritalStatus.Single, new { @class = "radio-template requiredField", @id = "MaritalStatus_Single" }) Single&nbsp;&nbsp;
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, EmployeeInformationSystem.Core.Models.MaritalStatus.Others, new { @class = "radio-template requiredField", @id = "MaritalStatus_Others" }) Others
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.MaritalStatus, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.MarriageDate, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.MarriageDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.MarriageDate, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.Gender, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-3">
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.Gender, EmployeeInformationSystem.Core.Models.Gender.Male, new { @class = "radio-template requiredField", @id = "Gender_Male" }) Male&nbsp;&nbsp;
-                    @Html.RadioButtonFor(model => model.EmployeeDetails.Gender, EmployeeInformationSystem.Core.Models.Gender.Female, new { @class = "radio-template requiredField", @id = "Gender_Female" }) Female
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.Gender, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.ProfilePhoto, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    <input type="file" id="file" name="file" class="form-control-file" />
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.ProfilePhoto, "", new { @class = "text-danger" })
-                </div>
-
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                @Html.LabelFor(model => model.EmployeeDetails.BloodGroup, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EnumDropDownListFor(model => model.EmployeeDetails.BloodGroup, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.BloodGroup, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.VehicleNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.VehicleNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.VehicleNumber, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                @Html.LabelFor(model => model.EmployeeDetails.PassportNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.PassportNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportNumber, "", new { @class = "text-danger" })
-                </div>
-                @Html.LabelFor(model => model.EmployeeDetails.PassportValidity, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.PassportValidity, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportValidity, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-
-            <div class="form-group row">
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.PANNumber, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.PANNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
-                </div>
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.AadhaarNumber, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-1">
-                    @Html.EditorFor(model => model.AadhaarPart1, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
-                </div>
-                <div class="col-sm-1">
-                    @Html.EditorFor(model => model.AadhaarPart2, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
-                </div>
-                <div class="col-sm-1">
-                    @Html.EditorFor(model => model.AadhaarPart3, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
-                </div>
-
-            </div>
-            <div class="line"></div>
-
-
-            <div class="form-group row justify-content-center">
-                <div class="col-sm-10">
-                    <h3 class="h4">Dependent Details</h3>
-                    <div class="table-responsive">
-                        <table class="table table-hover" id="dependentTable">
-                            <thead>
-                                <tr>
-                                    <th>Name<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
-                                    <th>Date of Birth</th>
-                                    <th>Relationship<p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p></th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if (Model.DependentDetails != null)
-                                {
-                                    for (int i = 0; i < Model.DependentDetails.Count(); i++)
-                                    {
-                                        <tr id="dependentRow@(i)">
-                                            <td>
-                                                @Html.HiddenFor(model => model.DependentDetails[i].Id, new { Value = Model.DependentDetails[i].Id })
-                                                @Html.HiddenFor(model => model.DependentDetails[i].CreatedAt, new { Value = Model.DependentDetails[i].CreatedAt.ToString() })
-                                                @Html.HiddenFor(model => model.DependentDetails[i].EmployeeId, new { Value = @Model.EmployeeDetails.Id, @class = "requiredField" })
-                                                @Html.EditorFor(model => model.DependentDetails[i].DependentName, new { htmlAttributes = new { @class = "form-control required" } })
-                                            </td>
-                                            <td>@Html.EditorFor(model => model.DependentDetails[i].DateofBirth, new { htmlAttributes = new { @class = "form-control FieldDate", @type = "text", @data_type = "date" } })</td>
-                                            <td>@Html.EditorFor(model => model.DependentDetails[i].Relationship, new { htmlAttributes = new { @class = "form-control required" } })</td>
-                                            <td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#dependentRow@(i)">Delete</button></td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                        <button type="button" class="btn btn-success float-right" id="addDependent"><span class="fa fa-plus"></span>  Add dependent</button>
-                    </div>
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row justify-content-center">
-                <!-- open1 is given in the class that is binded with the click event -->
-                <button class="btn btn-info nextBtn" type="button" data-next="#contactDetails" data-parent="#personalDetails">Next <span class="fa fa-arrow-right"></span></button>
-            </div>
-
+    <div class="form-group row">
+        <div class="col-sm-3" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.EmployeeCode, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
         </div>
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.EmployeeCode, new { htmlAttributes = new { @class = "form-control requiredField" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.EmployeeCode, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="col-sm-3" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.EmployeeType, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+        </div>
+        <div class="col-sm-3">
+            @Html.DropDownListFor(model => model.EmployeeDetails.EmployeeType, new SelectList(Model.EmployeeType, "Value", "Text"), new { @class = "form-control requiredField" })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.EmployeeType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="line"></div>
+    <div class="form-group row">
+        <div class="col-sm-1" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.Title, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+        </div>
+        <div class="col-sm-1">
+            @Html.EditorFor(model => model.EmployeeDetails.Title, new { htmlAttributes = new { @class = "form-control requiredField", @list = "TitleList" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.Title, "", new { @class = "text-danger" })
+            <datalist id="TitleList">
+                <option>Mr.</option>
+                <option>Mrs.</option>
+                <option>Dr.</option>
+            </datalist>
+        </div>
+
+        <div class="col-sm-2" style="text-align:center;">
+            @Html.LabelFor(model => model.EmployeeDetails.FirstName, htmlAttributes: new { @class = "form-control-label" })
+            <p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p>
+        </div>
+        <div class="col-sm-2">
+            @Html.EditorFor(model => model.EmployeeDetails.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.FirstName, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.MiddleName, htmlAttributes: new { @class = "form-control-label col-sm-1", @style = "text-align:center;" })
+        <div class="col-sm-2">
+            @Html.EditorFor(model => model.EmployeeDetails.MiddleName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.MiddleName, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.LastName, htmlAttributes: new { @class = "form-control-label col-sm-1", @style = "text-align:center;" })
+        <div class="col-sm-2">
+            @Html.EditorFor(model => model.EmployeeDetails.LastName, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        <div class="col-sm-3" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.DateOfBirth, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+        </div>
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.DateOfBirth, new { htmlAttributes = new { @class = "form-control requiredFieldDate", @type = "text", @data_type = "date" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.DateOfBirth, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.DateOfSuperannuation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.DateOfSuperannuation, new { htmlAttributes = new { @class = "form-control FieldDate", @type = "text", @data_type = "date" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.DateOfSuperannuation, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        <div class="col-sm-3" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.MaritalStatus, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+        </div>
+        <div class="col-sm-3">
+            @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, EmployeeInformationSystem.Core.Models.MaritalStatus.Married, new { @class = "radio-template requiredField", @id = "MaritalStatus_Married" }) Married&nbsp;&nbsp;
+            @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, EmployeeInformationSystem.Core.Models.MaritalStatus.Single, new { @class = "radio-template requiredField", @id = "MaritalStatus_Single" }) Single&nbsp;&nbsp;
+            @Html.RadioButtonFor(model => model.EmployeeDetails.MaritalStatus, EmployeeInformationSystem.Core.Models.MaritalStatus.Others, new { @class = "radio-template requiredField", @id = "MaritalStatus_Others" }) Others
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.MaritalStatus, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.MarriageDate, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.MarriageDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.MarriageDate, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        <div class="col-sm-3" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.Gender, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+        </div>
+        <div class="col-sm-3">
+            @Html.RadioButtonFor(model => model.EmployeeDetails.Gender, EmployeeInformationSystem.Core.Models.Gender.Male, new { @class = "radio-template requiredField", @id = "Gender_Male" }) Male&nbsp;&nbsp;
+            @Html.RadioButtonFor(model => model.EmployeeDetails.Gender, EmployeeInformationSystem.Core.Models.Gender.Female, new { @class = "radio-template requiredField", @id = "Gender_Female" }) Female
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.Gender, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.ProfilePhoto, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            <input type="file" id="file" name="file" class="form-control-file" />
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.ProfilePhoto, "", new { @class = "text-danger" })
+        </div>
+
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.EmployeeDetails.BloodGroup, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EnumDropDownListFor(model => model.EmployeeDetails.BloodGroup, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.BloodGroup, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.VehicleType, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.VehicleType, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.VehicleType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.EmployeeDetails.VehicleCategory, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EnumDropDownListFor(model => model.EmployeeDetails.VehicleCategory, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.VehicleCategory, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.VehicleNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.VehicleNumber, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.VehicleNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.EmployeeDetails.PassportNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.PassportNumber, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportNumber, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(model => model.EmployeeDetails.PassportValidity, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.PassportValidity, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", @disabled = "disabled" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.PassportValidity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+
+    <div class="form-group row">
+        <div class="col-sm-3" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.PANNumber, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+        </div>
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.PANNumber, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
+        </div>
+        <div class="col-sm-3" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.AadhaarNumber, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+        </div>
+        <div class="col-sm-1">
+            @Html.EditorFor(model => model.AadhaarPart1, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
+        </div>
+        <div class="col-sm-1">
+            @Html.EditorFor(model => model.AadhaarPart2, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
+        </div>
+        <div class="col-sm-1">
+            @Html.EditorFor(model => model.AadhaarPart3, new { htmlAttributes = new { @class = "form-control", @maxlength = "4" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.PANNumber, "", new { @class = "text-danger" })
+        </div>
+
+    </div>
+    <div class="line"></div>
+
+
+    <div class="form-group row justify-content-center">
+        <div class="col-sm-10">
+            <h3 class="h4">Dependent Details</h3>
+            <div class="table-responsive">
+                <table class="table table-hover" id="dependentTable">
+                    <thead>
+                        <tr>
+                            <th>Name<text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text></th>
+                            <th>Date of Birth</th>
+                            <th>Relationship<p class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</p></th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.DependentDetails != null)
+                        {
+                            for (int i = 0; i < Model.DependentDetails.Count(); i++)
+                            {
+                                <tr id="dependentRow@(i)">
+                                    <td>
+                                        @Html.HiddenFor(model => model.DependentDetails[i].Id, new { Value = Model.DependentDetails[i].Id })
+                                        @Html.HiddenFor(model => model.DependentDetails[i].CreatedAt, new { Value = Model.DependentDetails[i].CreatedAt.ToString() })
+                                        @Html.HiddenFor(model => model.DependentDetails[i].EmployeeId, new { Value = @Model.EmployeeDetails.Id, @class = "requiredField" })
+                                        @Html.EditorFor(model => model.DependentDetails[i].DependentName, new { htmlAttributes = new { @class = "form-control required" } })
+                                    </td>
+                                    <td>@Html.EditorFor(model => model.DependentDetails[i].DateofBirth, new { htmlAttributes = new { @class = "form-control FieldDate", @type = "text", @data_type = "date" } })</td>
+                                    <td>@Html.EditorFor(model => model.DependentDetails[i].Relationship, new { htmlAttributes = new { @class = "form-control required" } })</td>
+                                    <td><button type="button" class="btn btn-outline-danger deleteRow" data-rowid="#dependentRow@(i)">Delete</button></td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <button type="button" class="btn btn-success float-right" id="addDependent"><span class="fa fa-plus"></span>  Add dependent</button>
+            </div>
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row justify-content-center">
+        <!-- open1 is given in the class that is binded with the click event -->
+        <button class="btn btn-info nextBtn" type="button" data-next="#contactDetails" data-parent="#personalDetails">Next <span class="fa fa-arrow-right"></span></button>
+    </div>
+
+</div>
 
         <!-- id will be unique, but class name will be same -->
-        <div id="contactDetails" class="setup-content">
-            <div class="card-header d-flex">
-                <h3 class="h4">Contact Details</h3>
-            </div>
-            <br />
-            <!--  User's contact Details will be here with next and previous button -->
-            <div class="form-group row">
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.EmailID, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.EmailID, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmailID, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.AlternateEmailID, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.AlternateEmailID, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.AlternateEmailID, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                <div class="col-sm-3" style="text-align:right;">
-                    @Html.LabelFor(model => model.EmployeeDetails.MobileNumber, htmlAttributes: new { @class = "form-control-label" })
-                    <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
-                </div>
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.MobileNumber, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.ResidenceNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.ResidenceNumber, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.ResidenceNumber, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                @Html.LabelFor(model => model.EmployeeDetails.ResidenceAddress, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.ResidenceAddress, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.ResidenceAddress, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.PermanentAddress, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.PermanentAddress, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.PermanentAddress, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                @Html.LabelFor(model => model.EmployeeDetails.EmergencyPerson, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.EmergencyPerson, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmergencyPerson, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.EmployeeDetails.EmergencyContact, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EditorFor(model => model.EmployeeDetails.EmergencyContact, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.EmergencyContact, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row">
-                @Html.LabelFor(model => model.EmployeeDetails.SeatingLocation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.EnumDropDownListFor(model => model.EmployeeDetails.SeatingLocation, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(model => model.EmployeeDetails.SeatingLocation, "", new { @class = "text-danger" })
-                </div>
-
-                @Html.LabelFor(model => model.TelephoneExtensions.Number, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
-                <div class="col-sm-3">
-                    @Html.HiddenFor(model => model.TelephoneExtensions.EmployeeId, new { Value = @Model.EmployeeDetails.Id })
-                    @Html.EditorFor(model => model.TelephoneExtensions.Number, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.TelephoneExtensions.Number, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="line"></div>
-
-            <div class="form-group row justify-content-center">
-                <!-- back2 unique class name  -->
-                <button class="btn btn-warning nextBtn" type="button" data-next="#personalDetails" data-parent="#contactDetails"><span class="fa fa-arrow-left"></span> Back</button>&nbsp;&nbsp;&nbsp;
-                <!-- open2 unique class name -->
-                <button class="btn btn-info nextBtn" type="button" data-next="#professionalDetails" data-parent="#contactDetails">Next <span class="fa fa-arrow-right"></span></button>
-            </div>
+<div id="contactDetails" class="setup-content">
+    <div class="card-header d-flex">
+        <h3 class="h4">Contact Details</h3>
+    </div>
+    <br />
+    <!--  User's contact Details will be here with next and previous button -->
+    <div class="form-group row">
+        <div class="col-sm-3" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.EmailID, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
         </div>
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.EmailID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.EmailID, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.AlternateEmailID, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.AlternateEmailID, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.AlternateEmailID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        <div class="col-sm-3" style="text-align:right;">
+            @Html.LabelFor(model => model.EmployeeDetails.MobileNumber, htmlAttributes: new { @class = "form-control-label" })
+            <text class="form-control-label" style="font-weight:bold;color:red;display:inline;">*</text>
+        </div>
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.MobileNumber, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.MobileNumber, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.ResidenceNumber, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.ResidenceNumber, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.ResidenceNumber, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.EmployeeDetails.ResidenceAddress, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.ResidenceAddress, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.ResidenceAddress, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.PermanentAddress, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.PermanentAddress, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.PermanentAddress, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.EmployeeDetails.EmergencyPerson, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.EmergencyPerson, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.EmergencyPerson, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.EmployeeDetails.EmergencyContact, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.EmergencyContact, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.EmergencyContact, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.EmployeeDetails.EmergencyRelation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EditorFor(model => model.EmployeeDetails.EmergencyRelation, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.EmergencyRelation, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.EmployeeDetails.SeatingLocation, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.EnumDropDownListFor(model => model.EmployeeDetails.SeatingLocation, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.EmployeeDetails.SeatingLocation, "", new { @class = "text-danger" })
+        </div>
+
+        @Html.LabelFor(model => model.TelephoneExtensions.Number, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+        <div class="col-sm-3">
+            @Html.HiddenFor(model => model.TelephoneExtensions.EmployeeId, new { Value = @Model.EmployeeDetails.Id })
+            @Html.EditorFor(model => model.TelephoneExtensions.Number, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.TelephoneExtensions.Number, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="line"></div>
+
+    <div class="form-group row justify-content-center">
+        <!-- back2 unique class name  -->
+        <button class="btn btn-warning nextBtn" type="button" data-next="#personalDetails" data-parent="#contactDetails"><span class="fa fa-arrow-left"></span> Back</button>&nbsp;&nbsp;&nbsp;
+        <!-- open2 unique class name -->
+        <button class="btn btn-info nextBtn" type="button" data-next="#professionalDetails" data-parent="#contactDetails">Next <span class="fa fa-arrow-right"></span></button>
+    </div>
+</div>
 
         <!-- id will be unique, but class name will be same -->
         <div id="professionalDetails" class="setup-content">

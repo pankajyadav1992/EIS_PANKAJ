@@ -81,8 +81,9 @@ namespace EmployeeInformationSystem.Services
                     {
                         {"EmployeeCode", "CPF Number/Employee Code" },{"EmployeeType", "Employee Category" }, {"Title", "Title" }, {"GetName", "Name" },{"Vintage", "Vintage" },
                         {"DateOfBirth", "Date of Birth" },{"DateOfSuperannuation", "Date of Superannuation" }, {"MaritalStatus","Marital Status" }, {"MarriageDate","Marriage Date" },
-                        {"Gender","Gender" },{"BloodGroup","Blood Group"},{"PassportNumber", "Passport Number" },{"PassportValidity", "Passport Validity" },{"UANNumber", "UAN Number" },
-                        {"VehicleNumber", "Vehicle Number"},{"DeputedLocation", "Deputed Location" },{"PANNumber", "PAN Number" },{"AadhaarNumber", "Aadhaar Number" },{"Dependent Details", "Dependent Details"}
+                        {"Gender","Gender" },{"BloodGroup","Blood Group"}, {"VehicleType","Vehicle Type"}, {"VehicleCategory","Vehicle Category"}, {"VehicleNumber","Vehicle Number"}, 
+                        {"PassportNumber", "Passport Number" },{"PassportValidity", "Passport Validity" },{"UANNumber", "UAN Number" },{"DeputedLocation", "Deputed Location" },{"PANNumber", "PAN Number" },
+                        {"AadhaarNumber", "Aadhaar Number" },{"Dependent Details", "Dependent Details"}
                     };
 
                     break;
@@ -91,7 +92,7 @@ namespace EmployeeInformationSystem.Services
                     {
                         {"EmailID", "EMail ID" },{"AlternateEmailID", "Alternate EMail ID" },{"MobileNumber", "Mobile Number" },{"ResidenceNumber", "Residence Phone Number" },
                         {"ResidenceAddress", "Residence Address" },{"PermanentAddress", "Permanent Address" }, {"EmergencyPerson","Emergency Contact Person" }, {"EmergencyContact","Emergency Phone Number" },
-                        {"SeatingLocation","Seating Location" },{"Telephone Extension","Telephone Extension"}
+                        {"EmergencyRelation","Emergency Relation" },{"SeatingLocation","Seating Location" },{"Telephone Extension","Telephone Extension"}
                     };
 
                     break;

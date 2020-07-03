@@ -166,6 +166,13 @@ namespace EmployeeInformationSystem.Core.Models
         public DateTime? PassportValidity { get; set; }
 
         [StringLength(1000)]
+        [Display(Name = "Type of Vehicle (Make/Model)")]
+        public string VehicleType { get; set; }
+
+        [Display(Name = "Vehicle Category")]
+        public Nullable<VehicleCategory> VehicleCategory { get; set; }
+
+        [StringLength(1000)]
         [Display(Name = "Vehicle Number")]
         public string VehicleNumber { get; set; }
 
@@ -186,6 +193,9 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Emergency Contact Person")]
         public string EmergencyPerson { get; set; }
 
+        [StringLength(1000)]
+        [Display(Name = "Emergency Contact Relation")]
+        public string EmergencyRelation { get; set; }
 
         [StringLength(100)]
         [RegularExpression(@"^\d+$", ErrorMessage = "Please enter valid contact number")]
@@ -321,5 +331,13 @@ namespace EmployeeInformationSystem.Core.Models
         Married,
         Single,
         Others
+    }
+
+    public enum VehicleCategory
+    {
+        [Display(Name = "Two Wheeler")]
+        TwoWheeler,
+        [Display(Name = "Four Wheeler")]
+        FourWheeler
     }
 }
