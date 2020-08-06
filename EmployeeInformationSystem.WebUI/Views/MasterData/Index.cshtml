@@ -35,6 +35,67 @@
 <!-- Forms Section-->
 <section class="forms">
     <div class="container-fluid" style="position:relative">
+
+        <div class="container-fluid">
+            <div class="row">
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Manage Master Data</h3>
+                        </div>
+
+                        <div class="card-body mx-auto">
+                            <div class="form-group row">
+                                <label for="selectDataType" class="form-control-label">Select Type</label>
+                                <div class="ml-3">
+                                    <select class="form-control" id="selectDataType" style="min-width:80%;" data-live-search="true" data-width="auto">
+                                        <option value="" selected>--Select DataType--</option>
+                                        <option value="Degree">Degrees</option>
+                                        <option value="Department">Departments</option>
+                                        <option value="Designation">Designations</option>
+                                        <option value="Discipline">Disciplines</option>
+                                        <option value="Level">Levels</option>
+                                        <option value="Organisation">Organisations</option>
+                                        <option value="PayScale">PayScales</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="form-control btn btn-primary" style="width:50%;" id="manageDataType" disabled>Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Manage User Ids</h3>
+                        </div>
+                        <div class="card-body mx-auto">
+                            <div class="form-group row">
+                                <label for="selectEmployeeByNameId" class="form-control-label">Select Employee</label>
+                                <div class="ml-3">
+                                    <select class="form-control selectEmployeeOption" id="selectEmployeeByNameId" style="min-width:80%;" data-live-search="true">
+                                        <option value="" selected>--Select Employee Name/CPF No.--</option>
+                                        @foreach (var employee in ViewBag.Employees)
+                                        {
+                                            <option value="@employee.Id">@employee.GetFullName, CPF No.:  @employee.EmployeeCode</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="form-control btn btn-primary" style="width:50%;" id="manageUserID" disabled>Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6">
@@ -78,46 +139,22 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="col-lg-6">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <h3 class="h4">Manage User Ids</h3>
+                            <h3 class="h4">Manage Employee HoD Mapping</h3>
                         </div>
+
                         <div class="card-body mx-auto">
-                            <div class="form-group row">
-                                <label for="selectEmployeeByNameId" class="form-control-label">Select Employee</label>
-                                <div class="ml-3">
-                                    <select class="form-control selectEmployeeOption" id="selectEmployeeByNameId" style="min-width:80%;" data-live-search="true">
-                                        <option value="" selected>--Select Employee Name/CPF No.--</option>
-                                        @foreach (var employee in ViewBag.Employees)
-                                        {
-                                            <option value="@employee.Id">@employee.GetFullName, CPF No.:  @employee.EmployeeCode</option>
-                                        }
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="form-control btn btn-primary" style="width:50%;" id="manageUserID" disabled>Continue</button>
-                            </div>
+                            <h1>Coming Soon</h1>
                         </div>
                     </div>
                 </div>
+                                
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header d-flex align-items-center">
-                        <h3 class="h4">Manage Master Data</h3>
-                    </div>
-
-                    <div class="card-body mx-auto">
-                        <h1>Coming Soon</h1>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
 
@@ -148,7 +185,7 @@
     @Scripts.Render("~/bundles/bootstrap-select")
 <script>
         $(document).ready(function () {
-            $('#selectEmployeeByNameId').selectpicker({
+            $('select').selectpicker({
                 liveSearchStyle: "contains"
             });
 
@@ -157,6 +194,14 @@
                     $('#manageUserID').prop('disabled', false);
                 } else {
                     $('#manageUserID').prop('disabled', true);
+                }
+            });
+
+            $(document).on('propertychange change click keyup input paste', '#selectDataType', function () {
+                if (this.value != "") {
+                    $('#manageDataType').prop('disabled', false);
+                } else {
+                    $('#manageDataType').prop('disabled', true);
                 }
             });
 
@@ -211,6 +256,16 @@
                     alert("No Employee Selected !!");
                 }
                 $('#overlay').fadeOut();
+            });
+
+            $("#manageDataType").click(function () {
+                $('#overlay').fadeIn();
+                var TargetUrl = null;
+                TargetUrl = $("#selectDataType:enabled").val();
+                if ("" != TargetUrl) {
+                    window.location.replace("@Url.Action("Manage", "MasterData")?type=" + TargetUrl);
+                }
+
             });
 
             $(document).on("click", "#manageUserBtn", function () {

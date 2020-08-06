@@ -1108,5 +1108,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return Content(returnText);
         }
 
+        public ActionResult Manage(String type)
+        {
+            ViewBag.Type = type;
+            return View();
+        }
+
     }
 }
