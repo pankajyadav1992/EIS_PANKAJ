@@ -538,7 +538,8 @@
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.DateofJoiningDGH, "", new { @class = "text-danger" })
                 </div>
 
-                @Html.LabelFor(model => model.EmployeeDetails.DeputationPeriod, htmlAttributes: new { @class = "col-sm-3 form-control-label", @style = "text-align:right;" })
+                <!--Temp Fix till better solution is found-->
+                <label class="col-sm-3 form-control-label" for="EmployeeDetails_DeputationPeriod" style="text-align:right;">Engagement Period</label>
                 <div class="col-sm-3">
                     @Html.EditorFor(model => model.EmployeeDetails.DeputationPeriod, new { htmlAttributes = new { @class = "form-control" } })
                     @Html.ValidationMessageFor(model => model.EmployeeDetails.DeputationPeriod, "", new { @class = "text-danger" })
