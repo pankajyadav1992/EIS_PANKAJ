@@ -161,6 +161,17 @@
                         extend: 'excelHtml5',
                         sheetName: '@type Employees Report',
                         title: null,
+                        exportOptions: {
+                            format: {
+                                body: function (data, row, column, node) {
+                                    if (/^\d+$/.test(data) && 10 < data.length) {
+                                        return "\0" + data;
+                                    } else {
+                                        return data;
+                                    }
+                                }
+                            }
+                        },
                         customize: function (xlsx) {
                             var sheet = xlsx.xl.worksheets['sheet1.xml'];
                             var col = $('col', sheet);
