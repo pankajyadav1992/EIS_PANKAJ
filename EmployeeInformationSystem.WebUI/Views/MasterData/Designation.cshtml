@@ -1,0 +1,164 @@
+﻿@model EmployeeInformationSystem.Core.ViewModels.DataViewModel
+@ViewBag.Title = "Master Data Management";
+
+@section CustomStyles{
+    <style>
+        #overlay {
+            position: absolute;
+            justify-content: left;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(130, 130, 130, 0.5);
+        }
+    </style>
+
+}
+@section Admin{
+    class="active"
+}
+
+<div id="overlay" style="display:none;text-align:center;">
+    <img src="~/Content/img/spinner.gif" style="resize:inherit;" />
+    <br />
+</div>
+
+
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Manage - Designations</h2>
+    </div>
+</header>
+<!-- Forms Section-->
+<section class="forms">
+    <div class="container-fluid" style="position:relative">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Designation List</h3>
+                        </div>
+                        <div class="card-body" style="overflow-y: scroll; max-height: 550px;">
+                            <div id="accordion">
+                                @{int counter = 0;}
+                                @foreach (var organisation in Model.Organisations)
+                                {
+                                    counter++;
+                                    <div class="card">
+                                        <div class="card-header @(counter % 2 == 0 ? "bg-success" : "bg-secondary") form-inline" id="heading_@organisation.Id">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link  text-white" data-toggle="collapse" data-target="#collapse_@organisation.Id" aria-expanded="true" aria-controls="collapse_@organisation.Id">
+                                                    @organisation.Name
+                                                </button>
+                                            </h5>
+                                            <!-- Button trigger modal -->
+                                            <button type="button" class="btn btn-primary ml-auto modalBtn" data-orgid="@organisation.Id" data-role="add">
+                                                Add New
+                                            </button>
+                                        </div>
+
+                                        <div id="collapse_@organisation.Id" class="collapse" aria-labelledby="heading_@organisation.Id" data-parent="#accordion">
+                                            <div class="card-body" style="overflow-y: scroll; max-height: 300px;">
+                                                <table class="table table-hover">
+                                                    <tr>
+
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.Designations.First().Name)
+                                                        </th>
+                                                        <th>
+                                                            @Html.DisplayNameFor(model => model.Designations.First().Organisation.Name)
+                                                        </th>
+                                                        <th>Action</th>
+                                                    </tr>
+
+                                                    @foreach (var item in Model.Designations)
+                                                    {
+                                                        if (item.OrganisationId == organisation.Id)
+                                                        {
+                                                            <tr>
+
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Name)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.DisplayFor(modelItem => item.Organisation.Name)
+                                                                </td>
+                                                                <td>
+                                                                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                                                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="designationModal" tabindex="-1" role="dialog" aria-labelledby="designationModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="designationModalTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="designationModalBody">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $(".modalBtn").click(function () {
+                $('#overlay').fadeIn();
+                var orgId = $(this).data("orgid");
+                var role = $(this).data("role");
+                if ("add" == role && "" != role) {
+
+                    $.ajax({
+                        url: '@Url.Action("ManageForm", "MasterData")?mode=' + role + '&dataType=designation' + '&Id=' + orgId,
+                        success: function (result) {
+                            $("#designationModalBody").html(result);
+                        },
+                        error: function () {
+                            $('#designationModalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                        },
+                        fail: function (xhr, textStatus, errorThrown) {
+                            $('#designationModalBody').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                        },
+                        complete: function () {
+                            $('#overlay').fadeOut();
+                            $('#designationModal').modal('show');
+                        }
+                    });
+                }
+            });
+
+        });
+    </script>
+}

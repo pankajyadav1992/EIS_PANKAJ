@@ -9,6 +9,7 @@ using System.IO;
 using EmployeeInformationSystem.Core.Contracts;
 using EmployeeInformationSystem.Core.Models;
 using System.Text.RegularExpressions;
+using EmployeeInformationSystem.Core.ViewModels;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
@@ -1110,8 +1111,34 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public ActionResult Manage(String type)
         {
+            DataViewModel dataViewModel = new DataViewModel()
+            {
+                Designations = DesignationContext.Collection().OrderBy(d => d.Organisation.Name).AsEnumerable(),
+                Organisations = OrganisationContext.Collection().OrderBy(o => o.Name).AsEnumerable()
+            };
             ViewBag.Type = type;
-            return View();
+            ViewBag.Title = "Manage " + type + "s";
+            return "Designation" != type ? View() : View(type, dataViewModel);
+        }
+
+        public ActionResult ManageForm(string mode, string dataType, string Id = null)
+        {
+            string viewName = null;
+            object runtimeObject = null;
+            switch (dataType)
+            {
+                case "designation":
+                    viewName = "DesignationForm";
+                    if ("add" == mode )
+                    {
+                        if (Id != null)
+                        {
+                            runtimeObject = new Designation() { OrganisationId = Id };
+                        }
+                    }
+                    break;
+            }
+            return View(viewName, runtimeObject);
         }
 
     }

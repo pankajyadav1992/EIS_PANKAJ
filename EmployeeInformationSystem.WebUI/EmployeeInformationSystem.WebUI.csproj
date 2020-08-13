@@ -644,6 +644,9 @@
     <Content Include="Views\Manage\ModifyAccount.cshtml" />
     <Content Include="Views\Reports\CustomReports.cshtml" />
     <Content Include="Views\Reports\DeputationistVintageReport.cshtml" />
+    <Content Include="Views\MasterData\Manage.cshtml" />
+    <Content Include="Views\MasterData\Designation.cshtml" />
+    <Content Include="Views\MasterData\DesignationForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
