@@ -1,11 +1,11 @@
-﻿@model EmployeeInformationSystem.Core.Models.Designation
+﻿@model EmployeeInformationSystem.Core.Models.Level
 
 @{
     Layout = null;
 }
 
 
-@using (Html.BeginForm("Designation", "MasterData", FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "manageForm", @data_formtype = ViewBag.Mode }))
+@using (Html.BeginForm("Level", "MasterData", FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "manageForm", @data_formtype = ViewBag.Mode }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary("", new { @class = "text-danger" })
@@ -15,7 +15,7 @@
     {
         <div class="alert alert-warning" role="alert">
             Are you sure?
-            This will delete this designation and its dependent data!
+            This will delete this Level and its dependent data!
         </div>
 
         <div class="form-group row">

@@ -10,6 +10,7 @@ using EmployeeInformationSystem.Core.Contracts;
 using EmployeeInformationSystem.Core.Models;
 using System.Text.RegularExpressions;
 using EmployeeInformationSystem.Core.ViewModels;
+using System.Net;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
@@ -1113,32 +1114,213 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         {
             DataViewModel dataViewModel = new DataViewModel()
             {
+                Degrees = DegreeContext.Collection().OrderBy(d => d.Name).AsEnumerable(),
+                Departments = DepartmentContext.Collection().OrderBy(d => d.Name).AsEnumerable(),
                 Designations = DesignationContext.Collection().OrderBy(d => d.Organisation.Name).AsEnumerable(),
-                Organisations = OrganisationContext.Collection().OrderBy(o => o.Name).AsEnumerable()
+                Disciplines = DisciplineContext.Collection().OrderBy(d => d.Name).AsEnumerable(),
+                Levels = LevelContext.Collection().OrderBy(l => l.Organisation.Name).AsEnumerable(),
+                Organisations = OrganisationContext.Collection().OrderBy(o => o.Name).AsEnumerable(),
+                PayScales = PayScaleContext.Collection().OrderBy(p => p.Organisation.Name).AsEnumerable()
             };
             ViewBag.Type = type;
             ViewBag.Title = "Manage " + type + "s";
-            return "Designation" != type ? View() : View(type, dataViewModel);
+            // Temp CODE as not all pages developed
+            List<string> myList = new List<string>()
+            {
+                "Designation",
+                "PayScale",
+                "Level"
+            };
+            return myList.Contains(type)? View(type, dataViewModel): View();
         }
 
         public ActionResult ManageForm(string mode, string dataType, string Id = null)
         {
             string viewName = null;
             object runtimeObject = null;
-            switch (dataType)
+            if (!String.IsNullOrEmpty(Id))
             {
-                case "designation":
-                    viewName = "DesignationForm";
-                    if ("add" == mode )
-                    {
-                        if (Id != null)
+                switch (dataType)
+                {
+                    case "Designation":
+                        viewName = "DesignationForm";
+                        if ("Add" == mode)
                         {
-                            runtimeObject = new Designation() { OrganisationId = Id };
+                            runtimeObject = new Designation()
+                            {
+                                OrganisationId = Id,
+                                Organisation = OrganisationContext.Find(Id)
+                            };
                         }
-                    }
-                    break;
+                        else
+                        {
+                            runtimeObject = DesignationContext.Find(Id);
+                        }
+                        break;
+
+                    case "Level":
+                        viewName = "LevelForm";
+                        if ("Add" == mode)
+                        {
+                            runtimeObject = new Level()
+                            {
+                                OrganisationId = Id,
+                                Organisation = OrganisationContext.Find(Id)
+                            };
+                        }
+                        else
+                        {
+                            runtimeObject = LevelContext.Find(Id);
+                        }
+                        break;
+                    case "PayScale":
+                        viewName = "PayScaleForm";
+                        if ("Add" == mode)
+                        {
+                            runtimeObject = new PayScale()
+                            {
+                                OrganisationId = Id,
+                                Organisation = OrganisationContext.Find(Id)
+                            };
+                        }
+                        else
+                        {
+                            runtimeObject = PayScaleContext.Find(Id);
+                        }
+                        break;
+                    default:
+                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
             }
-            return View(viewName, runtimeObject);
+            if (runtimeObject != null)
+            {
+                ViewBag.Mode = mode;
+                return View(viewName, runtimeObject);
+            }
+            else return Content("<div class=\"alert alert-danger\" role=\"alert\"> An error has occured!</ div >");
+        }
+
+        [HttpPost]
+        public ActionResult Designation(Designation designation, string mode)
+        {
+            string existingDesignationId = (from designationToFind in DesignationContext.Collection()
+                                            where designationToFind.Name == designation.Name && designationToFind.OrganisationId == designation.OrganisationId
+                                            select designationToFind.Id).FirstOrDefault();
+            bool status = true;
+
+            switch (mode)
+            {
+                case "Add":
+                    if (!string.IsNullOrEmpty(existingDesignationId)) ModelState.AddModelError("", "Designation with identical Name/Organisation already exists! Please enter another value");
+                    if (ModelState.IsValid) DesignationContext.Insert(designation, UserName);
+                    else status = false;
+                    break;
+                case "Edit":
+                    if (!string.IsNullOrEmpty(existingDesignationId)) ModelState.AddModelError("", "Designation with identical Name/Organisation already exists! Please enter another value");
+                    if (ModelState.IsValid) DesignationContext.Update(designation, UserName);
+                    else status = false;
+                    break;
+                case "Delete":
+                    if (existingDesignationId != designation.Id) ModelState.AddModelError("", "Designation you are trying to delete doesn't exist! Please try again");
+                    if (ModelState.IsValid) DesignationContext.Delete(designation.Id);
+                    else status = false;
+                    break;
+                default:
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            if (status)
+            {
+                DesignationContext.Commit();
+                return Content("Success");
+            }
+            else
+            {
+                ViewBag.Mode = mode;
+                designation.Organisation = OrganisationContext.Find(designation.OrganisationId);
+                return View("DesignationForm", designation);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Level(Level level, string mode)
+        {
+            string existingLevelId = (from levelToFind in LevelContext.Collection()
+                                      where levelToFind.Name == level.Name && levelToFind.OrganisationId == level.OrganisationId
+                                      select levelToFind.Id).FirstOrDefault();
+            bool status = true;
+
+            switch (mode)
+            {
+                case "Add":
+                    if (!string.IsNullOrEmpty(existingLevelId)) ModelState.AddModelError("", "Level with identical Name/Organisation already exists! Please enter another value");
+                    if (ModelState.IsValid) LevelContext.Insert(level, UserName);
+                    else status = false;
+                    break;
+                case "Edit":
+                    if (!string.IsNullOrEmpty(existingLevelId)) ModelState.AddModelError("", "Level with identical Name/Organisation already exists! Please enter another value");
+                    if (ModelState.IsValid) LevelContext.Update(level, UserName);
+                    else status = false;
+                    break;
+                case "Delete":
+                    if (existingLevelId != level.Id) ModelState.AddModelError("", "Level you are trying to delete doesn't exist! Please try again");
+                    if (ModelState.IsValid) LevelContext.Delete(level.Id);
+                    else status = false;
+                    break;
+                default:
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            if (status)
+            {
+                LevelContext.Commit();
+                return Content("Success");
+            }
+            else
+            {
+                ViewBag.Mode = mode;
+                level.Organisation = OrganisationContext.Find(level.OrganisationId);
+                return View("LevelForm", level);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult PayScale(PayScale payScale, string mode)
+        {
+            string existingPayScaleId = (from payScaleToFind in PayScaleContext.Collection()
+                                      where payScaleToFind.Scale == payScale.Scale && payScaleToFind.OrganisationId == payScale.OrganisationId
+                                      select payScaleToFind.Id).FirstOrDefault();
+            bool status = true;
+
+            switch (mode)
+            {
+                case "Add":
+                    if (!string.IsNullOrEmpty(existingPayScaleId)) ModelState.AddModelError("", "PayScale with identical Name/Organisation already exists! Please enter another value");
+                    if (ModelState.IsValid) PayScaleContext.Insert(payScale, UserName);
+                    else status = false;
+                    break;
+                case "Edit":
+                    if (!string.IsNullOrEmpty(existingPayScaleId)) ModelState.AddModelError("", "PayScale with identical Name/Organisation already exists! Please enter another value");
+                    if (ModelState.IsValid) PayScaleContext.Update(payScale, UserName);
+                    else status = false;
+                    break;
+                case "Delete":
+                    if (existingPayScaleId != payScale.Id) ModelState.AddModelError("", "PayScale you are trying to delete doesn't exist! Please try again");
+                    if (ModelState.IsValid) PayScaleContext.Delete(payScale.Id);
+                    else status = false;
+                    break;
+                default:
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            if (status)
+            {
+                PayScaleContext.Commit();
+                return Content("Success");
+            }
+            else
+            {
+                ViewBag.Mode = mode;
+                payScale.Organisation = OrganisationContext.Find(payScale.OrganisationId);
+                return View("PayScaleForm", payScale);
+            }
         }
 
     }
