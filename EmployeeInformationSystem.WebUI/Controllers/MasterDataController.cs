@@ -1116,22 +1116,27 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             {
                 Degrees = DegreeContext.Collection().OrderBy(d => d.Name).AsEnumerable(),
                 Departments = DepartmentContext.Collection().OrderBy(d => d.Name).AsEnumerable(),
-                Designations = DesignationContext.Collection().OrderBy(d => d.Organisation.Name).AsEnumerable(),
+                Designations = DesignationContext.Collection().OrderBy(d => d.Organisation.Name).ThenBy(d => d.Name).AsEnumerable(),
                 Disciplines = DisciplineContext.Collection().OrderBy(d => d.Name).AsEnumerable(),
-                Levels = LevelContext.Collection().OrderBy(l => l.Organisation.Name).AsEnumerable(),
+                Levels = LevelContext.Collection().OrderBy(l => l.Organisation.Name).ThenBy(l => l.Name).AsEnumerable(),
                 Organisations = OrganisationContext.Collection().OrderBy(o => o.Name).AsEnumerable(),
-                PayScales = PayScaleContext.Collection().OrderBy(p => p.Organisation.Name).AsEnumerable()
+                PayScales = PayScaleContext.Collection().OrderBy(p => p.Organisation.Name).ThenBy(p => p.Scale).AsEnumerable()
             };
             ViewBag.Type = type;
             ViewBag.Title = "Manage " + type + "s";
-            // Temp CODE as not all pages developed
+            // Prevents unathorised access 
             List<string> myList = new List<string>()
             {
+                "Degree",
                 "Designation",
-                "PayScale",
-                "Level"
+                "Department",
+                "Discipline",
+                "Level",
+                "Organisation",
+                "PayScale"
             };
-            return myList.Contains(type)? View(type, dataViewModel): View();
+            if (myList.Contains(type)) return View(type, dataViewModel);
+            else return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
         }
 
         public ActionResult ManageForm(string mode, string dataType, string Id = null)
@@ -1142,6 +1147,18 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             {
                 switch (dataType)
                 {
+                    case "Degree":
+                        viewName = "DegreeForm";
+                        if ("Add" == mode)
+                        {
+                            runtimeObject = new Degree();
+                        }
+                        else
+                        {
+                            runtimeObject = DegreeContext.Find(Id);
+                        }
+                        break;
+
                     case "Designation":
                         viewName = "DesignationForm";
                         if ("Add" == mode)
@@ -1158,6 +1175,30 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         }
                         break;
 
+                    case "Department":
+                        viewName = "DepartmentForm";
+                        if ("Add" == mode)
+                        {
+                            runtimeObject = new Department();
+                        }
+                        else
+                        {
+                            runtimeObject = DepartmentContext.Find(Id);
+                        }
+                        break;
+
+                    case "Discipline":
+                        viewName = "DisciplineForm";
+                        if ("Add" == mode)
+                        {
+                            runtimeObject = new Discipline();
+                        }
+                        else
+                        {
+                            runtimeObject = DisciplineContext.Find(Id);
+                        }
+                        break;
+
                     case "Level":
                         viewName = "LevelForm";
                         if ("Add" == mode)
@@ -1171,6 +1212,17 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         else
                         {
                             runtimeObject = LevelContext.Find(Id);
+                        }
+                        break;
+                    case "Organisation":
+                        viewName = "OrganisationForm";
+                        if ("Add" == mode)
+                        {
+                            runtimeObject = new Organisation();
+                        }
+                        else
+                        {
+                            runtimeObject = OrganisationContext.Find(Id);
                         }
                         break;
                     case "PayScale":
@@ -1198,6 +1250,46 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 return View(viewName, runtimeObject);
             }
             else return Content("<div class=\"alert alert-danger\" role=\"alert\"> An error has occured!</ div >");
+        }
+
+        [HttpPost]
+        public ActionResult Degree(Degree degree, string mode)
+        {
+            string existingDegreeId = (from degreeToFind in DegreeContext.Collection()
+                                             where degreeToFind.Name == degree.Name
+                                             select degreeToFind.Id).FirstOrDefault();
+            bool status = true;
+
+            switch (mode)
+            {
+                case "Add":
+                    if (!string.IsNullOrEmpty(existingDegreeId)) ModelState.AddModelError("", "Degree with identical name already exists! Please enter another value");
+                    if (ModelState.IsValid) DegreeContext.Insert(degree, UserName);
+                    else status = false;
+                    break;
+                case "Edit":
+                    if (!string.IsNullOrEmpty(existingDegreeId)) ModelState.AddModelError("", "Degree with identical name already exists! Please enter another value");
+                    if (ModelState.IsValid) DegreeContext.Update(degree, UserName);
+                    else status = false;
+                    break;
+                case "Delete":
+                    if (existingDegreeId != degree.Id) ModelState.AddModelError("", "Degree you are trying to delete doesn't exist! Please try again");
+                    if (ModelState.IsValid) DegreeContext.Delete(degree.Id);
+                    else status = false;
+                    break;
+                default:
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            if (status)
+            {
+                DegreeContext.Commit();
+                return Content("Success");
+            }
+            else
+            {
+                ViewBag.Mode = mode;
+                return View("DegreeForm", degree);
+            }
         }
 
         [HttpPost]
@@ -1238,6 +1330,86 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 ViewBag.Mode = mode;
                 designation.Organisation = OrganisationContext.Find(designation.OrganisationId);
                 return View("DesignationForm", designation);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Department(Department department, string mode)
+        {
+            string existingDepartmentId = (from departmentToFind in DepartmentContext.Collection()
+                                       where departmentToFind.Name == department.Name
+                                       select departmentToFind.Id).FirstOrDefault();
+            bool status = true;
+
+            switch (mode)
+            {
+                case "Add":
+                    if (!string.IsNullOrEmpty(existingDepartmentId)) ModelState.AddModelError("", "Department with identical name already exists! Please enter another value");
+                    if (ModelState.IsValid) DepartmentContext.Insert(department, UserName);
+                    else status = false;
+                    break;
+                case "Edit":
+                    if (!string.IsNullOrEmpty(existingDepartmentId)) ModelState.AddModelError("", "Department with identical name already exists! Please enter another value");
+                    if (ModelState.IsValid) DepartmentContext.Update(department, UserName);
+                    else status = false;
+                    break;
+                case "Delete":
+                    if (existingDepartmentId != department.Id) ModelState.AddModelError("", "Department you are trying to delete doesn't exist! Please try again");
+                    if (ModelState.IsValid) DepartmentContext.Delete(department.Id);
+                    else status = false;
+                    break;
+                default:
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            if (status)
+            {
+                DepartmentContext.Commit();
+                return Content("Success");
+            }
+            else
+            {
+                ViewBag.Mode = mode;
+                return View("DepartmentForm", department);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Discipline(Discipline discipline, string mode)
+        {
+            string existingDisciplineId = (from disciplineToFind in DisciplineContext.Collection()
+                                       where disciplineToFind.Name == discipline.Name
+                                       select disciplineToFind.Id).FirstOrDefault();
+            bool status = true;
+
+            switch (mode)
+            {
+                case "Add":
+                    if (!string.IsNullOrEmpty(existingDisciplineId)) ModelState.AddModelError("", "Discipline with identical name already exists! Please enter another value");
+                    if (ModelState.IsValid) DisciplineContext.Insert(discipline, UserName);
+                    else status = false;
+                    break;
+                case "Edit":
+                    if (!string.IsNullOrEmpty(existingDisciplineId)) ModelState.AddModelError("", "Discipline with identical name already exists! Please enter another value");
+                    if (ModelState.IsValid) DisciplineContext.Update(discipline, UserName);
+                    else status = false;
+                    break;
+                case "Delete":
+                    if (existingDisciplineId != discipline.Id) ModelState.AddModelError("", "Discipline you are trying to delete doesn't exist! Please try again");
+                    if (ModelState.IsValid) DisciplineContext.Delete(discipline.Id);
+                    else status = false;
+                    break;
+                default:
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            if (status)
+            {
+                DisciplineContext.Commit();
+                return Content("Success");
+            }
+            else
+            {
+                ViewBag.Mode = mode;
+                return View("DisciplineForm", discipline);
             }
         }
 
@@ -1283,11 +1455,51 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         }
 
         [HttpPost]
+        public ActionResult Organisation(Organisation organisation, string mode)
+        {
+            string existingOrganisationId = (from organisationToFind in OrganisationContext.Collection()
+                                         where organisationToFind.Name == organisation.Name
+                                         select organisationToFind.Id).FirstOrDefault();
+            bool status = true;
+
+            switch (mode)
+            {
+                case "Add":
+                    if (!string.IsNullOrEmpty(existingOrganisationId)) ModelState.AddModelError("", "Organisation with identical name already exists! Please enter another value");
+                    if (ModelState.IsValid) OrganisationContext.Insert(organisation, UserName);
+                    else status = false;
+                    break;
+                case "Edit":
+                    if (!string.IsNullOrEmpty(existingOrganisationId)) ModelState.AddModelError("", "Organisation with identical name already exists! Please enter another value");
+                    if (ModelState.IsValid) OrganisationContext.Update(organisation, UserName);
+                    else status = false;
+                    break;
+                case "Delete":
+                    if (existingOrganisationId != organisation.Id) ModelState.AddModelError("", "Organisation you are trying to delete doesn't exist! Please try again");
+                    if (ModelState.IsValid) OrganisationContext.Delete(organisation.Id);
+                    else status = false;
+                    break;
+                default:
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+            }
+            if (status)
+            {
+                OrganisationContext.Commit();
+                return Content("Success");
+            }
+            else
+            {
+                ViewBag.Mode = mode;
+                return View("OrganisationForm", organisation);
+            }
+        }
+
+        [HttpPost]
         public ActionResult PayScale(PayScale payScale, string mode)
         {
             string existingPayScaleId = (from payScaleToFind in PayScaleContext.Collection()
-                                      where payScaleToFind.Scale == payScale.Scale && payScaleToFind.OrganisationId == payScale.OrganisationId
-                                      select payScaleToFind.Id).FirstOrDefault();
+                                         where payScaleToFind.Scale == payScale.Scale && payScaleToFind.OrganisationId == payScale.OrganisationId
+                                         select payScaleToFind.Id).FirstOrDefault();
             bool status = true;
 
             switch (mode)

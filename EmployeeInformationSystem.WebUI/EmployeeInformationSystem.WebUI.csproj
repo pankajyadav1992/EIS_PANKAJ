@@ -651,6 +651,14 @@
     <Content Include="Views\MasterData\LevelForm.cshtml" />
     <Content Include="Views\MasterData\PayScale.cshtml" />
     <Content Include="Views\MasterData\PayScaleForm.cshtml" />
+    <Content Include="Views\MasterData\Organisation.cshtml" />
+    <Content Include="Views\MasterData\OrganisationForm.cshtml" />
+    <Content Include="Views\MasterData\Degree.cshtml" />
+    <Content Include="Views\MasterData\DegreeForm.cshtml" />
+    <Content Include="Views\MasterData\Department.cshtml" />
+    <Content Include="Views\MasterData\DepartmentForm.cshtml" />
+    <Content Include="Views\MasterData\Discipline.cshtml" />
+    <Content Include="Views\MasterData\DisciplineForm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

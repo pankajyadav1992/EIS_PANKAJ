@@ -1,0 +1,184 @@
+﻿@model EmployeeInformationSystem.Core.ViewModels.DataViewModel
+@{ViewBag.Title = "Master Data Management";}
+
+@section CustomStyles{
+    <style>
+        #overlay {
+            position: absolute;
+            justify-content: left;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(130, 130, 130, 0.5);
+        }
+    </style>
+
+}
+@section Admin{
+    class="active"
+}
+
+<div id="overlay" style="display:none;text-align:center;">
+    <img src="~/Content/img/spinner.gif" style="resize:inherit;" />
+    <br />
+</div>
+
+
+<!-- Page Header-->
+<header class="page-header">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Manage - Degrees</h2>
+    </div>
+</header>
+<!-- Forms Section-->
+<section class="forms">
+    <div class="container-fluid" style="position:relative">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Degree List</h3>
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary ml-auto modalBtn" data-targetid="newDegree" data-role="Add">
+                                Add New
+                            </button>
+                        </div>
+                        <div class="card-body" style="overflow-y: scroll; max-height: 550px;">
+
+                            <table class="table table-striped table-hover">
+                                <tr>
+
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Degrees.First().Name)
+                                    </th>
+                                    <th>Action</th>
+                                </tr>
+
+                                @foreach (var item in Model.Degrees)
+                                {
+                                    <tr>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Name)
+                                        </td>
+                                        <td>
+                                            <a href="#" class="modalBtn" data-targetid="@item.Id" data-role="Edit">Edit</a> |
+                                            <a href="#" class="modalBtn" data-targetid="@item.Id" data-role="Delete">Delete</a>
+                                        </td>
+                                    </tr>
+                                }
+
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    ...
+                </div>
+                <div class="modal-footer" id="modalFooter">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeBtn" data-pagerefresh="false">Close</button>
+                    <button type="button" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+
+            $('#modal').on('hidden.bs.modal', function () {
+                if ("true" == $("#closeBtn").data("pagerefresh")) location.reload();
+            });
+
+            $(".modalBtn").click(function () {
+                $('#overlay').fadeIn();
+                var id = $(this).data("targetid");
+                var role = $(this).data("role");
+                if ("" != role) {
+
+                    $.ajax({
+                        url: '@Url.Action("ManageForm", "MasterData")?mode=' + role + '&dataType=Degree' + '&Id=' + id,
+                        success: function (result) {
+                            $("#modalBody").html(result);
+                            $("#saveChangesBtn").show();
+                        },
+                        error: function () {
+                            $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                            $("#saveChangesBtn").hide();
+                        },
+                        fail: function (xhr, textStatus, errorThrown) {
+                            $('#modalBody').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                            $("#saveChangesBtn").hide();
+                        },
+                        complete: function () {
+                            $('#overlay').fadeOut();
+                            $("#modalTitle").html(role +" Degree");
+                            $('#modal').modal('show');
+                        }
+                    });
+                }
+            });
+
+            $("#saveChangesBtn").click(function () {
+                $('#overlay').fadeIn();
+                var formType = $('#manageForm').data('formtype');
+                var formUrl = $('#manageForm').attr('action') + "?mode=" + formType;
+                var formData = new FormData(document.getElementById('manageForm'));
+                var text = null;
+                switch (formType) {
+                    case "Add": text = "added"; break;
+                    case "Edit": text = "updated"; break;
+                    case "Delete": text = "deleted"; break;
+                }
+                $.ajax({
+                    url: formUrl,
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (result) {
+                        if ('Success' == result) {
+                            $('#modalBody').html('<div class="alert alert-success" role="alert"> Successfully ' + text + ' degree</div >');
+                            $("#saveChangesBtn").fadeOut();
+                            $("#closeBtn").data("pagerefresh", "true")
+                        } else {
+                            $('#modalBody').html(result);
+                            $("#saveChangesBtn").show();
+                        }
+                    },
+                    error: function () {
+                        $('#modalBody').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');
+                        $("#saveChangesBtn").fadeOut();
+                    },
+                    fail: function (xhr, textStatus, errorThrown) {
+                        $('#modalBody').html('<div class="alert alert-danger" role="alert">Request Failed with error: ' + errorThrown + '</div > ');
+                        $("#saveChangesBtn").fadeOut();
+                    },
+                    complete: function () {
+                        $('#overlay').fadeOut();
+                    }
+                });
+            });
+
+        });
+    </script>
+}
