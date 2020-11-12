@@ -33,6 +33,11 @@ namespace EmployeeInformationSystem.Core.ViewModels
         [Display(Name = "Departments")]
         public IEnumerable<String> Departments { get; set; }
 
+        [Display(Name = "Organisation")]
+        public IEnumerable<String> Organisation { get; set; }
+        [Display(Name = "Level")]
+        public IEnumerable<String> Level { get; set; }
+
         [Display(Name = "Personal Details")]
         public IEnumerable<String> PersonalDetailsColumns { get; set; }
 
@@ -57,6 +62,11 @@ namespace EmployeeInformationSystem.Core.ViewModels
             }
         }
         public IEnumerable<SelectListItem> AllDepartments { get; set; }
+
+        public IEnumerable<SelectListItem> AllOrganizations { get; set; }
+        public IEnumerable<SelectListItem> AllLevels { get; set; }
+
+
 
         public IEnumerable<SelectListItem> AllPersonalDetailsColumns
         {
@@ -93,6 +103,8 @@ namespace EmployeeInformationSystem.Core.ViewModels
 
         // Addition for custom reports 
         public string CustomReportType { get; set; }
+
+        public string Working { get; set; }
 
         public IEnumerable<SelectListItem> AllCustomColumns
         {
