@@ -1,12 +1,12 @@
 ﻿using EmployeeInformationSystem.Core.Contracts;
 using EmployeeInformationSystem.Core.Models;
-using EmployeeInformationSystem.Core.ViewModels;
 using EmployeeInformationSystem.Services;
 using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using EmployeeInformationSystem.Core.ViewModels;
 using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
@@ -324,11 +324,12 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                   select new
                                   {
                                       employee.EmployeeCode,
-                                      FullName = employee.Title + ' ' + employee.FirstName + employee.MiddleName + employee.LastName,
-
+                                      FullName = employee.Title + " " + employee.FirstName + " " + (employee.MiddleName==""?"":(employee.MiddleName+" ")) + employee.LastName,
+                                      
                                       Organisation = y == null ? "" : y.Name,
                                       Discipline = y1 == null ? "" : y1.Name,
                                       Level = y2 == null ? "" : y2.Name,
+                                      employee.DateofJoiningDGH,
                                       employee.DateOfSuperannuation,
                                       employee.WorkingStatus,
                                       employee.LevelId,
