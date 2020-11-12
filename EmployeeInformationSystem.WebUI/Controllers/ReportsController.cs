@@ -329,13 +329,39 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                       Organisation = y == null ? "" : y.Name,
                                       Discipline = y1 == null ? "" : y1.Name,
                                       Level = y2 == null ? "" : y2.Name,
+                                      employee.DateOfSuperannuation,
+                                      employee.WorkingStatus,
                                       employee.LevelId,
                                       employee.OrganisationId,
-                                  }).Distinct().Where(x => reportSelection.Organisation.Contains(x.OrganisationId) && reportSelection.Level.Contains(x.LevelId)).ToList();
-               
-                dt_= ToDataTable(employees1);
+                                  }).Distinct().Where(x => reportSelection.Organisation.Contains(x.OrganisationId) && reportSelection.Level.Contains(x.LevelId)
+                &&
+                                      (reportSelection?.Working == "working" ? x.WorkingStatus == true :
+                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false)).ToList();
+
+
+                dt_ = ToDataTable(employees1);
                 dt_.Columns.Remove("LevelId");
                 dt_.Columns.Remove("OrganisationId");
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+                else if (!reportSelection.From.HasValue)
+                {
+                    var emp = employees1.Where(x => x.DateOfSuperannuation <= reportSelection.To || (!x.WorkingStatus && x.DateOfSuperannuation < reportSelection.To)).ToList();
+                    //                 select employee).Distinct().ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else if (!reportSelection.To.HasValue)
+                {
+                    var emp = employees1.Where(x => x.DateOfSuperannuation >= reportSelection.From).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else
+                {
+                    var emp = employees1.Where(x => x.DateOfSuperannuation >= reportSelection.From && x.DateOfSuperannuation <= reportSelection.To).ToList();
+                    dt_ = ToDataTable(emp);
+                }
                 return View("GeneratedReportView", dt_);
             }
         }
