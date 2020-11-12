@@ -131,6 +131,16 @@ namespace EmployeeInformationSystem.Services
                         {"Others","Others" }
                     };
                     break;
+                case "TenureReport":
+                    columns = new Dictionary<string, string>()
+                    {
+                       {"Advisor", "Advisor" },{"ContractualDGHStaff", "Contractual - DGH Staff" },
+                      {"Consultant","Consultant"},
+                        {"ContractualMoPNGStaff", "Contractual - MoPNG Staff" },
+                        {"TraineeOfficer","Trainee Officer" },
+
+                    };
+                    break;
                 default:
                     columns = new Dictionary<string, string>();
                     break;
