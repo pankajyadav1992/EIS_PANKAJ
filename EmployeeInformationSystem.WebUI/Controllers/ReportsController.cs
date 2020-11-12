@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -284,8 +285,169 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         {
             return PartialView(targetPage, GetViewModel(targetPage));
         }
-
+        //vaibhav
         [HttpPost]
+        public ActionResult TenureReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                DataTable dt_ = null;
+                return View("GeneratedReportView", dt_);
+            }
+        }
+        [HttpPost]
+        public ActionResult SuperannuationReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                DataTable dt_ = null;
+                var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+                                  join disci in DisciplineContext.Collection().ToList()
+                                    on employee.DisciplineId equals disci.Id into yy
+                                  from y1 in yy.DefaultIfEmpty()
+                                  join level in LevelContext.Collection().ToList()
+                                        on employee.LevelId equals level.Id into yy1
+                                  from y2 in yy1.DefaultIfEmpty()
+                                  join org in OrganisationContext.Collection().ToList()
+                                  // where(employee.OrganisationId == org.Id)
+                                  on employee.OrganisationId equals org.Id into xx
+                                  //into xx
+                                  from y in xx.DefaultIfEmpty()
+                                  select new
+                                  {
+                                      employee.EmployeeCode,
+                                      FullName = employee.Title + ' ' + employee.FirstName + employee.MiddleName + employee.LastName,
+
+                                      Organisation = y == null ? "" : y.Name,
+                                      Discipline = y1 == null ? "" : y1.Name,
+                                      Level = y2 == null ? "" : y2.Name,
+                                      employee.DateOfSuperannuation,
+                                      employee.WorkingStatus,
+                                      employee.LevelId,
+                                      employee.OrganisationId,
+                                  }).Distinct().Where(x => reportSelection.Organisation.Contains(x.OrganisationId) && reportSelection.Level.Contains(x.LevelId)
+                &&
+                                      (reportSelection?.Working == "working" ? x.WorkingStatus == true :
+                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false)).ToList();
+
+
+                dt_ = ToDataTable(employees1);
+                dt_.Columns.Remove("LevelId");
+                dt_.Columns.Remove("OrganisationId");
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+                else if (!reportSelection.From.HasValue)
+                {
+                    var emp = employees1.Where(x => x.DateOfSuperannuation <= reportSelection.To || (!x.WorkingStatus && x.DateOfSuperannuation < reportSelection.To)).ToList();
+                    //                 select employee).Distinct().ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else if (!reportSelection.To.HasValue)
+                {
+                    var emp = employees1.Where(x => x.DateOfSuperannuation >= reportSelection.From).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else
+                {
+                    var emp = employees1.Where(x => x.DateOfSuperannuation >= reportSelection.From && x.DateOfSuperannuation <= reportSelection.To).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                return View("GeneratedReportView", dt_);
+            }
+        }
+            [HttpPost]
+        public ActionResult ManPowerReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+             else
+                {
+                ViewBag.Title = "Man Power Report";
+                DataTable dt_ = null;
+                var type = reportSelection.CustomColumns.ToList();
+               // var status = reportSelection?.Working == "working" ? true : reportSelection?.Working == "separated" ? false : null;
+                // List<EmployeeDetail> employees = new List<EmployeeDetail>();
+                
+                    var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+                                      join disci in DisciplineContext.Collection().ToList() 
+                                      on employee.DisciplineId equals disci.Id into yy
+                                      from y1 in yy.DefaultIfEmpty()
+                                      join level in LevelContext.Collection().ToList() 
+                                        on employee.LevelId equals level.Id into yy1
+                                        from y2 in yy1.DefaultIfEmpty()
+                                      join org in OrganisationContext.Collection().ToList()
+                                      // where(employee.OrganisationId == org.Id)
+                                      on employee.OrganisationId equals org.Id into xx
+                                      //into xx
+                                      from y in xx.DefaultIfEmpty()
+                                      select new
+                                      {
+                                          employee.EmployeeCode,
+                                          FullName = employee.Title+' '+employee.FirstName+ employee.MiddleName + employee.LastName,
+
+                                          employee.EmployeeType,
+
+                                          employee.AadhaarNumber,
+                                          employee.BloodGroup,
+
+                                          Organisation=y == null ?"": y.Name ,
+                                          employee.DateOfBirth,
+                                          employee.DateOfSuperannuation,
+                                          employee.DateofJoiningParentOrg,
+employee.DateofRelievingLastOffice,employee.DateofJoiningDGH,employee.DateofLeavingDGH,employee.ReasonForLeaving,employee.DeputationPeriod,employee.SeatingLocation,
+employee.MobileNumber,employee.ResidenceNumber,employee.ResidenceAddress,employee.PermanentAddress,employee.EmailID,
+employee.ProfilePhoto,employee.WorkingStatus,
+employee.Gender,Discipline=y1==null?"":y1.Name,employee.PrimaryExpertise,Level=y2==null?"":y2.Name ,employee.CurrentBasicPay,employee.PANNumber,
+employee.PassportNumber,employee.PassportValidity,employee.VehicleNumber,employee.MaritalStatus,employee.MarriageDate,
+employee.AlternateEmailID,employee.EmergencyPerson,employee.EmergencyContact,employee.UANNumber,employee.DeputedLocation,employee.CreatedAt,
+employee.LastUpdateAt,employee.LastUpdateBy,employee.VehicleType,employee.VehicleCategory,employee.EmergencyRelation,
+
+                                      }).Distinct().Where(x => type.Contains(x.EmployeeType.ToString()) &&
+                                      (reportSelection?.Working == "working" ?  x.WorkingStatus == true :
+                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false)
+                       
+).ToList();
+
+                
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue) {
+                    dt_ = ToDataTable(employees1);
+                }
+                else if (!reportSelection.From.HasValue)
+                {
+                var emp= employees1.Where(x => x.DateofJoiningDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To)).ToList();
+                    //                 select employee).Distinct().ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else if (!reportSelection.To.HasValue)
+                {
+                  var emp=  employees1.Where(x => x.DateofJoiningDGH >= reportSelection.From).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else 
+                {
+                  var emp= employees1.Where(x => x.DateofJoiningDGH >= reportSelection.From && x.DateofJoiningDGH <= reportSelection.To).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+           
+
+             
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+            [HttpPost]
         public ActionResult DeputationistVintageReport(ReportSelectionViewModel reportSelection)
         {
             if (!ModelState.IsValid)
@@ -339,14 +501,14 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                   where (employee.DateofJoiningDGH >= reportSelection.From && employee.DateofJoiningDGH <= reportSelection.To) &&
                                   ((posting.From >= reportSelection.From || !posting.From.HasValue) && (posting.To <= reportSelection.To || !posting.To.HasValue))
                                   select employee).Distinct().ToList();
-
+              //  reportSelection.CustomColumns.
                 DataTable dt_ = GetDataTable(employees, reportSelection);
 
                 return View("GeneratedReportView", dt_);
             }
         }
-
-        private DataTable GetDataTable(List<EmployeeDetail> employees, ReportSelectionViewModel reportSelection)
+       
+            private DataTable GetDataTable(List<EmployeeDetail> employees, ReportSelectionViewModel reportSelection)
         {
             DataTable dt_ = new DataTable("Report");
             DataColumn dtColumn;
@@ -504,6 +666,16 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             reportSelectionViewModel.AllDepartments = (from department in DepartmentContext.Collection()
                                                        orderby department.Name
                                                        select new SelectListItem() { Value = department.Id, Text = department.Name }).AsEnumerable<SelectListItem>();
+            if(customReportType== "SuperannuationReport")
+            {
+                reportSelectionViewModel.AllOrganizations = (from org in OrganisationContext.Collection()
+                                                           orderby org.Name
+                                                           select new SelectListItem() { Value = org.Id, Text = org.Name }).AsEnumerable<SelectListItem>();
+                reportSelectionViewModel.AllLevels = (from level in LevelContext.Collection()
+                                                             orderby level.Name
+                                                             select new SelectListItem() { Value = level.Id, Text = level.Name }).AsEnumerable<SelectListItem>();
+
+            }
             return reportSelectionViewModel;
         }
 
@@ -520,6 +692,31 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             else if (employee.DateOfSuperannuation.HasValue) vintage = manipulateData.DateDifference(employee.DateOfSuperannuation.Value, VintageStartDate);// If nothing is available, use superannuation date
 
             return vintage;
+        }
+        public DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+
         }
     }
 }
