@@ -297,18 +297,15 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             {
                 DataTable dt_ = null;
                 var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
-                                  join dept in PostingDetailContext.Collection().ToList()
-                                  on employee.Id equals dept.EmployeeId
-                                  join promo in PromotionDetailContext.Collection().ToList()
-                                    on employee.Id equals promo.EmployeeId
-                                  join disci in DisciplineContext.Collection().ToList()
-                                    on employee.DisciplineId equals disci.Id into yy
-                                  from y1 in yy.DefaultIfEmpty()
-                                  join level in LevelContext.Collection().ToList()
-                                        on employee.LevelId equals level.Id into yy1
-                                  from y2 in yy1.DefaultIfEmpty()
+                                 
+                                  //join disci in DisciplineContext.Collection().ToList()
+                                  //  on employee.DisciplineId equals disci.Id into yy
+                                  //from y1 in yy.DefaultIfEmpty()
+                                  //join level in LevelContext.Collection().ToList()
+                                  //      on employee.LevelId equals level.Id into yy1
+                                  //from y2 in yy1.DefaultIfEmpty()
                                   join org in OrganisationContext.Collection().ToList()
-                                  // where(employee.OrganisationId == org.Id)
+                                  //// where(employee.OrganisationId == org.Id)
                                   on employee.OrganisationId equals org.Id into xx
                                   //into xx
                                   from y in xx.DefaultIfEmpty()
@@ -316,12 +313,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                   {
                                       employee.EmployeeCode,
                                       FullName = employee.Title + ' ' + employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
-                                      Department = dept.Department.Name,
-                                      Designation = promo.Designation.Name,
+                                      Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+
                                       EmployeeType = employee.EmployeeType.GetDisplayName(),
                                       Organisation = y == null ? "" : y.Name,
-                                      Discipline = y1 == null ? "" : y1.Name,
-                                      Level = y2 == null ? "" : y2.Name,
+                                      //Discipline = y1 == null ? "" : y1.Name,
+                                      //Level = y2 == null ? "" : y2.Name,
                                       Vintage = ManPowerEtraDetai("Vintage", employee, reportSelection),
                                       employee.DateofJoiningDGH,
                                       employee.DateOfSuperannuation,
@@ -378,11 +376,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 DataTable dt_ = null;
                 var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
                                 
-                                  join disci in DisciplineContext.Collection().ToList()
-                                    on employee.DisciplineId equals disci.Id into yy
-                                  from y1 in yy.DefaultIfEmpty()
+                                  //join disci in DisciplineContext.Collection().ToList()
+                                  //  on employee.DisciplineId equals disci.Id into yy
+                                  //from y1 in yy.DefaultIfEmpty()
                                   join level in LevelContext.Collection().ToList()
-                                        on employee.LevelId equals level.Id into yy1
+                                       on employee.LevelId equals level.Id into yy1
                                   from y2 in yy1.DefaultIfEmpty()
                                   join org in OrganisationContext.Collection().ToList()
                                   // where(employee.OrganisationId == org.Id)
@@ -397,8 +395,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                       Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
                                       EmployeeType = employee.EmployeeType.GetDisplayName(),
                                       Organisation = y == null ? "" : y.Name,
-                                      Discipline = y1 == null ? "" : y1.Name,
-                                      Level = y2 == null ? "" : y2.Name,
+                                      //Discipline = y1 == null ? "" : y1.Name,
+                                      //Level = y2 == null ? "" : y2.Name,
                                       employee.DateofJoiningDGH,
                                       employee.DateOfSuperannuation,
                                       employee.ReasonForLeaving,
