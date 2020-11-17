@@ -662,6 +662,7 @@
     <Content Include="Views\Reports\ManPowerReport.cshtml" />
     <Content Include="Views\Reports\SuperannuationReport.cshtml" />
     <Content Include="Views\Reports\TenureReport.cshtml" />
+    <Content Include="Views\Reports\PromotionReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
