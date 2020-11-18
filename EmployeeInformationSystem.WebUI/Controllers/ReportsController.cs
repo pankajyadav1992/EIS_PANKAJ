@@ -363,6 +363,101 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
            
         }
+
+
+        [HttpPost]
+        public ActionResult Quali_Exp_Pay_Report(ReportSelectionViewModel reportSelection)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+               
+                DataTable dt_ = null;
+                var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+                                  join org in OrganisationContext.Collection().ToList()
+                                //// where(employee.OrganisationId == org.Id)
+                                on employee.OrganisationId equals org.Id into xx
+                                  //into xx
+                                  from y in xx.DefaultIfEmpty()
+                                  select new
+                                  {
+                                      employee.EmployeeCode,
+                                      FullName = employee.Title + ' ' + employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                      Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                                      QualificationDetails = ManPowerEtraDetai("Qualification Details", employee, reportSelection),
+
+                                      CurrentBasicPay = employee.CurrentBasicPay,
+                                      PastExperience = employee.OrganisationId != null ? ManPowerEtraDetai("Past Experience", employee, reportSelection) : "",
+
+                                      employee.WorkingStatus,
+                                      EmployeeTypeId = employee.EmployeeType,
+                                  }).Distinct().Where(x => reportSelection.CustomColumns.Contains(x.EmployeeTypeId.ToString())
+                &&
+                                      (reportSelection?.Working == "working" ? x.WorkingStatus == true :
+                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false)).ToList();
+                dt_ = ToDataTable(employees1);
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Past_Emp_Report(ReportSelectionViewModel reportSelection)
+            {
+
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                DataTable dt_ = null;
+                var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+                                  join org in OrganisationContext.Collection().ToList()
+                                //// where(employee.OrganisationId == org.Id)
+                                on employee.OrganisationId equals org.Id into xx
+                                  //into xx
+                                  from y in xx.DefaultIfEmpty()
+                                  select new
+                                  {
+                                      employee.EmployeeCode,
+                                      FullName = employee.Title + ' ' + employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                      Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                                      employee.DateofJoiningDGH,
+                                      employee.DateofLeavingDGH,
+                                      employee.ReasonForLeaving,
+                                      employee.WorkingStatus,
+                                      EmployeeTypeId = employee.EmployeeType,
+                                  }).Distinct().Where(x=>x.WorkingStatus == false && x.EmployeeTypeId!=EmployeeType.Deputationist).ToList();
+                dt_ = ToDataTable(employees1);
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+                else if (!reportSelection.From.HasValue)
+                {
+                    var emp = employees1.Where(x => x.DateofJoiningDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofJoiningDGH < reportSelection.To)).ToList();
+                    //                 select employee).Distinct().ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else if (!reportSelection.To.HasValue)
+                {
+                    var emp = employees1.Where(x => x.DateofJoiningDGH >= reportSelection.From).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else
+                {
+                    var emp = employees1.Where(x => x.DateofJoiningDGH >= reportSelection.From && x.DateofJoiningDGH <= reportSelection.To).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                return View("GeneratedReportView", dt_);
+            }
+        }
         [HttpPost]
         public ActionResult TenureReport(ReportSelectionViewModel reportSelection)
         {
@@ -572,7 +667,23 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                            ).ToArray();
                     columdetail = String.Join("NUMBER", promotions);
                     break;
-               
+                case "Pay Scale":
+                    string[] payscale =(from pay in PayScaleContext.Collection().Where(x => x.OrganisationId==employee.OrganisationId).ToList()
+                                           select pay.Scale).ToArray();
+
+                    columdetail = String.Join("NUMBER", payscale);
+                    break;
+                case "Past Experience":
+                    string[] past_exp = (from exp in PastExperienceContext.Collection().Where(x => x.EmployeeId == employee.Id).ToList()
+                                         select (!string.IsNullOrEmpty(exp.Position)?
+                                         "Postion: " + exp.Position:"")+
+                                         (!string.IsNullOrEmpty(exp.Organisation) ? ", Organisation: " + exp.Organisation : "")+
+                                            (exp.From.HasValue ? ", From: " + exp.From : "")+
+                                             (exp.To.HasValue ? ", To: " + exp.To : "")
+                                         ).ToArray();
+
+                    columdetail = String.Join("NUMBER", past_exp);
+                    break;
                 //case "Department":
                 //    var department = (from dept in PostingDetailContext.Collection().Where(q => q.EmployeeId == employee.Id).ToList()
                 //                           select dept.Department );

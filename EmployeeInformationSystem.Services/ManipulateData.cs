@@ -141,6 +141,17 @@ namespace EmployeeInformationSystem.Services
 
                     };
                     break;
+                case "Quali_Exp_Pay_Report":
+                    columns = new Dictionary<string, string>()
+                    {
+                        {"Deputationist", "Deputationist" },{"Advisor", "Advisor" },{"ContractualDGHStaff", "Contractual - DGH Staff" },
+                      {"Consultant","Consultant"},
+                        {"ContractualMoPNGStaff", "Contractual - MoPNG Staff" },
+                        {"TraineeOfficer","Trainee Officer" },
+
+                        {"Others","Others" }
+                    };
+                    break;
                 default:
                     columns = new Dictionary<string, string>();
                     break;
