@@ -38,6 +38,9 @@ namespace EmployeeInformationSystem.Core.ViewModels
         [Display(Name = "Level")]
         public IEnumerable<String> Level { get; set; }
 
+        [Display(Name = "Month")]
+        public IEnumerable<String> Month { get; set; }
+
         [Display(Name = "Personal Details")]
         public IEnumerable<String> PersonalDetailsColumns { get; set; }
 
@@ -66,6 +69,7 @@ namespace EmployeeInformationSystem.Core.ViewModels
         public IEnumerable<SelectListItem> AllOrganizations { get; set; }
         public IEnumerable<SelectListItem> AllLevels { get; set; }
 
+        public IEnumerable<SelectListItem> AllMonths { get; set; }
 
 
         public IEnumerable<SelectListItem> AllPersonalDetailsColumns
