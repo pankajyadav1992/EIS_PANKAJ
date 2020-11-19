@@ -286,6 +286,69 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return PartialView(targetPage, GetViewModel(targetPage));
         }
         //vaibhav
+
+        [HttpPost]
+
+        public ActionResult birthdayandAniReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                DataTable dt_ = null;
+                var employees1 = (from employee in EmployeeDetailContext.Collection().Where(x => x.DateOfBirth != null).ToList()
+                                 join post in PostingDetailContext.Collection().ToList()
+                                 on employee.Id equals post.EmployeeId 
+                                 select new
+                                 {
+                                     employee.EmployeeCode,
+                                     FullName = employee.Title + ' ' + employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                     EmployeeType = employee.EmployeeType.GetDisplayName(),
+                                     Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                     Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                                     employee.WorkingStatus,
+                                     DateOfBirth = employee.DateOfBirth,
+                                     employeeId=employee.Id,
+                                     DepartmentId=post.DepartmentId
+
+
+                                 } into s
+                                 group s by s.employeeId into g
+                                 from y1 in g 
+                                  select new{
+                                      y1.EmployeeCode,
+                                      y1.FullName,
+                                      EmployeeType = y1.EmployeeType,
+                                      y1.Department,
+                                      y1.Designation,
+                                      y1.WorkingStatus,
+                                      DateOfBirth = y1.DateOfBirth,
+                                      EmployeeId=y1.employeeId,
+                                      y1.DepartmentId,
+                                      DateOfBirthMonth = y1.DateOfBirth?.ToString("MM"),
+
+                                  }
+
+
+                                 ).
+             Distinct().Where(x => reportSelection.Departments.Contains(x.DepartmentId)
+                && reportSelection.Month.Contains(x.DateOfBirthMonth) &&
+                                      (reportSelection?.Working == "working" ? x.WorkingStatus == true :
+                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false))
+             .OrderByDescending(x => x.DateOfBirth).DistinctBy(x => x.EmployeeId).ToList();
+                dt_ = ToDataTable(employees1);
+              
+                    var emp = employees1.ToList();
+                    dt_ = ToDataTable(emp);
+                // dt_ = ToDataTable(employees1);
+                dt_.Columns.Remove("EmployeeId");
+               dt_.Columns.Remove("DepartmentId");
+                dt_.Columns.Remove("DateOfBirthMonth");
+                return View("GeneratedReportView", dt_);
+            }
+            }
         [HttpPost]
         public ActionResult PromotionReport(ReportSelectionViewModel reportSelection)
         {
@@ -376,7 +439,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                // dt_ = ToDataTable(employees1);
                 //dt_.Columns.Remove("LevelId");
                 //dt_.Columns.Remove("OrganisationId");
-                //dt_.Columns.Remove("EmployeeTypeId");
+               dt_.Columns.Remove("EmployeeTypeId");
 
                 return View("GeneratedReportView", dt_);
             }
