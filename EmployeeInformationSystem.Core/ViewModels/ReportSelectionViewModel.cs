@@ -109,6 +109,7 @@ namespace EmployeeInformationSystem.Core.ViewModels
         public string CustomReportType { get; set; }
 
         public string Working { get; set; }
+        public string Type { get; set; }
 
         public IEnumerable<SelectListItem> AllCustomColumns
         {

@@ -310,7 +310,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
                                      employee.WorkingStatus,
                                      DateOfBirth = employee.DateOfBirth,
-                                     employeeId=employee.Id,
+                                     Anniversary=employee.MarriageDate,
+                                     employeeId =employee.Id,
                                      DepartmentId=post.DepartmentId
 
 
@@ -328,13 +329,15 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                       EmployeeId=y1.employeeId,
                                       y1.DepartmentId,
                                       DateOfBirthMonth = y1.DateOfBirth?.ToString("MM"),
-
+                                      AnniversaryMonth = y1.Anniversary?.ToString("MM"),
+                                      y1.Anniversary,
                                   }
 
 
                                  ).
              Distinct().Where(x => reportSelection.Departments.Contains(x.DepartmentId)
-                && reportSelection.Month.Contains(x.DateOfBirthMonth) &&
+                && reportSelection.Month.Contains(reportSelection?.Type == "Birthday" ?
+                x.DateOfBirthMonth: reportSelection?.Type== "Anniversary"?x.AnniversaryMonth : (x.DateOfBirthMonth)) &&
                                       (reportSelection?.Working == "working" ? x.WorkingStatus == true :
                                       reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false))
              .OrderByDescending(x => x.DateOfBirth).DistinctBy(x => x.EmployeeId).ToList();
@@ -346,6 +349,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("EmployeeId");
                dt_.Columns.Remove("DepartmentId");
                 dt_.Columns.Remove("DateOfBirthMonth");
+                dt_.Columns.Remove("AnniversaryMonth");
+                
                 return View("GeneratedReportView", dt_);
             }
             }
@@ -482,6 +487,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 &&
                                       (reportSelection?.Working == "working" ? x.WorkingStatus == true :
                                       reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false)).ToList();
+                dt_.Columns.Remove("EmployeeTypeId");
                 dt_ = ToDataTable(employees1);
                 return View("GeneratedReportView", dt_);
             }
