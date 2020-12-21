@@ -666,6 +666,8 @@
     <Content Include="Views\Reports\Quali_Exp_Pay_Report.cshtml" />
     <Content Include="Views\Reports\Past_Emp_Report.cshtml" />
     <Content Include="Views\Reports\birthdayandAnniReport.cshtml" />
+    <Content Include="Views\Reports\DateOfJoiningReport.cshtml" />
+    <Content Include="Views\Reports\SeparationReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -66,8 +66,18 @@
             </select>
         </div>
     </div>
+
     <div class="form-group row offset-sm-3">
         <div classs="col-sm-9" style="display:none;color: red;" id="errorworking">Please select status</div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-3 form-control-label">Employee Type</label>
+        <div class="col-sm-5">
+            @Html.ListBoxFor(model => model.CustomColumns, Model.AllCustomColumns, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+        </div>
+    </div>
+    <div class="form-group row offset-sm-3">
+        <div classs="col-sm-9" style="display:none;color: red;" id="errorColumns">Please select Employee Type</div>
     </div>
     @*<div class="form-group row">
             @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
@@ -116,6 +126,11 @@
             } else {
                 $("#errorworking").hide();
             }
+            if (0 == $('#@Html.IdFor(model => model.CustomColumns) :selected').length ) {
+               $("#errorColumns").show(); isValid = false;
+           } else {
+               $("#errorColumns").hide();
+           }
             if (!isValid) {
                 e.preventDefault(); //prevent the default action
             } else {
