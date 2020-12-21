@@ -30,7 +30,7 @@
         </div>
         <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
     </div>
-    <div class="form-group row">
+    @*<div class="form-group row">
         <label class="col-sm-3 form-control-label">Status</label>
         <div class="col-sm-5">
             <select id="working" name="Working">
@@ -40,10 +40,10 @@
                 <option value="all">All</option>
             </select>
         </div>
-    </div>
-    <div class="form-group row offset-sm-3">
+    </div>*@
+    @*<div class="form-group row offset-sm-3">
         <div classs="col-sm-9" style="display:none;color: red;" id="errorworking">Please select status</div>
-    </div>
+    </div>*@
     <div class="form-group row">
         <label class="col-sm-3 form-control-label">Employee Type</label>
         <div class="col-sm-5">
@@ -73,20 +73,21 @@
 <script>
         $(document).ready(function () {
         $(document).on('click', '#reportSubmitBtn', function (e) {
-           var isValid = true;
+            var isValid = true;
+            
            var australianDate = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$|^$/;
 
-            if (0 == $('#@Html.IdFor(model => model.Categories) :selected').length) {
+            @*if (0 == $('#@Html.IdFor(model => model.Categories) :selected').length) {
                $("#errorDepartment").show(); isValid = false;
            } else {
                 $("#errorDepartment").hide();
-           }
+           }*@
 
-           if (0 == $('#working :selected').val()) {
-               $("#errorworking").show(); isValid = false;
-           } else {
-               $("#errorworking").hide();
-           }
+           //if (0 == $('#working :selected').val()) {
+           //    $("#errorworking").show(); isValid = false;
+           //} else {
+           //    $("#errorworking").hide();
+           //}
 
            if (!australianDate.test($("#@Html.IdFor(model => model.From)").val())) {
                $("#errorFromDate").show(); isValid = false;
@@ -113,8 +114,10 @@
                  $("#errorSeparationType").hide();
            }
             if (!isValid) {
+                
                 e.preventDefault(); //prevent the default action
             } else {
+                
                 $('#overlay').fadeIn(); // show spinner
             }
            });

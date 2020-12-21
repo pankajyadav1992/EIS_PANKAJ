@@ -785,9 +785,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                   })
                 .Distinct().Where(x => reportSelection.CustomColumns.Contains(x.EmployeeTypeId.ToString())
                
-                && (reportSelection.SeparationReason.Contains(x.ReasonForLeaving.ToString())) &&
-                                      (reportSelection?.Working == "working" ? x.WorkingStatus == true :
-                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false)).ToList();
+                && reportSelection.SeparationReason.Contains(x.ReasonForLeaving.ToString())).ToList();
 
 
                 dt_ = ToDataTable(employees1);

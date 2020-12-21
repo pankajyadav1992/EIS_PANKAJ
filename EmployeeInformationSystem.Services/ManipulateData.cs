@@ -209,7 +209,7 @@ namespace EmployeeInformationSystem.Services
 
                         {"Superannuation","Superannuation" },
                          {"ConsultancyCompletion","Consultancy Completion" },
-                         {"Others","Others" },
+                         {"Others","Others" }
                        
                           
                     };

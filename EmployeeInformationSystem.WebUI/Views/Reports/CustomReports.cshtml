@@ -102,6 +102,7 @@
             $('#continueBtn').click(function () {
                 $('#overlay').fadeIn();
                 var targetPage = $("#chooseReportType").children("option:selected").val();
+               
                 if ('NA' != targetPage) {
                     $.ajax({
                         url: '@Url.Action("SelectCustomReport", "Reports")?targetPage=' + targetPage ,
