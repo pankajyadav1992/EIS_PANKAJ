@@ -66,6 +66,12 @@ namespace EmployeeInformationSystem.Core.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
         public DateTime? DateofRelievingLastOffice { get; set; }
 
+        [Display(Name = "Date Of Contract Expiry")]
+        [Column(TypeName = "date")]
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd-MM-yyyy}")]
+        public DateTime? DateOfContractExpiry { get; set; }
+
         //Make required in View Model
         [Display(Name = "Date of Joining DGH")]
         [Column(TypeName = "date")]

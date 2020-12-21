@@ -18,7 +18,7 @@
     <AssemblyName>EmployeeInformationSystem.WebUI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -659,6 +659,15 @@
     <Content Include="Views\MasterData\DepartmentForm.cshtml" />
     <Content Include="Views\MasterData\Discipline.cshtml" />
     <Content Include="Views\MasterData\DisciplineForm.cshtml" />
+    <Content Include="Views\Reports\ManPowerReport.cshtml" />
+    <Content Include="Views\Reports\SuperannuationReport.cshtml" />
+    <Content Include="Views\Reports\TenureReport.cshtml" />
+    <Content Include="Views\Reports\PromotionReport.cshtml" />
+    <Content Include="Views\Reports\Quali_Exp_Pay_Report.cshtml" />
+    <Content Include="Views\Reports\Past_Emp_Report.cshtml" />
+    <Content Include="Views\Reports\birthdayandAnniReport.cshtml" />
+    <Content Include="Views\Reports\DateOfJoiningReport.cshtml" />
+    <Content Include="Views\Reports\SeparationReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -717,7 +726,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55818</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost/EIS</IISUrl>
+          <IISUrl>http://localhost:55818/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

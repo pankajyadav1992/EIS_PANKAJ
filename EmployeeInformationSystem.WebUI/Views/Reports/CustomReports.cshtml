@@ -47,7 +47,16 @@
                                 <div class="form-group">
                                     <select name="account" class="mr-5 form-control" style="width:500px" id="chooseReportType">
                                         <option value="NA" selected="selected">--Select option--</option>
+                                        <option value="ManPowerReport">Man Power Report</option>
+                                        <option value="SuperannuationReport">Superannuation Report</option>
+                                        <option value="TenureReport">Tenure Report</option>
                                         <option value="DeputationistVintageReport">Deputationist Vintage Report</option>
+                                        <option value="PromotionReport">Promotion Report</option>
+                                        <option value="Quali_Exp_Pay_Report">Qualification Experience or Pay-Scale Report</option>
+                                        <option value="Past_Emp_Report">Past Employee deputation with DGH Report</option>
+                                        <option value="birthdayandAnniReport">Birthday and Anniversary Report</option>
+                                        <option value="DateOfJoiningReport">Date of Joining Report</option>
+                                        <option value="SeparationReport">Separation Report</option>
                                     </select>
                                 </div>
                                 <div class="form-group ">
@@ -106,6 +115,7 @@
                                     format: 'dd-mm-yyyy'
                                 });
                             });
+                          
                         },
                         error: function () {
                             $('#reportDisplayBlock').html('<div class="alert alert-danger" role="alert"> An Error has occured </div >');

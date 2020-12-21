@@ -33,6 +33,14 @@ namespace EmployeeInformationSystem.Core.ViewModels
         [Display(Name = "Departments")]
         public IEnumerable<String> Departments { get; set; }
 
+        [Display(Name = "Organisation")]
+        public IEnumerable<String> Organisation { get; set; }
+        [Display(Name = "Level")]
+        public IEnumerable<String> Level { get; set; }
+
+        [Display(Name = "Month")]
+        public IEnumerable<String> Month { get; set; }
+
         [Display(Name = "Personal Details")]
         public IEnumerable<String> PersonalDetailsColumns { get; set; }
 
@@ -48,6 +56,9 @@ namespace EmployeeInformationSystem.Core.ViewModels
         [Display(Name = "Custom Columns")]
         public IEnumerable<String> CustomColumns { get; set; }
 
+        [Display(Name = "Separation Reason")]
+        public IEnumerable<String> SeparationReason { get; set; }
+
         public IEnumerable<SelectListItem> AllCategories
         {
             get
@@ -58,6 +69,19 @@ namespace EmployeeInformationSystem.Core.ViewModels
         }
         public IEnumerable<SelectListItem> AllDepartments { get; set; }
 
+        public IEnumerable<SelectListItem> AllOrganizations { get; set; }
+        public IEnumerable<SelectListItem> AllLevels { get; set; }
+
+        public IEnumerable<SelectListItem> AllMonths { get; set; }
+
+        public IEnumerable<SelectListItem> AllSeparationReasonColumns
+        {
+            get
+            {
+                return (from column in manipulateData.GetSeparationReasonList("SeparationReport")
+                        select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
+            }
+        }
         public IEnumerable<SelectListItem> AllPersonalDetailsColumns
         {
             get
@@ -94,6 +118,9 @@ namespace EmployeeInformationSystem.Core.ViewModels
         // Addition for custom reports 
         public string CustomReportType { get; set; }
 
+        public string Working { get; set; }
+        public string Type { get; set; }
+
         public IEnumerable<SelectListItem> AllCustomColumns
         {
             get
@@ -102,6 +129,8 @@ namespace EmployeeInformationSystem.Core.ViewModels
                         select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
             }
         }
+
+       
 
         public Dictionary<string, string> AllColumnsKeys
         {

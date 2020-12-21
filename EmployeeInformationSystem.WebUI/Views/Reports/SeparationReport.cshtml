@@ -1,0 +1,122 @@
+﻿@model EmployeeInformationSystem.Core.ViewModels.ReportSelectionViewModel
+
+
+@using (Html.BeginForm("SeparationReport", "Reports", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Separation Report" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.CustomReportType, new { Value = @Model.CustomReportType })
+
+    @*<div class="form-group row">
+            @Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+            <div class="col-sm-5">
+                @Html.ListBoxFor(model => model.Categories, Model.AllCategories, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+            </div>
+            <div classs="col-sm-4" style="display:none;color: red;" id="errorDepartment">Please select Departments</div>
+        </div>*@
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+        <div class="col-sm-5">
+            @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+        </div>
+        <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
+    </div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+        <div class="col-sm-5">
+            @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+        </div>
+        <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-3 form-control-label">Status</label>
+        <div class="col-sm-5">
+            <select id="working" name="Working">
+                <option value="0">Choose</option>
+                <option value="working">Working</option>
+                <option value="separated">Separated</option>
+                <option value="all">All</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row offset-sm-3">
+        <div classs="col-sm-9" style="display:none;color: red;" id="errorworking">Please select status</div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-3 form-control-label">Employee Type</label>
+        <div class="col-sm-5">
+            @Html.ListBoxFor(model => model.CustomColumns, Model.AllCustomColumns, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+        </div>
+    </div>
+    <div class="form-group row offset-sm-3">
+        <div classs="col-sm-9" style="display:none;color: red;" id="errorColumns">Please select columns</div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-3 form-control-label">Separation Type</label>
+        <div class="col-sm-5">
+            @Html.ListBoxFor(model => model.SeparationReason, Model.AllSeparationReasonColumns, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+        </div>
+    </div>
+    <div class="form-group row offset-sm-3">
+        <div classs="col-sm-9" style="display:none;color: red;" id="errorSeparationType">Please Select Separation Type</div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-9 offset-sm-3">
+            <input type="submit" value="Generate Report" class="btn btn-primary" id="reportSubmitBtn">
+        </div>
+    </div>
+
+}
+
+<script>
+        $(document).ready(function () {
+        $(document).on('click', '#reportSubmitBtn', function (e) {
+           var isValid = true;
+           var australianDate = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$|^$/;
+
+            if (0 == $('#@Html.IdFor(model => model.Categories) :selected').length) {
+               $("#errorDepartment").show(); isValid = false;
+           } else {
+                $("#errorDepartment").hide();
+           }
+
+           if (0 == $('#working :selected').val()) {
+               $("#errorworking").show(); isValid = false;
+           } else {
+               $("#errorworking").hide();
+           }
+
+           if (!australianDate.test($("#@Html.IdFor(model => model.From)").val())) {
+               $("#errorFromDate").show(); isValid = false;
+               console.log($("#@Html.IdFor(model => model.From)").val());
+           } else {
+               $("#errorFromDate").hide();
+           }
+
+           if (!australianDate.test($("#@Html.IdFor(model => model.To)").val())) {
+               console.log($("#@Html.IdFor(model => model.To)").val());
+               $("#errorToDate").show(); isValid = false;
+           } else {
+                $("#errorToDate").hide();
+           }
+
+           if (0 == $('#@Html.IdFor(model => model.CustomColumns) :selected').length ) {
+               $("#errorColumns").show(); isValid = false;
+           } else {
+               $("#errorColumns").hide();
+           }
+             if (0 == $('#@Html.IdFor(model => model.SeparationReason) :selected').length ) {
+                 $("#errorSeparationType").show(); isValid = false;
+           } else {
+                 $("#errorSeparationType").hide();
+           }
+            if (!isValid) {
+                e.preventDefault(); //prevent the default action
+            } else {
+                $('#overlay').fadeIn(); // show spinner
+            }
+           });
+        });
+</script>
