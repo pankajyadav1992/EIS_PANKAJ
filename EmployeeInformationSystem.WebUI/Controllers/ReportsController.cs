@@ -1203,7 +1203,55 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 return View("GeneratedReportView", dt_);
             }
         }
-       
+
+        [HttpPost]
+        public ActionResult LocalAddressReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                ViewBag.Title = "Address Report";
+                DataTable dt_ = null;
+                var type = reportSelection.CustomColumns.ToList();
+
+                var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+
+                                  select new
+                                  {
+                                      employee.EmployeeCode,
+                                      FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                      Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                                      EmployeeType = employee.EmployeeType.GetDisplayName(),
+                                      employee.MobileNumber,
+                                      employee.ResidenceNumber,
+                                      employee.ResidenceAddress,
+                                      employee.PermanentAddress,
+                                      employee.WorkingStatus ,
+                                      WorkStatus = employee.WorkingStatus == true ? "working" : "separated",
+                                      EmployeeTypeId = employee.EmployeeType,
+                                  }).Distinct().Where(p => type.Contains(p.EmployeeTypeId.ToString()) &&
+                                  (
+                                  reportSelection?.Working == "working" ? p.WorkingStatus == true :
+                                  reportSelection?.Working == "separated" ? p.WorkingStatus == false : p.WorkingStatus == true || p.WorkingStatus == false)).ToList();
+
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+               
+                dt_.Columns.Remove("EmployeeTypeId");
+                dt_.Columns.Remove("WorkingStatus");
+
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+
             private DataTable GetDataTable(List<EmployeeDetail> employees, ReportSelectionViewModel reportSelection)
         {
             DataTable dt_ = new DataTable("Report");
