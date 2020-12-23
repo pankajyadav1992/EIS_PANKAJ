@@ -669,6 +669,8 @@
     <Content Include="Views\Reports\DateOfJoiningReport.cshtml" />
     <Content Include="Views\Reports\SeparationReport.cshtml" />
     <Content Include="Views\Reports\LocalAddressReport.cshtml" />
+    <Content Include="Views\Reports\FamilyDetailsReport.cshtml" />
+    <Content Include="Views\Reports\AgeProfileReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

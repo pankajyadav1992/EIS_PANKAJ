@@ -1251,8 +1251,159 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
         }
 
+        [HttpPost]
+        public ActionResult FamilyDetailsReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                ViewBag.Title = "Family Details Report";
+                DataTable dt_ = null;
+                var type = reportSelection.CustomColumns.ToList();
 
-            private DataTable GetDataTable(List<EmployeeDetail> employees, ReportSelectionViewModel reportSelection)
+                var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+                                  join Dependt in DependentDetailContext.Collection().ToList()
+                                 on employee.Id equals Dependt.EmployeeId 
+                                  select new
+                                  {
+                                      employee.EmployeeCode,
+                                      FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                      EmployeeType = employee.EmployeeType.GetDisplayName(),
+                                      Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                                      Dependt.DependentName,
+                                      Dependt.Relationship,
+                                      DependentDetails = ManPowerEtraDetai("Dependent Details", employee, reportSelection),
+                                      Vintage = ManPowerEtraDetai("Vintage", employee, reportSelection),
+                                      DateOfBirth = employee.DateOfBirth?.ToString("dd-MM-yyyy"),
+                                      employee.WorkingStatus,
+                                      WorkStatus = employee.WorkingStatus == true ? "working" : "separated",
+                                      employee.Gender,
+                                      MarriageDate = employee.MarriageDate?.ToString("dd-MM-yyyy"),
+                                      employee.AlternateEmailID,
+                                      EmployeeTypeId = employee.EmployeeType,
+                                      employee.DateofJoiningDGH,
+                                      employee.DateofLeavingDGH,
+                                  }).Distinct().Where(p => type.Contains(p.EmployeeTypeId.ToString()) &&
+                                  (reportSelection?.Working == "working" ? p.WorkingStatus == true :
+                                  reportSelection?.Working == "separated" ? false : p.WorkingStatus == true || p.WorkingStatus == false)).ToList();
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+                else if (!reportSelection.From.HasValue)
+                {
+
+                    var emp = employees1.Where(x =>
+                     reportSelection?.Working == "separated" ? (x.DateofLeavingDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To)) :
+                     (x.DateofJoiningDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To))).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else if (!reportSelection.To.HasValue)
+                {
+                    var emp = employees1.Where(x =>
+                     reportSelection?.Working == "separated" ? (x.DateofLeavingDGH >= reportSelection.From) :
+                     (x.DateofJoiningDGH >= reportSelection.From)).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else
+                {
+                    var emp = employees1.Where(x =>
+                      reportSelection?.Working == "separated" ? (x.DateofLeavingDGH >= reportSelection.From && x.DateofLeavingDGH <= reportSelection.To) :
+                       (x.DateofJoiningDGH >= reportSelection.From && x.DateofJoiningDGH <= reportSelection.To)).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+
+                if (dt_ != null)
+                {
+                    dt_.Columns.Remove("EmployeeTypeId");
+                    dt_.Columns.Remove("WorkingStatus");
+                    dt_.Columns.Remove("DateofJoiningDGH");
+                    dt_.Columns.Remove("DateofLeavingDGH");
+                }
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult AgeProfileReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                ViewBag.Title = "Age Profile Report";
+                DataTable dt_ = null;
+                var type = reportSelection.CustomColumns.ToList();
+                var DOB = DateTime.Now.Year;
+                var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+                                
+                                  select new
+                                  {
+                                      employee.EmployeeCode,
+                                      FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                      EmployeeType = employee.EmployeeType.GetDisplayName(),
+                                      Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                                      Age = DateTime.Now.Year - employee.DateOfBirth?.Year - 1,
+                                      DateOfBirth = employee.DateOfBirth?.ToString("dd-MM-yyyy"),
+                                      Vintage = ManPowerEtraDetai("Vintage", employee, reportSelection),
+                                      employee.WorkingStatus,
+                                      WorkStatus = employee.WorkingStatus == true ? "working" : "separated",
+                                      EmployeeTypeId = employee.EmployeeType,
+                                      employee.DateofJoiningDGH,
+                                      employee.DateofLeavingDGH,
+                                  }).Distinct().Where(p => type.Contains(p.EmployeeTypeId.ToString()) &&
+                                  (reportSelection?.Working == "working" ? p.WorkingStatus == true :
+                                  reportSelection?.Working == "separated" ? p.WorkingStatus == false : p.WorkingStatus == true || p.WorkingStatus == false)).ToList();
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+                else if (!reportSelection.From.HasValue)
+                {
+
+                    var emp = employees1.Where(x =>
+                     reportSelection?.Working == "separated" ? (x.DateofLeavingDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To)) :
+                     (x.DateofJoiningDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To))).ToList();
+                    //                 select employee).Distinct().ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else if (!reportSelection.To.HasValue)
+                {
+                    var emp = employees1.Where(x =>
+                     reportSelection?.Working == "separated" ? (x.DateofLeavingDGH >= reportSelection.From) :
+                     (x.DateofJoiningDGH >= reportSelection.From)).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else
+                {
+                    var emp = employees1.Where(x =>
+                      reportSelection?.Working == "separated" ? (x.DateofLeavingDGH >= reportSelection.From && x.DateofLeavingDGH <= reportSelection.To) :
+                       (x.DateofJoiningDGH >= reportSelection.From && x.DateofJoiningDGH <= reportSelection.To)).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+
+                if (dt_ != null)
+                {
+                    dt_.Columns.Remove("EmployeeTypeId");
+                    dt_.Columns.Remove("WorkingStatus");
+                    dt_.Columns.Remove("DateofJoiningDGH");
+                    dt_.Columns.Remove("DateofLeavingDGH");
+                }
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+
+        private DataTable GetDataTable(List<EmployeeDetail> employees, ReportSelectionViewModel reportSelection)
         {
             DataTable dt_ = new DataTable("Report");
             DataColumn dtColumn;
