@@ -671,6 +671,7 @@
     <Content Include="Views\Reports\LocalAddressReport.cshtml" />
     <Content Include="Views\Reports\FamilyDetailsReport.cshtml" />
     <Content Include="Views\Reports\AgeProfileReport.cshtml" />
+    <Content Include="Views\Reports\LastPromotionReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -219,13 +219,24 @@ namespace EmployeeInformationSystem.Services
                         {"Others","Others" }
                     };
                     break;
+                case "LastPromotionReport":
+                    columns = new Dictionary<string, string>()
+                    {
+                        {"Deputationist", "Deputationist" },{"Advisor", "Advisor" },{"ContractualDGHStaff", "Contractual - DGH Staff" },
+                      {"Consultant","Consultant"},
+                        {"ContractualMoPNGStaff", "Contractual - MoPNG Staff" },
+                        {"TraineeOfficer","Trainee Officer" },
+
+                        {"Others","Others" }
+                    };
+                    break;
                 default:
                     columns = new Dictionary<string, string>();
                     break;
             }
             return columns;
         }
-
+        // PromotionReport
         public Dictionary<string, string> GetSeparationReasonList(string infoType)
         {
             Dictionary<string, string> columns;
