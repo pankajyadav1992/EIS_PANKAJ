@@ -414,6 +414,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                       employee.LevelId,
                                       employee.OrganisationId,
                                       EmployeeTypeId = employee.EmployeeType,
+                                      
 
                                   } into s
                                   group s by s.EmployeeId into g
@@ -746,6 +747,85 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
         }
 
+
+
+        [HttpPost]
+
+        public ActionResult EarlyRepatriationReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+
+            else
+            {
+                DataTable dt_ = null;
+
+                var employees1 = (
+                    from employee in EmployeeDetailContext.Collection().ToList()
+
+                    select new
+                    {
+                        employee.EmployeeCode,
+                        FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                        Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                        Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                        employee.EmployeeType,
+                        Vintage = ManPowerEtraDetai("Vintage", employee, reportSelection),
+                        DateofJoiningDGH = employee.DateofJoiningDGH?.ToString("dd-MM-yyyy"),
+                        employee.DateofLeavingDGH,
+                        DGHLeavingDate = employee.DateofLeavingDGH?.ToString("dd-MM-yyyy"),
+                        employee.ReasonForLeaving,
+                        employee.DateOfSuperannuation,
+                        SuperannuationDate = employee.DateOfSuperannuation?.ToString("dd-MM-yyyy"),
+                        employee.WorkingStatus,
+                        WorkStatus = employee.WorkingStatus == true ? "working" : "separated",
+                        employee.LevelId,
+                        employee.OrganisationId,
+                        EmployeeTypeId = employee.EmployeeType,
+
+                    }
+
+                    ).Distinct().Where(x => x.EmployeeType==EmployeeType.Deputationist
+                  &&
+                                        (x.WorkingStatus == false) && (x.ReasonForLeaving == ReasonForLeaving.Repatriation) && (Convert.ToDateTime(x.DateofLeavingDGH) < Convert.ToDateTime(x.DateOfSuperannuation))).ToList();
+
+
+
+
+                dt_ = ToDataTable(employees1);
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+                else if (!reportSelection.From.HasValue)
+                {
+                    var emp = employees1.Where(x => x.DateofLeavingDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To)).ToList();
+                    //                 select employee).Distinct().ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else if (!reportSelection.To.HasValue)
+                {
+                    var emp = employees1.Where(x => x.DateofLeavingDGH >= reportSelection.From).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else
+                {
+                    var emp = employees1.Where(x => x.DateofLeavingDGH >= reportSelection.From && x.DateofLeavingDGH <= reportSelection.To).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+
+                dt_.Columns.Remove("LevelId");
+                dt_.Columns.Remove("OrganisationId");
+                dt_.Columns.Remove("EmployeeTypeId");
+                dt_.Columns.Remove("DateofLeavingDGH");
+                dt_.Columns.Remove("DateOfSuperannuation");
+                dt_.Columns.Remove("WorkingStatus");
+                return View("GeneratedReportView", dt_);
+            }
+        }
 
         [HttpPost]
         public ActionResult EarlyTerminationReport(ReportSelectionViewModel reportSelection)

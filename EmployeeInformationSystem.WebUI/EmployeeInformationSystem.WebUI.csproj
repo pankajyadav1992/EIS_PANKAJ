@@ -18,7 +18,7 @@
     <AssemblyName>EmployeeInformationSystem.WebUI</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -675,6 +675,7 @@
     <Content Include="Views\Reports\TenureCompletionReport.cshtml" />
     <Content Include="Views\Reports\LastChangeMadeReport.cshtml" />
     <Content Include="Views\Reports\EarlyTerminationReport.cshtml" />
+    <Content Include="Views\Reports\EarlyRepatriationReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -733,7 +734,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55818</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:55818/</IISUrl>
+          <IISUrl>http://localhost/EmployeeInformationSystem.WebUI</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
