@@ -672,6 +672,9 @@
     <Content Include="Views\Reports\FamilyDetailsReport.cshtml" />
     <Content Include="Views\Reports\AgeProfileReport.cshtml" />
     <Content Include="Views\Reports\LastPromotionReport.cshtml" />
+    <Content Include="Views\Reports\TenureCompletionReport.cshtml" />
+    <Content Include="Views\Reports\LastChangeMadeReport.cshtml" />
+    <Content Include="Views\Reports\EarlyTerminationReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

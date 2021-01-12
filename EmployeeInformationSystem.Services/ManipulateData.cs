@@ -81,7 +81,7 @@ namespace EmployeeInformationSystem.Services
                     {
                         {"EmployeeCode", "CPF Number/Employee Code" },{"EmployeeType", "Employee Category" }, {"Title", "Title" }, {"GetName", "Name" },{"Vintage", "Vintage" },
                         {"DateOfBirth", "Date of Birth" },{"DateOfSuperannuation", "Date of Superannuation" }, {"MaritalStatus","Marital Status" }, {"MarriageDate","Marriage Date" },
-                        {"Gender","Gender" },{"BloodGroup","Blood Group"}, {"VehicleType","Vehicle Type"}, {"VehicleCategory","Vehicle Category"}, {"VehicleNumber","Vehicle Number"}, 
+                        {"Gender","Gender" },{"BloodGroup","Blood Group"}, {"VehicleType","Vehicle Type"}, {"VehicleCategory","Vehicle Category"}, {"VehicleNumber","Vehicle Number"},
                         {"PassportNumber", "Passport Number" },{"PassportValidity", "Passport Validity" },{"UANNumber", "UAN Number" },{"DeputedLocation", "Deputed Location" },{"PANNumber", "PAN Number" },
                         {"AadhaarNumber", "Aadhaar Number" },{"Dependent Details", "Dependent Details"}
                     };
@@ -127,7 +127,7 @@ namespace EmployeeInformationSystem.Services
                       {"Consultant","Consultant"},
                         {"ContractualMoPNGStaff", "Contractual - MoPNG Staff" },
                         {"TraineeOfficer","Trainee Officer" },
-                      
+
                         {"Others","Others" }
                     };
                     break;
@@ -183,7 +183,7 @@ namespace EmployeeInformationSystem.Services
                         {"TraineeOfficer","Trainee Officer" },
 
                         {"Others","Others" }
-                       
+
                     };
                     break;
                 case "LocalAddressReport":
@@ -230,6 +230,38 @@ namespace EmployeeInformationSystem.Services
                         {"Others","Others" }
                     };
                     break;
+                case "TenureCompletionReport":
+                    columns = new Dictionary<string, string>()
+                    {
+                       {"Advisor", "Advisor" },{"ContractualDGHStaff", "Contractual - DGH Staff" },
+                      {"Consultant","Consultant"},
+                        {"ContractualMoPNGStaff", "Contractual - MoPNG Staff" },
+                        {"TraineeOfficer","Trainee Officer" },
+
+                    };
+                    break;
+
+                case "LastChangeMadeReport":
+                    columns = new Dictionary<string, string>()
+                    {
+                       {"Advisor", "Advisor" },{"ContractualDGHStaff", "Contractual - DGH Staff" },
+                      {"Consultant","Consultant"},
+                        {"ContractualMoPNGStaff", "Contractual - MoPNG Staff" },
+                        {"TraineeOfficer","Trainee Officer" },
+
+                    };
+                    break;
+                case "EarlyTerminationReport":
+                    columns = new Dictionary<string, string>()
+                    {
+                       {"Advisor", "Advisor" },{"ContractualDGHStaff", "Contractual - DGH Staff" },
+                      {"Consultant","Consultant"},
+                        {"ContractualMoPNGStaff", "Contractual - MoPNG Staff" },
+                        {"TraineeOfficer","Trainee Officer" },
+
+                    };
+                    break;
+                    
                 default:
                     columns = new Dictionary<string, string>();
                     break;
@@ -242,7 +274,7 @@ namespace EmployeeInformationSystem.Services
             Dictionary<string, string> columns;
             switch (infoType)
             {
-                
+
                 case "SeparationReport":
                     columns = new Dictionary<string, string>()
                     {
@@ -254,8 +286,8 @@ namespace EmployeeInformationSystem.Services
                         {"Superannuation","Superannuation" },
                          {"ConsultancyCompletion","Consultancy Completion" },
                          {"Others","Others" }
-                       
-                          
+
+
                     };
                     break;
                 default:

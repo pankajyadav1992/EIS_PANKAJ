@@ -125,6 +125,9 @@ namespace EmployeeInformationSystem.Core.ViewModels
         {
             get
             {
+                var result= (from column in manipulateData.GetColumnList(this.CustomReportType)
+                             select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
+
                 return (from column in manipulateData.GetColumnList(this.CustomReportType)
                         select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
             }
