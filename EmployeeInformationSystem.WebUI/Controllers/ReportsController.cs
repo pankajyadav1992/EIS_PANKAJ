@@ -376,6 +376,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 //    dt_.Rows[i][7] = wstatus;
                 //}
 
+                ViewBag.ReportTitle = "- Birthday and Anniversary Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -479,6 +480,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("WorkingStatus");
                 dt_.Columns.Remove("EmployeeId");
                 dt_.Columns.Remove("From");
+
+
+                ViewBag.ReportTitle = "- Promotion Report";
                 return View("GeneratedReportView", dt_);
             }
 
@@ -525,6 +529,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_ = ToDataTable(employees1);
                 dt_.Columns.Remove("EmployeeTypeId");
                 dt_.Columns.Remove("WorkingStatus");
+
+                ViewBag.ReportTitle = "- Qualification Experience or Pay-Scale Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -584,6 +590,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 }
                 dt_.Columns.Remove("WorkingStatus");
                 dt_.Columns.Remove("DateofLeavingDGH");
+
+                ViewBag.ReportTitle = "- Employee deputation with DGH Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -660,6 +668,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("EmployeeTypeId");
                 dt_.Columns.Remove("DateofLeavingDGH");
                 dt_.Columns.Remove("WorkingStatus");
+
+                ViewBag.ReportTitle = "- Tenure Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -710,7 +720,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 .Distinct().Where(x => reportSelection.CustomColumns.Contains(x.EmployeeTypeId.ToString())
                 &&
                                       (reportSelection?.Working == "working" ? x.WorkingStatus == true :
-                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false)).ToList();
+                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false) && (Convert.ToDateTime(x.DGHLeavingDate) == Convert.ToDateTime(x.ContractExpiryDate))).ToList();
 
 
                 dt_ = ToDataTable(employees1);
@@ -743,6 +753,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("EmployeeTypeId");
                 dt_.Columns.Remove("DateofLeavingDGH");
                 dt_.Columns.Remove("WorkingStatus");
+
+                ViewBag.ReportTitle = "- Tenure Completion Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -784,12 +796,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         employee.LevelId,
                         employee.OrganisationId,
                         EmployeeTypeId = employee.EmployeeType,
+                        ContractExpiryDate = employee.DateOfContractExpiry?.ToString("dd-Mm-yyyy")
 
                     }
 
                     ).Distinct().Where(x => x.EmployeeType==EmployeeType.Deputationist
                   &&
-                                        (x.WorkingStatus == false) && (x.ReasonForLeaving == ReasonForLeaving.Repatriation) && (Convert.ToDateTime(x.DateofLeavingDGH) < Convert.ToDateTime(x.DateOfSuperannuation))).ToList();
+                                        (x.WorkingStatus == false) && (x.ReasonForLeaving == ReasonForLeaving.Repatriation) && (Convert.ToDateTime(x.DateofLeavingDGH) < Convert.ToDateTime(x.ContractExpiryDate))).ToList();
 
 
 
@@ -803,7 +816,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 else if (!reportSelection.From.HasValue)
                 {
                     var emp = employees1.Where(x => x.DateofLeavingDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To)).ToList();
-                    //                 select employee).Distinct().ToList();
+                    
                     dt_ = ToDataTable(emp);
                 }
                 else if (!reportSelection.To.HasValue)
@@ -823,6 +836,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("DateofLeavingDGH");
                 dt_.Columns.Remove("DateOfSuperannuation");
                 dt_.Columns.Remove("WorkingStatus");
+
+                ViewBag.ReportTitle = "- Deputationist Early Repatriation Report ";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -903,6 +918,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("EmployeeTypeId");
                 dt_.Columns.Remove("DateofLeavingDGH");
                 dt_.Columns.Remove("WorkStatus");
+
+                ViewBag.ReportTitle = "- Early Termination/Separation Report For Contractuals ";
                 return View("GeneratedReportView", dt_);
 
             }
@@ -971,6 +988,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("WorkingStatus");
                 dt_.Columns.Remove("EmployeeTypeId");
                 dt_.Columns.Remove("WorkStatus");
+
+                ViewBag.ReportTitle = "- Last Change Made Report";
                 return View("GeneratedReportView", dt_);
 
             }
@@ -1055,6 +1074,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("EmployeeTypeId");
                 dt_.Columns.Remove("DateofJoiningDGH");
                 dt_.Columns.Remove("WorkingStatus");
+
+                ViewBag.ReportTitle = "- Date of Joining Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -1134,6 +1155,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("EmployeeTypeId");
                 dt_.Columns.Remove("DateofLeavingDGH");
                 dt_.Columns.Remove("WorkingStatus");
+
+                ViewBag.ReportTitle = "- Separation Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -1217,6 +1240,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("OrganisationId");
                 dt_.Columns.Remove("DateOfSuperannuation");
                 dt_.Columns.Remove("WorkingStatus");
+
+                ViewBag.ReportTitle = "- Superannuation Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -1319,6 +1344,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     break;
 
             }
+           
             return columdetail;
         }
         [HttpPost]
@@ -1457,6 +1483,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("WorkingStatus");
                 dt_.Columns.Remove("ProfilePhoto");
 
+                ViewBag.ReportTitle = "- Man Power Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -1518,6 +1545,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 //  reportSelection.CustomColumns.
                 DataTable dt_ = GetDataTable(employees, reportSelection);
 
+                ViewBag.ReportTitle = "- Deputationist Vintage Report";
+
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -1565,6 +1594,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("EmployeeTypeId");
                 dt_.Columns.Remove("WorkingStatus");
 
+                ViewBag.ReportTitle = "- Address Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -1643,6 +1673,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     dt_.Columns.Remove("DateofJoiningDGH");
                     dt_.Columns.Remove("DateofLeavingDGH");
                 }
+
+                ViewBag.ReportTitle = "- Family Details Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -1714,6 +1746,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     dt_.Columns.Remove("DateofJoiningDGH");
                     dt_.Columns.Remove("DateofLeavingDGH");
                 }
+
+                ViewBag.ReportTitle = "- Age Profile Report";
                 return View("GeneratedReportView", dt_);
             }
         }
@@ -1785,6 +1819,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     dt_.Columns.Remove("DateofJoiningDGH");
                     dt_.Columns.Remove("DateofLeavingDGH");
                 }
+
+                ViewBag.ReportTitle = "- Last Promotion Report";
                 return View("GeneratedReportView", dt_);
             }
         }
