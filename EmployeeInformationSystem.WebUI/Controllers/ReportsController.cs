@@ -2,7 +2,9 @@
 using EmployeeInformationSystem.Core.Models;
 using EmployeeInformationSystem.Core.ViewModels;
 using EmployeeInformationSystem.Services;
+using EmployeeInformationSystem.WebUI.Models;
 using Microsoft.Ajax.Utilities;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -842,6 +844,100 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
         }
 
+
+
+        [HttpPost]
+
+        public ActionResult LoginDetailsReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                DataTable dt_ = null;
+
+                var context = new ApplicationDbContext();
+
+                var allUsers = context.Users.ToList();
+
+
+                var employees1 = (
+                                  from user in context.Users.ToList()
+
+
+                                 join employee in EmployeeDetailContext.Collection().ToList()
+                                  on user.UserName equals employee.EmployeeCode   into xy
+                                  from z in xy.DefaultIfEmpty()
+                                      //// where(employee.OrganisationId == org.Id)
+                                      ///
+                                  join org in OrganisationContext.Collection().ToList()
+                                  on z.OrganisationId equals org.Id into xx
+
+                                 
+                                 
+                                  from y in xx.DefaultIfEmpty()
+                                  
+                                      //into xx
+
+                                 
+
+                                  select new
+                                  {
+                                      z.EmployeeCode,
+                                      FullName = z.FirstName + " " + (z.MiddleName == "" ? "" : z.MiddleName + " ") + z.LastName,
+                                      Department = ManPowerEtraDetai("Department", z, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", z, reportSelection),
+
+                                      EmployeeType = z.EmployeeType.GetDisplayName(),
+                                      Organisation = y == null ? "" : y.Name,
+                                     
+                                      DateofJoiningDGH = z.DateofJoiningDGH?.ToString("dd-MM-yyyy"),
+                                      z.DateofLeavingDGH,
+                                      DGHLeavingDate = z.DateofLeavingDGH?.ToString("dd-MM-yyyy"),
+                                      ContractPeriod = z.DeputationPeriod,
+                                      ContractExpiryDate = z.DateOfContractExpiry?.ToString("dd-Mm-yyyy"),
+                                      z.WorkingStatus,
+                                      WorkStatus = z.WorkingStatus == true ? "working" : "separated",
+                                      z.LevelId,
+                                      z.OrganisationId,
+                                      EmployeeTypeId = z.EmployeeType
+                                      
+                                  }
+
+                    ).Distinct().Where(x => 
+                                      (reportSelection?.Working == "working" ? x.WorkingStatus == true :
+                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false) ).ToList();
+
+
+
+
+
+                dt_ = ToDataTable(employees1);
+
+                ViewBag.ReportTitle = "- Authorisations and Login Reports ";
+
+
+
+                dt_.Columns.Remove("LevelId");
+                dt_.Columns.Remove("OrganisationId");
+                dt_.Columns.Remove("EmployeeTypeId");
+                dt_.Columns.Remove("DateofLeavingDGH");
+                
+                dt_.Columns.Remove("WorkingStatus");
+                dt_.Columns.Remove("DateofJoiningDGH");
+                dt_.Columns.Remove("DGHLeavingDate");
+                dt_.Columns.Remove("ContractPeriod");
+                dt_.Columns.Remove("ContractExpiryDate");
+                
+
+
+                return View("GeneratedReportView", dt_); 
+
+            }
+        }
+
         [HttpPost]
         public ActionResult EarlyTerminationReport(ReportSelectionViewModel reportSelection)
         {
@@ -920,6 +1016,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("WorkStatus");
 
                 ViewBag.ReportTitle = "- Early Termination/Separation Report For Contractuals ";
+
+                
+
                 return View("GeneratedReportView", dt_);
 
             }

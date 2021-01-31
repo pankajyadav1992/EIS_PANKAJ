@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "LoginDetailsReport";
+}
+
+@model EmployeeInformationSystem.Core.ViewModels.ReportSelectionViewModel
+
+
+@using (Html.BeginForm("LoginDetailsReport", "Reports", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Authorisations and Login Report" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.CustomReportType, new { Value = @Model.CustomReportType })
+
+
+
+    @*<div class="form-group row">
+        @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+        <div class="col-sm-5">
+            @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+        </div>
+        <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
+    </div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+        <div class="col-sm-5">
+            @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+        </div>
+        <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
+    </div>*@
+
+    <div class="form-group row">
+        <label class="col-sm-3 form-control-label">Status</label>
+        <div class="col-sm-5">
+            <select id="working" name="Working">
+                <option value="0">Choose</option>
+                <option value="working">Working</option>
+                <option value="separated">Separated</option>
+                <option value="all">All</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group row offset-sm-3">
+        <div classs="col-sm-9" style="display:none;color: red;" id="errorworking">Please select status</div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-sm-9 offset-sm-3">
+            <input type="submit" value="Generate Report" class="btn btn-primary" id="reportSubmitBtn">
+        </div>
+    </div>
+}
+
+
