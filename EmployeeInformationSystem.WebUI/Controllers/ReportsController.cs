@@ -1889,6 +1889,70 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         }
 
         [HttpPost]
+        public ActionResult VintageReportExclude (ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                ViewBag.Title = "Vintage Report excluding superannuating cases";
+                List<EmployeeDetail> employees = new List<EmployeeDetail>();
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                                                        .Where(e => reportSelection.Categories.Contains(e.EmployeeType) 
+                                                                                                                                        )
+                                                                                                                                        .ToList()
+                                                                                                 join posting in PostingDetailContext.Collection()
+                                                                                                                                     .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                                                     .ToList()
+                                                                                                                                      on employee.Id equals posting.EmployeeId
+                                                                                                 orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                                                 select employee).Distinct().ToList();
+                else if (!reportSelection.From.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                            .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                                                            .ToList()
+                                                                      join posting in PostingDetailContext.Collection()
+                                                                                                          .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                          .ToList()
+                                                                                                           on employee.Id equals posting.EmployeeId
+                                                                      orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                      where (employee.DateofJoiningDGH <= reportSelection.To || (!employee.WorkingStatus && employee.DateofLeavingDGH < reportSelection.To)) &&
+                                                                      (posting.From <= reportSelection.To || (!posting.From.HasValue && posting.To < reportSelection.To))
+                                                                      select employee).Distinct().ToList();
+                else if (!reportSelection.To.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                              .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                                                              .ToList()
+                                                                    join posting in PostingDetailContext.Collection()
+                                                                                                        .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                        .ToList()
+                                                                                                         on employee.Id equals posting.EmployeeId
+                                                                    orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                    where employee.DateofJoiningDGH >= reportSelection.From &&
+                                                                    (posting.From >= reportSelection.From || !posting.From.HasValue)
+                                                                    select employee).Distinct().ToList();
+                else employees = (from employee in EmployeeDetailContext.Collection()
+                                                                        .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                        .ToList()
+                                  join posting in PostingDetailContext.Collection()
+                                                                       .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                       .ToList()
+                                                                        on employee.Id equals posting.EmployeeId
+                                  orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                  where (employee.DateofJoiningDGH >= reportSelection.From && employee.DateofJoiningDGH <= reportSelection.To) &&
+                                  ((posting.From >= reportSelection.From || !posting.From.HasValue) && (posting.To <= reportSelection.To || !posting.To.HasValue))
+                                  select employee).Distinct().ToList();
+                //  reportSelection.CustomColumns.
+                DataTable dt_ = GetDataTable(employees.Where(e => e.ReasonForLeaving != ReasonForLeaving.Superannuation).ToList(), reportSelection);
+
+                ViewBag.ReportTitle = "- Vintage Report excluding superannuating cases";
+
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+        [HttpPost]
         public ActionResult LocalAddressReport(ReportSelectionViewModel reportSelection)
         {
             if (!ModelState.IsValid)

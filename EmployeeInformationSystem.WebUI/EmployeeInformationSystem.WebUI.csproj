@@ -678,6 +678,7 @@
     <Content Include="Views\Reports\EarlyRepatriationReport.cshtml" />
     <Content Include="Views\Reports\LoginDetailsReport.cshtml" />
     <Content Include="Views\Reports\MissingDataReport.cshtml" />
+    <Content Include="Views\Reports\VintageReportExclude.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

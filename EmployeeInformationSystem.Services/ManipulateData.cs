@@ -120,6 +120,16 @@ namespace EmployeeInformationSystem.Services
 
                     };
                     break;
+
+                case "VintageReportExclude":
+                    columns = new Dictionary<string, string>()
+                    {
+                        {"EmployeeCode", "CPF Number/Employee Code" },{"GetFullName", "Name" },{"Designation", "Designation" },{"Department", "Department" },{"DateofJoiningDGH","Date of Joining DGH" },{"WorkingStatus", "Working Status" },
+                        {"ReasonForLeaving","Reason for Leaving DGH" }, {"DateOfSuperannuation", "Date of Superannuation" }, {"DeputationPeriod","Deputation/Engagement Period" },{"DateofLeavingDGH","Date of Separation from DGH"},{"Vintage", "Vintage" },
+                        {"Vintage1Year", "Vintage in 1 Year" }, {"Vintage2Years", "Vintage in 2 Years" },{"Vintage3Years", "Vintage in 3 Years" }, {"Vintage4Years", "Vintage in 4 Years" }, {"Vintage5Years", "Vintage in 5 Years" }
+
+                    };
+                    break;
                 case "ManPowerReport":
                     columns = new Dictionary<string, string>()
                     {

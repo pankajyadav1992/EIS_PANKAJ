@@ -1,14 +1,23 @@
 ﻿@model EmployeeInformationSystem.Core.ViewModels.ReportSelectionViewModel
 
+@{
+    ViewBag.Title = "VintageReportExclude";
+}
 
-@using (Html.BeginForm("DeputationistVintageReport", "Reports", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Deputationist Vintage Report" }))
+@using (Html.BeginForm("VintageReportExclude", "Reports", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Vintage Report excluding superannuating cases" }))
 {
     @Html.AntiForgeryToken()
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.CustomReportType, new { Value = @Model.CustomReportType })
 
-    
 
+    <div class="form-group row">
+        @Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+        <div class="col-sm-5">
+            @Html.ListBoxFor(model => model.Categories, Model.AllCategories, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+        </div>
+        <div classs="col-sm-4" style="display:none;color: red;" id="errorCategory">Please select Categories</div>
+    </div>
     <div class="form-group row">
         @Html.LabelFor(model => model.Departments, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
         <div class="col-sm-5">
