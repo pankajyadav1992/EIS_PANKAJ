@@ -82,7 +82,7 @@ namespace EmployeeInformationSystem.Services
                         {"EmployeeCode", "CPF Number/Employee Code" },{"EmployeeType", "Employee Category" }, {"Title", "Title" }, {"GetName", "Name" },{"Vintage", "Vintage" },
                         {"DateOfBirth", "Date of Birth" },{"DateOfSuperannuation", "Date of Superannuation" }, {"MaritalStatus","Marital Status" }, {"MarriageDate","Marriage Date" },
                         {"Gender","Gender" },{"BloodGroup","Blood Group"}, {"VehicleType","Vehicle Type"}, {"VehicleCategory","Vehicle Category"}, {"VehicleNumber","Vehicle Number"},
-                        {"PassportNumber", "Passport Number" },{"PassportValidity", "Passport Validity" },{"UANNumber", "UAN Number" },{"DeputedLocation", "Deputed Location" },{"PANNumber", "PAN Number" },
+                        {"PassportNumber", "Passport Number" },{"PassportValidity", "Passport Validity" },{"UANNumber", "UAN Number"     },{"DeputedLocation", "Deputed Location" },{"PANNumber", "PAN Number" },
                         {"AadhaarNumber", "Aadhaar Number" },{"Dependent Details", "Dependent Details"}
                     };
 

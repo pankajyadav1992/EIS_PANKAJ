@@ -1,0 +1,266 @@
+﻿
+@{
+    ViewBag.Title = "MissingDataReport";
+}
+
+@model EmployeeInformationSystem.Core.ViewModels.ReportSelectionViewModel
+
+@section CustomStyles{
+    @Styles.Render("~/Content/bootstrap-select")
+    @Styles.Render("~/Content/gijgo")
+    <style>
+        #overlay {
+            position: absolute;
+            justify-content: left;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(130, 130, 130, 0.5);
+        }
+    </style>
+}
+@section Reports{
+    show
+}
+@{ string headerClass = "";
+    string type = "";
+    string formTarget = "";}
+
+@*@switch (ViewBag.Title)
+{
+    case "Active Employees Report":
+        headerClass = "bg-success"; type = "Active"; formTarget = "ActiveEmployees";
+        @section ActiveEmployees{
+            class="active"
+        }
+        break;
+    case "InActive Employees Report":
+        headerClass = "bg-danger"; type = "InActive"; formTarget = "InActiveEmployees";
+        @section InActiveEmployees{
+            class="active"
+        }
+        break;
+    case "All Employees Report":
+        headerClass = "bg-info"; type = "All"; formTarget = "AllEmployees";
+        @section AllEmployees{
+            class="active"
+        }
+        break;
+}*@
+
+<div id="overlay" style="display:none;text-align:center;">
+    <img src="~/Content/img/spinner.gif" style="resize:inherit;" />
+    <br />
+</div>
+<!-- Page Header-->
+<header class="page-header @headerClass text-white">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">Employees Missing Data Reports</h2>
+    </div>
+</header>
+<!-- Forms Section-->
+<section class="forms">
+    <div class="container-fluid" style="position:relative">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            <h3 class="h4">Select Parameters</h3>
+                        </div>
+                        <div class="card-body">
+                            @using (Html.BeginForm("MissingDataReport", "Reports", FormMethod.Post, new { @class = "form-horizontal", @id = "MissingDataReport" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Categories, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                    <div class="col-sm-5">
+                                        @Html.ListBoxFor(model => model.Categories, Model.AllCategories, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+                                    </div>
+                                    <div classs="col-sm-4" style="display:none;color: red;" id="errorCategory">Please select Categories</div>
+                                </div>
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.Departments, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                    <div class="col-sm-5">
+                                        @Html.ListBoxFor(model => model.Departments, Model.AllDepartments, new { @class = "form-control selectpicker", @data_actions_box = "true", @data_live_search = "true" })
+                                    </div>
+                                    <div classs="col-sm-4" style="display:none;color: red;" id="errorDepartment">Please select Departments</div>
+                                </div>
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.From, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.From, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                                    </div>
+                                    <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
+                                </div>
+
+                                <div class="form-group row">
+                                    @Html.LabelFor(model => model.To, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                    <div class="col-sm-5">
+                                        @Html.EditorFor(model => model.To, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
+                                    </div>
+                                    <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-3 form-control-label">Custom Columns</label>
+                                    <div class="col-sm-9">
+                                        <div class="form-inline">
+                                            <input id="checkboxPersonalDetails" type="checkbox" class="checkbox-template">
+                                            <label for="checkboxPersonalDetails">Personal Details</label>
+                                            @Html.ListBoxFor(model => model.PersonalDetailsColumns, Model.AllPersonalDetailsColumns, new { @class = "form-control selectpicker ml-4", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px"})
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-9 offset-sm-3">
+                                        <div class="form-inline">
+                                            <input id="checkboxContactDetails" type="checkbox" class="checkbox-template">
+                                            <label for="checkboxContactDetails">Contact Details</label>
+                                            @Html.ListBoxFor(model => model.ContactDetailsColumns, Model.AllContactDetailsColumns, new { @class = "form-control selectpicker ml-4", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-9 offset-sm-3">
+                                        <div class="form-inline">
+                                            <input id="checkboxProfessionalDetails" type="checkbox" class="checkbox-template">
+                                            <label for="checkboxProfessionalDetails">Professional Details</label>
+                                            @Html.ListBoxFor(model => model.ProfessionalDetailsColumns, Model.AllProfessionalDetailsColumns, new { @class = "form-control selectpicker ml-3", @data_actions_box = "true", @data_live_search = "true", @data_width = "275px" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-9 offset-sm-3">
+                                        <div class="form-inline">
+                                            <input id="checkboxPromotionDetails" type="checkbox" class="checkbox-template">
+                                            <label for="checkboxPromotionDetails">Promotion Details</label>
+                                            @Html.ListBoxFor(model => model.PromotionDetailsColumns, Model.AllPromotionDetailsColumns, new { @class = "form-control selectpicker ml-3", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px"})
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row offset-sm-3">
+                                    <div classs="col-sm-9" style="display:none;color: red;" id="errorColumns">Please select columns</div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-9 offset-sm-3">
+                                        <input type="submit" value="Generate Report" class="btn btn-primary" id="reportSubmitBtn">
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/bootstrap-select")
+    @Scripts.Render("~/bundles/gijgo")
+    <script>
+        $(document).ready(function () {
+            $('[data-type="date"]').each(function () {
+                $(this).datepicker({
+                    uiLibrary: 'bootstrap',
+                    format: 'dd-mm-yyyy'
+                });
+            });
+
+            $("#checkboxPersonalDetails").change(function () {
+                if (!$(this).is(":checked")) {
+                    $("#@Html.IdFor(model=> model.PersonalDetailsColumns)").attr("disabled", "disabled").selectpicker('deselectAll').selectpicker('refresh');
+                } else {
+                    $("#@Html.IdFor(model=> model.PersonalDetailsColumns)").removeAttr("disabled").selectpicker('refresh');
+                }
+
+            });
+
+            $("#checkboxContactDetails").change(function () {
+                if (!$(this).is(":checked")) {
+                    $("#@Html.IdFor(model=> model.ContactDetailsColumns)").attr("disabled", "disabled").selectpicker('deselectAll').selectpicker('refresh');
+                } else {
+                    $("#@Html.IdFor(model=> model.ContactDetailsColumns)").removeAttr("disabled").selectpicker('refresh');
+                }
+
+            });
+
+            $("#checkboxProfessionalDetails").change(function () {
+                if (!$(this).is(":checked")) {
+                    $("#@Html.IdFor(model=> model.ProfessionalDetailsColumns)").attr("disabled", "disabled").selectpicker('deselectAll').selectpicker('refresh');
+                } else {
+                    $("#@Html.IdFor(model=> model.ProfessionalDetailsColumns)").removeAttr("disabled").selectpicker('refresh');
+                }
+
+            });
+
+            $("#checkboxPromotionDetails").change(function () {
+                if (!$(this).is(":checked")) {
+                    $("#@Html.IdFor(model=> model.PromotionDetailsColumns)").attr("disabled", "disabled").selectpicker('deselectAll').selectpicker('refresh');
+                } else {
+                    $("#@Html.IdFor(model=> model.PromotionDetailsColumns)").removeAttr("disabled").selectpicker('refresh');
+                }
+
+            });
+
+        $(document).on('click', '#reportSubmitBtn', function (e) {
+           var isValid = true;
+           var australianDate = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$|^$/;
+           if (0 == $('#@Html.IdFor(model => model.Categories) :selected').length) {
+               $("#errorCategory").show();
+               isValid = false;
+           } else {
+               $("#errorCategory").hide();
+           }
+
+           if (0 == $('#@Html.IdFor(model => model.Departments) :selected').length) {
+               $("#errorDepartment").show(); isValid = false;
+           } else {
+                $("#errorDepartment").hide();
+           }
+
+           if (0 == $('#@Html.IdFor(model => model.Departments) :selected').length) {
+               $("#errorDepartment").show(); isValid = false;
+           } else {
+               $("#errorDepartment").hide();
+           }
+
+           if (!australianDate.test($("#@Html.IdFor(model => model.From)").val())) {
+               $("#errorFromDate").show(); isValid = false;
+               console.log($("#@Html.IdFor(model => model.From)").val());
+           } else {
+               $("#errorFromDate").hide();
+           }
+
+           if (!australianDate.test($("#@Html.IdFor(model => model.To)").val())) {
+               console.log($("#@Html.IdFor(model => model.To)").val());
+               $("#errorToDate").show(); isValid = false;
+           } else {
+                $("#errorToDate").hide();
+           }
+
+           if (0 == $('#@Html.IdFor(model => model.PersonalDetailsColumns) :selected').length && 0 == $('#@Html.IdFor(model => model.ContactDetailsColumns) :selected').length && 0 == $('#@Html.IdFor(model => model.ProfessionalDetailsColumns) :selected').length && 0 == $('#@Html.IdFor(model => model.PromotionDetailsColumns) :selected').length) {
+               $("#errorColumns").show(); isValid = false;
+           } else {
+               $("#errorColumns").hide();
+           }
+
+            if (!isValid) {
+                e.preventDefault(); //prevent the default action
+            } else {
+                $('#overlay').fadeIn(); // show spinner
+            }
+           });
+        });
+    </script>
+}

@@ -257,6 +257,7 @@ namespace EmployeeInformationSystem.Core.Models
         TraineeOfficer,
         [Display(Name = "Others")]
         Others
+       
     }
 
     public enum SeatingLocation
@@ -276,7 +277,8 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "SDC Bhubneshwar")]
         SDC_BBSR,
         [Display(Name = "Trainee Officer")]
-        Others
+        Others,
+        Missing
     }
 
     public enum DeputeLocations
@@ -288,7 +290,8 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "SDC, Bhubhaneshwar")]
         SDCBhubhaneshwar,
         [Display(Name = "Scope Minar, New Delhi")]
-        ScopeMinarDelhi
+        ScopeMinarDelhi,
+        Missing
     }
     public enum BloodGroup
     {
@@ -307,7 +310,9 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "O+")]
         OPositive,
         [Display(Name = "O-")]
-        ONegative
+        ONegative,
+        Missing
+
     }
 
     public enum Gender
@@ -336,7 +341,9 @@ namespace EmployeeInformationSystem.Core.Models
     {
         Married,
         Single,
-        Others
+        Others,
+        Missing
+
     }
 
     public enum VehicleCategory
@@ -344,6 +351,9 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Two Wheeler")]
         TwoWheeler,
         [Display(Name = "Four Wheeler")]
-        FourWheeler
+        FourWheeler,
+        Missing
     }
+
+   
 }

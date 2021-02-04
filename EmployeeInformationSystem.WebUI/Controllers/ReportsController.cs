@@ -417,7 +417,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                       employee.LevelId,
                                       employee.OrganisationId,
                                       EmployeeTypeId = employee.EmployeeType,
-                                      
+
 
                                   } into s
                                   group s by s.EmployeeId into g
@@ -802,7 +802,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                     }
 
-                    ).Distinct().Where(x => x.EmployeeType==EmployeeType.Deputationist
+                    ).Distinct().Where(x => x.EmployeeType == EmployeeType.Deputationist
                   &&
                                         (x.WorkingStatus == false) && (x.ReasonForLeaving == ReasonForLeaving.Repatriation) && (Convert.ToDateTime(x.DateofLeavingDGH) < Convert.ToDateTime(x.ContractExpiryDate))).ToList();
 
@@ -818,7 +818,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 else if (!reportSelection.From.HasValue)
                 {
                     var emp = employees1.Where(x => x.DateofLeavingDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To)).ToList();
-                    
+
                     dt_ = ToDataTable(emp);
                 }
                 else if (!reportSelection.To.HasValue)
@@ -845,6 +845,244 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult MissingDataReport(ReportSelectionViewModel reportSelection)
+        {
+
+            if (!ModelState.IsValid)
+            {
+                return View("ReportSelection", reportSelection);
+            }
+            else
+            {
+                ViewBag.Title = "Missing Data Report";
+                List<EmployeeDetail> employees = new List<EmployeeDetail>();
+                List<EmployeeDetail> employeesCheck = new List<EmployeeDetail>();
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                                                        .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                                                                                        .ToList()
+                                                                                                 join posting in PostingDetailContext.Collection()
+                                                                                                                                     .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                                                     .ToList()
+                                                                                                                                      on employee.Id equals posting.EmployeeId
+                                                                                                 orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                                                 select employee).Distinct().ToList();
+                else if (!reportSelection.From.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                            .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                                                            .ToList()
+                                                                      join posting in PostingDetailContext.Collection()
+                                                                                                          .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                          .ToList()
+                                                                                                           on employee.Id equals posting.EmployeeId
+                                                                      orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                      where (employee.DateofJoiningDGH <= reportSelection.To || (!employee.WorkingStatus && employee.DateofLeavingDGH < reportSelection.To)) &&
+                                                                      (posting.From <= reportSelection.To || (!posting.From.HasValue && posting.To < reportSelection.To))
+                                                                      select employee).Distinct().ToList();
+                else if (!reportSelection.To.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                              .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                                                              .ToList()
+                                                                    join posting in PostingDetailContext.Collection()
+                                                                                                        .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                        .ToList()
+                                                                                                         on employee.Id equals posting.EmployeeId
+                                                                    orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                    where employee.DateofJoiningDGH >= reportSelection.From &&
+                                                                    (posting.From >= reportSelection.From || !posting.From.HasValue)
+                                                                    select employee).Distinct().ToList();
+                else employees = (from employee in EmployeeDetailContext.Collection()
+                                                                        .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                        .ToList()
+                                  join posting in PostingDetailContext.Collection()
+                                                                       .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                       .ToList()
+                                                                        on employee.Id equals posting.EmployeeId
+                                  orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                  where (employee.DateofJoiningDGH >= reportSelection.From && employee.DateofJoiningDGH <= reportSelection.To) &&
+                                  ((posting.From >= reportSelection.From || !posting.From.HasValue) && (posting.To <= reportSelection.To || !posting.To.HasValue))
+                                  select employee).Distinct().ToList();
+
+
+                foreach (var data in employees)
+                {
+                    if (data.EmployeeCode == null)
+                    {
+                        data.EmployeeCode = "Missing";
+                    }
+                    if (data.Title == null)
+                    {
+                        data.Title = "Missing";
+                    }
+                    if (data.FirstName == null)
+                    {
+                        data.FirstName = "Missing";
+                    }
+                   
+                    if (data.LastName == null)
+                    {
+                        data.LastName = "Missing";
+                    }
+
+                    if (data.DeputationPeriod == null)
+                    {
+                        data.DeputationPeriod = "Missing";
+                    }
+
+                    if (data.MobileNumber == null)
+                    {
+                        data.MobileNumber = "Missing";
+                    }
+
+                    if (data.ResidenceNumber == null)
+                    {
+                        data.ResidenceNumber = "Missing";
+                    }
+
+                    if (data.ResidenceAddress == null)
+                    {
+                        data.ResidenceAddress = "Missing";
+                    }
+
+                    if (data.PermanentAddress == null)
+                    {
+                        data.PermanentAddress = "Missing";
+                    }
+
+                    if (data.PrimaryExpertise == null)
+                    {
+                        data.PrimaryExpertise = "Missing";
+                    }
+
+                    if (data.CurrentBasicPay == null)
+                    {
+
+                        data.CurrentBasicPay = "Missing";
+                    }
+
+                    if (data.PANNumber == null)
+                    {
+
+                        data.PANNumber = "Missing";
+                    }
+
+                    if (data.AadhaarNumber == null)
+                    {
+
+                        data.AadhaarNumber = "Missing";
+                    }
+
+                    if (data.PassportNumber == null)
+                    {
+                        data.PassportNumber = "Missing";
+                    }
+
+
+
+                    if (data.VehicleType == null)
+                    {
+                        data.VehicleType = "Missing";
+                    }
+
+                    if (data.VehicleNumber == null)
+                    {
+                        data.VehicleNumber = "Missing";
+
+                    }
+
+                    if (data.VehicleCategory == null)
+                    {
+                        data.VehicleCategory = VehicleCategory.Missing;
+                    }
+
+                    if (data.AlternateEmailID == null) {
+                        data.AlternateEmailID = "Missing";
+                    
+                    }
+
+                    if (data.EmergencyPerson == null) {
+                        data.EmergencyPerson = "Missing";
+                    }
+
+                    if (data.EmergencyRelation == null) {
+                        data.EmergencyRelation = "Missing";
+                    }
+
+                    if (data.EmergencyContact == null) {
+                        data.EmergencyContact = "Missing";
+                    }
+
+                    if (data.UANNumber == null) {
+
+                        data.UANNumber = "Missing";
+                    }
+
+                    if(data.MaritalStatus==null)
+                    {
+                        data.MaritalStatus = MaritalStatus.Missing;
+                    }
+
+
+                    if (data.BloodGroup == null)
+                    {
+                        data.BloodGroup = BloodGroup.Missing;
+                    }
+
+                    if (data.SeatingLocation == null)
+                    {
+                        data.SeatingLocation = SeatingLocation.Missing;
+                    }
+
+                    if (data.DeputedLocation == null)
+                    {
+                        data.DeputedLocation = DeputeLocations.Missing;
+                    }
+                  
+                    
+
+
+                    //if (data.DateOfBirth == null)
+                    //{
+                    //    Convert.ToString(data.DateOfBirth) ="Missing";
+                    //}
+                    //if (data.DateOfSuperannuation == null) {
+
+
+                    //}
+
+
+                    //if (data.DateofJoiningParentOrg == null) { }
+
+                    //if (data.DateofRelievingLastOffice == null) { }
+
+
+                    //if (data.DateOfContractExpiry == null) { }
+
+
+                    //if (data.DateofJoiningDGH == null) { }
+                    //if (data.DateofLeavingDGH == null) { }
+
+
+
+
+
+
+                    if (data.EmailID == null)
+                    {
+                        data.EmailID = "Missing";
+                    }
+                    employeesCheck.Add(data);
+
+                }
+
+
+                DataTable dt_ = GetDataTable(employeesCheck, reportSelection);
+
+                ViewBag.ReportTitle = "- Missing Data Report ";
+
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
 
         [HttpPost]
 
@@ -867,21 +1105,21 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                   from user in context.Users.ToList()
 
 
-                                 join employee in EmployeeDetailContext.Collection().ToList()
-                                  on user.UserName equals employee.EmployeeCode   into xy
+                                  join employee in EmployeeDetailContext.Collection().ToList()
+                                   on user.UserName equals employee.EmployeeCode into xy
                                   from z in xy.DefaultIfEmpty()
                                       //// where(employee.OrganisationId == org.Id)
                                       ///
                                   join org in OrganisationContext.Collection().ToList()
                                   on z.OrganisationId equals org.Id into xx
 
-                                 
-                                 
+
+
                                   from y in xx.DefaultIfEmpty()
-                                  
+
                                       //into xx
 
-                                 
+
 
                                   select new
                                   {
@@ -892,7 +1130,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                                       EmployeeType = z.EmployeeType.GetDisplayName(),
                                       Organisation = y == null ? "" : y.Name,
-                                     
+
                                       DateofJoiningDGH = z.DateofJoiningDGH?.ToString("dd-MM-yyyy"),
                                       z.DateofLeavingDGH,
                                       DGHLeavingDate = z.DateofLeavingDGH?.ToString("dd-MM-yyyy"),
@@ -903,12 +1141,12 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                       z.LevelId,
                                       z.OrganisationId,
                                       EmployeeTypeId = z.EmployeeType
-                                      
+
                                   }
 
-                    ).Distinct().Where(x => 
+                    ).Distinct().Where(x =>
                                       (reportSelection?.Working == "working" ? x.WorkingStatus == true :
-                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false) ).ToList();
+                                      reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false)).ToList();
 
 
 
@@ -924,16 +1162,16 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 dt_.Columns.Remove("OrganisationId");
                 dt_.Columns.Remove("EmployeeTypeId");
                 dt_.Columns.Remove("DateofLeavingDGH");
-                
+
                 dt_.Columns.Remove("WorkingStatus");
                 dt_.Columns.Remove("DateofJoiningDGH");
                 dt_.Columns.Remove("DGHLeavingDate");
                 dt_.Columns.Remove("ContractPeriod");
                 dt_.Columns.Remove("ContractExpiryDate");
-                
 
 
-                return View("GeneratedReportView", dt_); 
+
+                return View("GeneratedReportView", dt_);
 
             }
         }
@@ -950,39 +1188,39 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             {
                 DataTable dt_ = null;
 
-                var employees1=(from employee in EmployeeDetailContext.Collection().ToList()
+                var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
 
-                                join org in OrganisationContext.Collection().ToList()
-                                //// where(employee.OrganisationId == org.Id)
-                                on employee.OrganisationId equals org.Id into xx
-                                //into xx
-                                from y in xx.DefaultIfEmpty()
-                                select new
-                                {
-                                    employee.EmployeeCode,
-                                    FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
-                                    Department = ManPowerEtraDetai("Department", employee, reportSelection),
-                                    Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                                  join org in OrganisationContext.Collection().ToList()
+                                  //// where(employee.OrganisationId == org.Id)
+                                  on employee.OrganisationId equals org.Id into xx
+                                  //into xx
+                                  from y in xx.DefaultIfEmpty()
+                                  select new
+                                  {
+                                      employee.EmployeeCode,
+                                      FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                      Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
 
-                                    EmployeeType = employee.EmployeeType.GetDisplayName(),
-                                    Organisation = y == null ? "" : y.Name,
-                                    Vintage = ManPowerEtraDetai("Vintage", employee, reportSelection),
-                                    DateofJoiningDGH = employee.DateofJoiningDGH?.ToString("dd-MM-yyyy"),
-                                    employee.DateofLeavingDGH,
-                                    DGHLeavingDate = employee.DateofLeavingDGH?.ToString("dd-MM-yyyy"),
-                                    employee.ReasonForLeaving,
-                                    ContractPeriod = employee.DeputationPeriod,
-                                    ContractExpiryDate = employee.DateOfContractExpiry?.ToString("dd-Mm-yyyy"),
-                                    employee.WorkingStatus,
-                                    WorkStatus = employee.WorkingStatus == true ? "working" : "separated",
-                                    employee.LevelId,
-                                    employee.OrganisationId,
-                                    EmployeeTypeId = employee.EmployeeType,
-                                }
+                                      EmployeeType = employee.EmployeeType.GetDisplayName(),
+                                      Organisation = y == null ? "" : y.Name,
+                                      Vintage = ManPowerEtraDetai("Vintage", employee, reportSelection),
+                                      DateofJoiningDGH = employee.DateofJoiningDGH?.ToString("dd-MM-yyyy"),
+                                      employee.DateofLeavingDGH,
+                                      DGHLeavingDate = employee.DateofLeavingDGH?.ToString("dd-MM-yyyy"),
+                                      employee.ReasonForLeaving,
+                                      ContractPeriod = employee.DeputationPeriod,
+                                      ContractExpiryDate = employee.DateOfContractExpiry?.ToString("dd-Mm-yyyy"),
+                                      employee.WorkingStatus,
+                                      WorkStatus = employee.WorkingStatus == true ? "working" : "separated",
+                                      employee.LevelId,
+                                      employee.OrganisationId,
+                                      EmployeeTypeId = employee.EmployeeType,
+                                  }
 
                     ).Distinct().Where(x => reportSelection.CustomColumns.Contains(x.EmployeeTypeId.ToString())
                   &&
-                                        (x.WorkingStatus == false) &&(x.ReasonForLeaving == ReasonForLeaving.Termination)&& (Convert.ToDateTime(x.DGHLeavingDate)< Convert.ToDateTime(x.ContractExpiryDate))).ToList();
+                                        (x.WorkingStatus == false) && (x.ReasonForLeaving == ReasonForLeaving.Termination) && (Convert.ToDateTime(x.DGHLeavingDate) < Convert.ToDateTime(x.ContractExpiryDate))).ToList();
 
 
                 if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
@@ -1017,7 +1255,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                 ViewBag.ReportTitle = "- Early Termination/Separation Report For Contractuals ";
 
-                
+
 
                 return View("GeneratedReportView", dt_);
 
@@ -1067,7 +1305,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 else if (!reportSelection.From.HasValue)
                 {
                     var emp = employee1.Where(x => x.LastUpdateAt <= reportSelection.To).ToList();
-                    
+
                     dt_ = ToDataTable(emp);
                 }
 
@@ -1443,7 +1681,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     break;
 
             }
-           
+
             return columdetail;
         }
         [HttpPost]
@@ -2079,6 +2317,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         {
             ReportSelectionViewModel reportSelectionViewModel;
             if (customReportType.IsNullOrWhiteSpace()) reportSelectionViewModel = new ReportSelectionViewModel();
+            else if (customReportType == "MissingDataReport")
+            {
+                reportSelectionViewModel = new ReportSelectionViewModel();
+            }
+
             else reportSelectionViewModel = new ReportSelectionViewModel(customReportType);
 
             reportSelectionViewModel.AllDepartments = (from department in DepartmentContext.Collection()

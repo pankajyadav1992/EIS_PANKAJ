@@ -86,6 +86,8 @@ namespace EmployeeInformationSystem.Core.ViewModels
         {
             get
             {
+                var rs= (from column in manipulateData.GetColumnList("personalDetails")
+                        select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
                 return (from column in manipulateData.GetColumnList("personalDetails")
                         select new SelectListItem { Value = column.Key, Text = column.Value }).AsEnumerable<SelectListItem>();
             }
