@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "MissingDataReport";
+    ViewBag.Title = "DataCompletedReport";
 }
 
 @model EmployeeInformationSystem.Core.ViewModels.ReportSelectionViewModel
@@ -29,26 +29,26 @@
     string formTarget = "";}
 
 @*@switch (ViewBag.Title)
-{
-    case "Active Employees Report":
-        headerClass = "bg-success"; type = "Active"; formTarget = "ActiveEmployees";
-        @section ActiveEmployees{
-            class="active"
-        }
-        break;
-    case "InActive Employees Report":
-        headerClass = "bg-danger"; type = "InActive"; formTarget = "InActiveEmployees";
-        @section InActiveEmployees{
-            class="active"
-        }
-        break;
-    case "All Employees Report":
-        headerClass = "bg-info"; type = "All"; formTarget = "AllEmployees";
-        @section AllEmployees{
-            class="active"
-        }
-        break;
-}*@
+    {
+        case "Active Employees Report":
+            headerClass = "bg-success"; type = "Active"; formTarget = "ActiveEmployees";
+            @section ActiveEmployees{
+                class="active"
+            }
+            break;
+        case "InActive Employees Report":
+            headerClass = "bg-danger"; type = "InActive"; formTarget = "InActiveEmployees";
+            @section InActiveEmployees{
+                class="active"
+            }
+            break;
+        case "All Employees Report":
+            headerClass = "bg-info"; type = "All"; formTarget = "AllEmployees";
+            @section AllEmployees{
+                class="active"
+            }
+            break;
+    }*@
 
 <div id="overlay" style="display:none;text-align:center;">
     <img src="~/Content/img/spinner.gif" style="resize:inherit;" />
@@ -71,7 +71,7 @@
                             <h3 class="h4">Select Parameters</h3>
                         </div>
                         <div class="card-body">
-                            @using (Html.BeginForm("MissingDataReport", "Reports", FormMethod.Post, new { @class = "form-horizontal", @id = "MissingDataReport" }))
+                            @using (Html.BeginForm("DataCompletedReport", "Reports", FormMethod.Post, new { @class = "form-horizontal", @id = "MissingDataReport" }))
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -114,7 +114,7 @@
                                         <div class="form-inline">
                                             @*<input id="checkboxPersonalDetails" type="checkbox" class="checkbox-template">*@
                                             <label for="checkboxPersonalDetails">Personal Details</label>
-                                            @Html.ListBoxFor(model => model.PersonalDetailsColumns, Model.AllPersonalDetailsColumns, new { @class = "form-control selectpicker ml-4", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px"})
+                                            @Html.ListBoxFor(model => model.PersonalDetailsColumns, Model.AllPersonalDetailsColumns, new { @class = "form-control selectpicker ml-4", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px" })
                                         </div>
                                     </div>
                                 </div>
@@ -143,7 +143,7 @@
                                         <div class="form-inline">
                                             @*<input id="checkboxPromotionDetails" type="checkbox" class="checkbox-template">*@
                                             <label for="checkboxPromotionDetails">Promotion Details</label>
-                                            @Html.ListBoxFor(model => model.PromotionDetailsColumns, Model.AllPromotionDetailsColumns, new { @class = "form-control selectpicker ml-3", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px"})
+                                            @Html.ListBoxFor(model => model.PromotionDetailsColumns, Model.AllPromotionDetailsColumns, new { @class = "form-control selectpicker ml-3", @data_actions_box = "true", @data_live_search = "true", @data_width = "300px" })
                                         </div>
                                     </div>
                                 </div>
@@ -264,3 +264,5 @@
         });
     </script>
 }
+
+

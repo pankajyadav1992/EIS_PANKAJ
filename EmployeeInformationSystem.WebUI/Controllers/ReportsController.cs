@@ -846,6 +846,553 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
 
         [HttpPost]
+        public ActionResult DataCompletedReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View("ReportSelection", reportSelection);
+            }
+            else
+            {
+                ViewBag.Title = "Data Completed Report";
+                List<EmployeeDetail> employees = new List<EmployeeDetail>();
+                List<EmployeeDetail> employeesCheck = new List<EmployeeDetail>();
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                                                        .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                                                                                        .ToList()
+                                                                                                 join posting in PostingDetailContext.Collection()
+                                                                                                                                     .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                                                     .ToList()
+                                                                                                                                      on employee.Id equals posting.EmployeeId
+                                                                                                 orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                                                 select employee).Distinct().ToList();
+                else if (!reportSelection.From.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                            .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                                                            .ToList()
+                                                                      join posting in PostingDetailContext.Collection()
+                                                                                                          .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                          .ToList()
+                                                                                                           on employee.Id equals posting.EmployeeId
+                                                                      orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                      where (employee.DateofJoiningDGH <= reportSelection.To || (!employee.WorkingStatus && employee.DateofLeavingDGH < reportSelection.To)) &&
+                                                                      (posting.From <= reportSelection.To || (!posting.From.HasValue && posting.To < reportSelection.To))
+                                                                      select employee).Distinct().ToList();
+                else if (!reportSelection.To.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
+                                                                                                              .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                                                              .ToList()
+                                                                    join posting in PostingDetailContext.Collection()
+                                                                                                        .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                                                        .ToList()
+                                                                                                         on employee.Id equals posting.EmployeeId
+                                                                    orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                                                    where employee.DateofJoiningDGH >= reportSelection.From &&
+                                                                    (posting.From >= reportSelection.From || !posting.From.HasValue)
+                                                                    select employee).Distinct().ToList();
+                else employees = (from employee in EmployeeDetailContext.Collection()
+                                                                        .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                                                                        .ToList()
+                                  join posting in PostingDetailContext.Collection()
+                                                                       .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                                       .ToList()
+                                                                        on employee.Id equals posting.EmployeeId
+                                  orderby employee.FirstName, employee.MiddleName, employee.LastName
+                                  where (employee.DateofJoiningDGH >= reportSelection.From && employee.DateofJoiningDGH <= reportSelection.To) &&
+                                  ((posting.From >= reportSelection.From || !posting.From.HasValue) && (posting.To <= reportSelection.To || !posting.To.HasValue))
+                                  select employee).Distinct().ToList();
+
+                List<MissingData> MissingDataList = new List<MissingData>();
+
+                var DeputationPeriodCount = 0;
+                var MobileNumberCount = 0;
+                var ResidenceNumberCount = 0;
+                var ResidenceAddressCount = 0;
+                var PermanentAddressCount = 0;
+                var PrimaryExpertiseCount = 0;
+                var CurrentBasicPayCount = 0;
+                var PANNumberCount = 0;
+                var AadhaarNumberCount = 0;
+                var PassportNumberCount = 0;
+                var VehicleTypeCount = 0;
+                var VehicleNumberCount = 0;
+                var VehicleCategoryCount = 0;
+                var AlternateEmailIDCount = 0;
+                var EmergencyPersonCount = 0;
+                var EmergencyRelationCount = 0;
+                var EmergencyContactCount = 0;
+                var UANNumberCount = 0;
+                var MaritalStatusCount = 0;
+                var BloodGroupCount = 0;
+                var SeatingLocationCount = 0;
+                var DeputedLocationCount = 0;
+                var DateOfBirthCount = 0;
+                var DateofJoiningParentOrgCount = 0;
+                var DateOfContractExpiryCount = 0;
+                var DateofJoiningDGHCount = 0;
+                var EmailIDCount = 0;
+
+                foreach (var data in employees)
+                {
+                    if (data.EmployeeCode != null && data.Title != null && data.FirstName != null && data.DeputationPeriod != null && data.MobileNumber != null
+                        && data.ResidenceNumber != null && data.ResidenceAddress != null && data.PermanentAddress != null && data.PrimaryExpertise != null && data.CurrentBasicPay != null
+                        && data.PANNumber != null && data.AadhaarNumber != null && data.PassportNumber != null && data.VehicleType != null && data.VehicleNumber != null
+                        && data.VehicleCategory != null && data.AlternateEmailID != null && data.EmergencyPerson != null && data.EmergencyRelation != null && data.EmergencyContact != null
+                        && data.UANNumber != null && data.MaritalStatus != null && data.BloodGroup != null && data.SeatingLocation != null && data.DeputedLocation != null
+                        && data.DateOfBirth != null && data.DateofJoiningParentOrg != null
+                        && data.DateOfContractExpiry != null && data.DateofJoiningDGH != null && data.EmailID != null
+
+                        )
+
+                    {
+                        employeesCheck.Add(data);
+                    }
+
+                    else
+                    {
+                        if (data.EmployeeCode == null)
+                        {
+                            data.EmployeeCode = "Missing";
+
+
+
+                        }
+                        if (data.Title == null)
+                        {
+                            data.Title = "Missing";
+                        }
+                        if (data.FirstName == null)
+                        {
+                            data.FirstName = "Missing";
+                        }
+                        if (data.DeputationPeriod == null)
+                        {
+                            data.DeputationPeriod = "Missing";
+
+                            DeputationPeriodCount = DeputationPeriodCount + 1;
+
+
+                        }
+
+
+                        if (data.MobileNumber == null)
+                        {
+                            data.MobileNumber = "Missing";
+                            MobileNumberCount = MobileNumberCount + 1;
+
+                        }
+
+                        if (data.ResidenceNumber == null)
+                        {
+                            data.ResidenceNumber = "Missing";
+
+                            ResidenceNumberCount = ResidenceNumberCount + 1;
+
+                        }
+
+                        if (data.ResidenceAddress == null)
+                        {
+                            data.ResidenceAddress = "Missing";
+                            ResidenceAddressCount = ResidenceAddressCount + 1;
+                        }
+
+                        if (data.PermanentAddress == null)
+                        {
+                            data.PermanentAddress = "Missing";
+                            PermanentAddressCount = PermanentAddressCount + 1;
+                        }
+
+                        if (data.PrimaryExpertise == null)
+                        {
+                            data.PrimaryExpertise = "Missing";
+                            PrimaryExpertiseCount = PrimaryExpertiseCount + 1;
+                        }
+
+                        if (data.CurrentBasicPay == null)
+                        {
+
+                            data.CurrentBasicPay = "Missing";
+                            CurrentBasicPayCount = CurrentBasicPayCount + 1;
+                        }
+
+                        if (data.PANNumber == null)
+                        {
+
+                            data.PANNumber = "Missing";
+                            PANNumberCount = PANNumberCount + 1;
+                        }
+
+                        if (data.AadhaarNumber == null)
+                        {
+
+                            data.AadhaarNumber = "Missing";
+                            AadhaarNumberCount = AadhaarNumberCount + 1;
+                        }
+
+                        if (data.PassportNumber == null)
+                        {
+                            data.PassportNumber = "Missing";
+                            PassportNumberCount = PassportNumberCount + 1;
+                        }
+
+
+
+                        if (data.VehicleType == null)
+                        {
+                            data.VehicleType = "Missing";
+                            VehicleTypeCount = VehicleTypeCount + 1;
+                        }
+
+                        if (data.VehicleNumber == null)
+                        {
+                            data.VehicleNumber = "Missing";
+                            VehicleNumberCount = VehicleNumberCount + 1;
+
+                        }
+
+                        if (data.VehicleCategory == null)
+                        {
+                            data.VehicleCategory = VehicleCategory.Missing;
+                            VehicleCategoryCount = VehicleCategoryCount + 1;
+                        }
+
+                        if (data.AlternateEmailID == null)
+                        {
+                            data.AlternateEmailID = "Missing";
+                            AlternateEmailIDCount = AlternateEmailIDCount + 1;
+
+                        }
+
+                        if (data.EmergencyPerson == null)
+                        {
+                            data.EmergencyPerson = "Missing";
+                            EmergencyPersonCount = EmergencyPersonCount + 1;
+                        }
+
+                        if (data.EmergencyRelation == null)
+                        {
+                            data.EmergencyRelation = "Missing";
+                            EmergencyRelationCount = EmergencyRelationCount + 1;
+                        }
+
+                        if (data.EmergencyContact == null)
+                        {
+                            data.EmergencyContact = "Missing";
+                            EmergencyContactCount = EmergencyContactCount + 1;
+                        }
+
+                        if (data.UANNumber == null)
+                        {
+
+                            data.UANNumber = "Missing";
+                            UANNumberCount = UANNumberCount + 1;
+                        }
+
+                        if (data.MaritalStatus == null)
+                        {
+                            data.MaritalStatus = MaritalStatus.Missing;
+                            MaritalStatusCount = MaritalStatusCount + 1;
+                        }
+
+
+                        if (data.BloodGroup == null)
+                        {
+                            data.BloodGroup = BloodGroup.Missing;
+                            BloodGroupCount = BloodGroupCount + 1;
+                        }
+
+                        if (data.SeatingLocation == null)
+                        {
+                            data.SeatingLocation = SeatingLocation.Missing;
+                            SeatingLocationCount = SeatingLocationCount + 1;
+                        }
+
+                        if (data.DeputedLocation == null)
+                        {
+                            data.DeputedLocation = DeputeLocations.Missing;
+                            DeputedLocationCount = DeputedLocationCount + 1;
+                        }
+
+
+
+
+                        if (data.DateOfBirth == null)
+                        {
+                            DateOfBirthCount = DateOfBirthCount + 1;
+                        }
+                        //if (data.DateOfSuperannuation == null)
+                        //{
+
+
+                        // }
+
+
+                        if (data.DateofJoiningParentOrg == null)
+                        {
+
+                            DateofJoiningParentOrgCount = DateofJoiningParentOrgCount + 1;
+
+                        }
+
+                        //if (data.DateofRelievingLastOffice == null) { }
+
+
+                        if (data.DateOfContractExpiry == null)
+                        {
+                            DateOfContractExpiryCount = DateOfContractExpiryCount + 1;
+                        }
+
+
+                        if (data.DateofJoiningDGH == null)
+                        {
+                            DateofJoiningDGHCount = DateofJoiningDGHCount + 1;
+                        }
+                        //if (data.DateofLeavingDGH == null) { }
+
+                        if (data.EmailID == null)
+                        {
+                            data.EmailID = "Missing";
+                            EmailIDCount = EmailIDCount + 1;
+                        }
+                        employeesCheck.Add(data);
+
+
+                    }
+
+                }
+
+                if (EmailIDCount != 0)
+                {
+                    MissingData Mdata27 = new MissingData();
+                    Mdata27.Title = "EmailID";
+                    Mdata27.CountValue = EmailIDCount;
+                    MissingDataList.Add(Mdata27);
+                }
+
+                if (DeputationPeriodCount != 0)
+                {
+                    MissingData Mdata1 = new MissingData();
+                    Mdata1.Title = "Deputation Period";
+                    Mdata1.CountValue = DeputationPeriodCount;
+                    MissingDataList.Add(Mdata1);
+                }
+
+                if (MobileNumberCount != 0)
+                {
+                    MissingData Mdata2 = new MissingData();
+                    Mdata2.Title = "Mobile Number";
+                    Mdata2.CountValue = MobileNumberCount;
+                    MissingDataList.Add(Mdata2);
+                }
+
+                if (ResidenceNumberCount != 0)
+                {
+                    MissingData Mdata3 = new MissingData();
+                    Mdata3.Title = "Residence Number";
+                    Mdata3.CountValue = ResidenceNumberCount;
+                    MissingDataList.Add(Mdata3);
+                }
+
+                if (ResidenceAddressCount != 0)
+                {
+                    MissingData Mdata4 = new MissingData();
+                    Mdata4.Title = "Residence Address";
+                    Mdata4.CountValue = ResidenceAddressCount;
+                    MissingDataList.Add(Mdata4);
+                }
+
+                if (PermanentAddressCount != 0)
+                {
+                    MissingData Mdata5 = new MissingData();
+                    Mdata5.Title = "Permanent Address";
+                    Mdata5.CountValue = PermanentAddressCount;
+                    MissingDataList.Add(Mdata5);
+                }
+
+                if (PrimaryExpertiseCount != 0)
+                {
+                    MissingData Mdata6 = new MissingData();
+                    Mdata6.Title = "Primary Expertise";
+                    Mdata6.CountValue = PrimaryExpertiseCount;
+                    MissingDataList.Add(Mdata6);
+                }
+
+                if (CurrentBasicPayCount != 0)
+                {
+                    MissingData Mdata7 = new MissingData();
+                    Mdata7.Title = "Current Basic Pay";
+                    Mdata7.CountValue = CurrentBasicPayCount;
+                    MissingDataList.Add(Mdata7);
+                }
+
+                if (PANNumberCount != 0)
+                {
+                    MissingData Mdata8 = new MissingData();
+                    Mdata8.Title = "PAN Number";
+                    Mdata8.CountValue = PANNumberCount;
+                    MissingDataList.Add(Mdata8);
+                }
+
+                if (AadhaarNumberCount != 0)
+                {
+                    MissingData Mdata9 = new MissingData();
+                    Mdata9.Title = "Aadhaar Number";
+                    Mdata9.CountValue = AadhaarNumberCount;
+                    MissingDataList.Add(Mdata9);
+                }
+
+                if (PassportNumberCount != 0)
+                {
+                    MissingData Mdata10 = new MissingData();
+                    Mdata10.Title = "Passport Number";
+                    Mdata10.CountValue = PassportNumberCount;
+                    MissingDataList.Add(Mdata10);
+                }
+
+
+                if (VehicleTypeCount != 0)
+                {
+                    MissingData Mdata11 = new MissingData();
+                    Mdata11.Title = "Vehicle Type";
+                    Mdata11.CountValue = VehicleTypeCount;
+                    MissingDataList.Add(Mdata11);
+                }
+
+                if (VehicleNumberCount != 0)
+                {
+                    MissingData Mdata12 = new MissingData();
+                    Mdata12.Title = "Vehicle Number";
+                    Mdata12.CountValue = VehicleNumberCount;
+                    MissingDataList.Add(Mdata12);
+                }
+
+
+                if (VehicleCategoryCount != 0)
+                {
+                    MissingData Mdata13 = new MissingData();
+                    Mdata13.Title = "Vehicle Category";
+                    Mdata13.CountValue = VehicleCategoryCount;
+                    MissingDataList.Add(Mdata13);
+                }
+
+                if (AlternateEmailIDCount != 0)
+                {
+                    MissingData Mdata14 = new MissingData();
+                    Mdata14.Title = "Alternate Email ID";
+                    Mdata14.CountValue = AlternateEmailIDCount;
+                    MissingDataList.Add(Mdata14);
+                }
+
+                if (EmergencyPersonCount != 0)
+                {
+                    MissingData Mdata15 = new MissingData();
+                    Mdata15.Title = "Emergency Person";
+                    Mdata15.CountValue = EmergencyPersonCount;
+                    MissingDataList.Add(Mdata15);
+                }
+
+                if (EmergencyRelationCount != 0)
+                {
+                    MissingData Mdata16 = new MissingData();
+                    Mdata16.Title = "Emergency Relation";
+                    Mdata16.CountValue = EmergencyRelationCount;
+                    MissingDataList.Add(Mdata16);
+                }
+
+                if (EmergencyContactCount != 0)
+                {
+                    MissingData Mdata17 = new MissingData();
+                    Mdata17.Title = "Emergency Contact";
+                    Mdata17.CountValue = EmergencyContactCount;
+                    MissingDataList.Add(Mdata17);
+                }
+
+
+                if (UANNumberCount != 0)
+                {
+                    MissingData Mdata18 = new MissingData();
+                    Mdata18.Title = "UAN Number ";
+                    Mdata18.CountValue = UANNumberCount;
+                    MissingDataList.Add(Mdata18);
+                }
+
+                if (MaritalStatusCount != 0)
+                {
+                    MissingData Mdata19 = new MissingData();
+                    Mdata19.Title = "Marital Status";
+                    Mdata19.CountValue = MaritalStatusCount;
+                    MissingDataList.Add(Mdata19);
+                }
+
+                if (BloodGroupCount != 0)
+                {
+                    MissingData Mdata20 = new MissingData();
+                    Mdata20.Title = "Blood Group";
+                    Mdata20.CountValue = BloodGroupCount;
+                    MissingDataList.Add(Mdata20);
+                }
+
+                if (SeatingLocationCount != 0)
+                {
+                    MissingData Mdata21 = new MissingData();
+                    Mdata21.Title = "Seating Location";
+                    Mdata21.CountValue = SeatingLocationCount;
+                    MissingDataList.Add(Mdata21);
+                }
+
+                if (DeputedLocationCount != 0)
+                {
+                    MissingData Mdata22 = new MissingData();
+                    Mdata22.Title = "Deputed Location";
+                    Mdata22.CountValue = DeputedLocationCount;
+                    MissingDataList.Add(Mdata22);
+                }
+
+                if (DateOfBirthCount != 0)
+                {
+                    MissingData Mdata23 = new MissingData();
+                    Mdata23.Title = "Date Of Birth";
+                    Mdata23.CountValue = DateOfBirthCount;
+                    MissingDataList.Add(Mdata23);
+                }
+
+                if (DateofJoiningParentOrgCount != 0)
+                {
+                    MissingData Mdata24 = new MissingData();
+                    Mdata24.Title = "Date of Joining Parent Org";
+                    Mdata24.CountValue = DateofJoiningParentOrgCount;
+                    MissingDataList.Add(Mdata24);
+                }
+
+                if (DateOfContractExpiryCount != 0)
+                {
+                    MissingData Mdata25 = new MissingData();
+                    Mdata25.Title = "Date Of Contract Expiry";
+                    Mdata25.CountValue = DateOfContractExpiryCount;
+                    MissingDataList.Add(Mdata25);
+                }
+
+                if (DateofJoiningDGHCount != 0)
+                {
+                    MissingData Mdata26 = new MissingData();
+                    Mdata26.Title = "Date of Joining DGH";
+                    Mdata26.CountValue = DateofJoiningDGHCount;
+                    MissingDataList.Add(Mdata26);
+                }
+
+                if (MissingDataList.Count>0)
+                {
+                    ViewBag.MissingDataSummary = MissingDataList;
+                }
+
+                DataTable dt_ = GetDataTable(employeesCheck, reportSelection);
+
+                ViewBag.ReportTitle = "- Data Completed Report ";
+
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+        [HttpPost]
         public ActionResult MissingDataReport(ReportSelectionViewModel reportSelection)
         {
 
@@ -902,12 +1449,45 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                   ((posting.From >= reportSelection.From || !posting.From.HasValue) && (posting.To <= reportSelection.To || !posting.To.HasValue))
                                   select employee).Distinct().ToList();
 
+                List<MissingData> MissingDataList = new List<MissingData>();
+
+
+                var DeputationPeriodCount = 0;
+                var MobileNumberCount = 0;
+                var ResidenceNumberCount = 0;
+                var ResidenceAddressCount = 0;
+                var PermanentAddressCount = 0;
+                var PrimaryExpertiseCount = 0;
+                var CurrentBasicPayCount = 0;
+                var PANNumberCount = 0;
+                var AadhaarNumberCount = 0;
+                var PassportNumberCount = 0;
+                var VehicleTypeCount = 0;
+                var VehicleNumberCount = 0;
+                var VehicleCategoryCount = 0;
+                var AlternateEmailIDCount = 0;
+                var EmergencyPersonCount = 0;
+                var EmergencyRelationCount = 0;
+                var EmergencyContactCount = 0;
+                var UANNumberCount = 0;
+                var MaritalStatusCount = 0;
+                var BloodGroupCount = 0;
+                var SeatingLocationCount = 0;
+                var DeputedLocationCount = 0;
+                var DateOfBirthCount = 0;
+                var DateofJoiningParentOrgCount = 0;
+                var DateOfContractExpiryCount = 0;
+                var DateofJoiningDGHCount = 0;
+                var EmailIDCount = 0;
 
                 foreach (var data in employees)
                 {
                     if (data.EmployeeCode == null)
                     {
                         data.EmployeeCode = "Missing";
+
+
+
                     }
                     if (data.Title == null)
                     {
@@ -917,63 +1497,74 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     {
                         data.FirstName = "Missing";
                     }
-                   
-                    if (data.LastName == null)
-                    {
-                        data.LastName = "Missing";
-                    }
-
                     if (data.DeputationPeriod == null)
                     {
                         data.DeputationPeriod = "Missing";
+
+                        DeputationPeriodCount = DeputationPeriodCount + 1;
+
+
                     }
+
 
                     if (data.MobileNumber == null)
                     {
                         data.MobileNumber = "Missing";
+                        MobileNumberCount = MobileNumberCount + 1;
+
                     }
 
                     if (data.ResidenceNumber == null)
                     {
                         data.ResidenceNumber = "Missing";
+
+                        ResidenceNumberCount = ResidenceNumberCount + 1;
+
                     }
 
                     if (data.ResidenceAddress == null)
                     {
                         data.ResidenceAddress = "Missing";
+                        ResidenceAddressCount = ResidenceAddressCount + 1;
                     }
 
                     if (data.PermanentAddress == null)
                     {
                         data.PermanentAddress = "Missing";
+                        PermanentAddressCount = PermanentAddressCount + 1;
                     }
 
                     if (data.PrimaryExpertise == null)
                     {
                         data.PrimaryExpertise = "Missing";
+                        PrimaryExpertiseCount = PrimaryExpertiseCount + 1;
                     }
 
                     if (data.CurrentBasicPay == null)
                     {
 
                         data.CurrentBasicPay = "Missing";
+                        CurrentBasicPayCount = CurrentBasicPayCount + 1;
                     }
 
                     if (data.PANNumber == null)
                     {
 
                         data.PANNumber = "Missing";
+                        PANNumberCount = PANNumberCount + 1;
                     }
 
                     if (data.AadhaarNumber == null)
                     {
 
                         data.AadhaarNumber = "Missing";
+                        AadhaarNumberCount = AadhaarNumberCount + 1;
                     }
 
                     if (data.PassportNumber == null)
                     {
                         data.PassportNumber = "Missing";
+                        PassportNumberCount = PassportNumberCount + 1;
                     }
 
 
@@ -981,99 +1572,268 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     if (data.VehicleType == null)
                     {
                         data.VehicleType = "Missing";
+                        VehicleTypeCount = VehicleTypeCount + 1;
                     }
 
                     if (data.VehicleNumber == null)
                     {
                         data.VehicleNumber = "Missing";
+                        VehicleNumberCount = VehicleNumberCount + 1;
 
                     }
 
                     if (data.VehicleCategory == null)
                     {
                         data.VehicleCategory = VehicleCategory.Missing;
+                        VehicleCategoryCount = VehicleCategoryCount + 1;
                     }
 
-                    if (data.AlternateEmailID == null) {
+                    if (data.AlternateEmailID == null)
+                    {
                         data.AlternateEmailID = "Missing";
-                    
+                        AlternateEmailIDCount = AlternateEmailIDCount + 1;
+
                     }
 
-                    if (data.EmergencyPerson == null) {
+                    if (data.EmergencyPerson == null)
+                    {
                         data.EmergencyPerson = "Missing";
+                        EmergencyPersonCount = EmergencyPersonCount + 1;
                     }
 
-                    if (data.EmergencyRelation == null) {
+                    if (data.EmergencyRelation == null)
+                    {
                         data.EmergencyRelation = "Missing";
+                        EmergencyRelationCount = EmergencyRelationCount + 1;
                     }
 
-                    if (data.EmergencyContact == null) {
+                    if (data.EmergencyContact == null)
+                    {
                         data.EmergencyContact = "Missing";
+                        EmergencyContactCount = EmergencyContactCount + 1;
                     }
 
-                    if (data.UANNumber == null) {
+                    if (data.UANNumber == null)
+                    {
 
                         data.UANNumber = "Missing";
+                        UANNumberCount = UANNumberCount + 1;
                     }
 
-                    if(data.MaritalStatus==null)
+                    if (data.MaritalStatus == null)
                     {
                         data.MaritalStatus = MaritalStatus.Missing;
+                        MaritalStatusCount = MaritalStatusCount + 1;
                     }
 
 
                     if (data.BloodGroup == null)
                     {
                         data.BloodGroup = BloodGroup.Missing;
+                        BloodGroupCount = BloodGroupCount + 1;
                     }
 
                     if (data.SeatingLocation == null)
                     {
                         data.SeatingLocation = SeatingLocation.Missing;
+                        SeatingLocationCount = SeatingLocationCount + 1;
                     }
 
                     if (data.DeputedLocation == null)
                     {
                         data.DeputedLocation = DeputeLocations.Missing;
+                        DeputedLocationCount = DeputedLocationCount + 1;
                     }
-                  
-                    
 
 
-                    //if (data.DateOfBirth == null)
+
+
+                    if (data.DateOfBirth == null)
+                    {
+                        DateOfBirthCount = DateOfBirthCount + 1;
+                    }
+                    //if (data.DateOfSuperannuation == null)
                     //{
-                    //    Convert.ToString(data.DateOfBirth) ="Missing";
-                    //}
-                    //if (data.DateOfSuperannuation == null) {
 
 
-                    //}
+                    // }
 
 
-                    //if (data.DateofJoiningParentOrg == null) { }
+                    if (data.DateofJoiningParentOrg == null)
+                    {
+
+                        DateofJoiningParentOrgCount = DateofJoiningParentOrgCount + 1;
+
+                    }
 
                     //if (data.DateofRelievingLastOffice == null) { }
 
 
-                    //if (data.DateOfContractExpiry == null) { }
+                    if (data.DateOfContractExpiry == null)
+                    {
+                        DateOfContractExpiryCount = DateOfContractExpiryCount + 1;
+                    }
 
 
-                    //if (data.DateofJoiningDGH == null) { }
+                    if (data.DateofJoiningDGH == null)
+                    {
+                        DateofJoiningDGHCount = DateofJoiningDGHCount + 1;
+                    }
                     //if (data.DateofLeavingDGH == null) { }
-
-
-
-
-
 
                     if (data.EmailID == null)
                     {
                         data.EmailID = "Missing";
+                        EmailIDCount = EmailIDCount + 1;
                     }
                     employeesCheck.Add(data);
 
+
+
+
+
                 }
 
+                MissingData Mdata27 = new MissingData();
+                Mdata27.Title = "EmailID";
+                Mdata27.CountValue = EmailIDCount;
+                MissingDataList.Add(Mdata27);
+
+                MissingData Mdata1 = new MissingData();
+                Mdata1.Title = "Deputation Period";
+                Mdata1.CountValue = DeputationPeriodCount;
+                MissingDataList.Add(Mdata1);
+
+
+                MissingData Mdata2 = new MissingData();
+                Mdata2.Title = "Mobile Number";
+                Mdata2.CountValue = MobileNumberCount;
+                MissingDataList.Add(Mdata2);
+
+                MissingData Mdata3 = new MissingData();
+                Mdata3.Title = "Residence Number";
+                Mdata3.CountValue = ResidenceNumberCount;
+                MissingDataList.Add(Mdata3);
+
+
+                MissingData Mdata4 = new MissingData();
+                Mdata4.Title = "Residence Address";
+                Mdata4.CountValue = ResidenceAddressCount;
+                MissingDataList.Add(Mdata4);
+
+                MissingData Mdata5 = new MissingData();
+                Mdata5.Title = "Permanent Address";
+                Mdata5.CountValue = PermanentAddressCount;
+                MissingDataList.Add(Mdata5);
+
+                MissingData Mdata6 = new MissingData();
+                Mdata6.Title = "Primary Expertise";
+                Mdata6.CountValue = PrimaryExpertiseCount;
+                MissingDataList.Add(Mdata6);
+
+                MissingData Mdata7 = new MissingData();
+                Mdata7.Title = "Current Basic Pay";
+                Mdata7.CountValue = CurrentBasicPayCount;
+                MissingDataList.Add(Mdata7);
+
+                MissingData Mdata8 = new MissingData();
+                Mdata8.Title = "PAN Number";
+                Mdata8.CountValue = PANNumberCount;
+                MissingDataList.Add(Mdata8);
+
+                MissingData Mdata9 = new MissingData();
+                Mdata9.Title = "Aadhaar Number";
+                Mdata9.CountValue = AadhaarNumberCount;
+                MissingDataList.Add(Mdata9);
+
+                MissingData Mdata10 = new MissingData();
+                Mdata10.Title = "Passport Number";
+                Mdata10.CountValue = PassportNumberCount;
+                MissingDataList.Add(Mdata10);
+
+                MissingData Mdata11 = new MissingData();
+                Mdata11.Title = "Vehicle Type";
+                Mdata11.CountValue = VehicleTypeCount;
+                MissingDataList.Add(Mdata11);
+
+                MissingData Mdata12 = new MissingData();
+                Mdata12.Title = "Vehicle Number";
+                Mdata12.CountValue = VehicleNumberCount;
+                MissingDataList.Add(Mdata12);
+
+                MissingData Mdata13 = new MissingData();
+                Mdata13.Title = "Vehicle Category";
+                Mdata13.CountValue = VehicleCategoryCount;
+                MissingDataList.Add(Mdata13);
+
+                MissingData Mdata14 = new MissingData();
+                Mdata14.Title = "Alternate Email ID";
+                Mdata14.CountValue = AlternateEmailIDCount;
+                MissingDataList.Add(Mdata14);
+
+                MissingData Mdata15 = new MissingData();
+                Mdata15.Title = "Emergency Person";
+                Mdata15.CountValue = EmergencyPersonCount;
+                MissingDataList.Add(Mdata15);
+
+                MissingData Mdata16 = new MissingData();
+                Mdata16.Title = "Emergency Relation";
+                Mdata16.CountValue = EmergencyRelationCount;
+                MissingDataList.Add(Mdata16);
+
+                MissingData Mdata17 = new MissingData();
+                Mdata17.Title = "Emergency Contact";
+                Mdata17.CountValue = EmergencyContactCount;
+                MissingDataList.Add(Mdata17);
+
+
+                MissingData Mdata18 = new MissingData();
+                Mdata18.Title = "UAN Number ";
+                Mdata18.CountValue = UANNumberCount;
+                MissingDataList.Add(Mdata18);
+
+                MissingData Mdata19 = new MissingData();
+                Mdata19.Title = "Marital Status";
+                Mdata19.CountValue = MaritalStatusCount;
+                MissingDataList.Add(Mdata19);
+
+                MissingData Mdata20 = new MissingData();
+                Mdata20.Title = "Blood Group";
+                Mdata20.CountValue = BloodGroupCount;
+                MissingDataList.Add(Mdata20);
+
+                MissingData Mdata21 = new MissingData();
+                Mdata21.Title = "Seating Location";
+                Mdata21.CountValue = SeatingLocationCount;
+                MissingDataList.Add(Mdata21);
+
+                MissingData Mdata22 = new MissingData();
+                Mdata22.Title = "Deputed Location";
+                Mdata22.CountValue = DeputedLocationCount;
+                MissingDataList.Add(Mdata22);
+
+                MissingData Mdata23 = new MissingData();
+                Mdata23.Title = "Date Of Birth";
+                Mdata23.CountValue = DateOfBirthCount;
+                MissingDataList.Add(Mdata23);
+
+                MissingData Mdata24 = new MissingData();
+                Mdata24.Title = "Date of Joining Parent Org";
+                Mdata24.CountValue = DateofJoiningParentOrgCount;
+                MissingDataList.Add(Mdata24);
+
+                MissingData Mdata25 = new MissingData();
+                Mdata25.Title = "Date Of Contract Expiry";
+                Mdata25.CountValue = DateOfContractExpiryCount;
+                MissingDataList.Add(Mdata25);
+
+                MissingData Mdata26 = new MissingData();
+                Mdata26.Title = "Date of Joining DGH";
+                Mdata26.CountValue = DateofJoiningDGHCount;
+                MissingDataList.Add(Mdata26);
+
+
+                ViewBag.MissingDataSummary = MissingDataList;
 
                 DataTable dt_ = GetDataTable(employeesCheck, reportSelection);
 
@@ -1082,6 +1842,100 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 return View("GeneratedReportView", dt_);
             }
         }
+
+        [HttpPost]
+        public ActionResult LevelWiseReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                DataTable dt_ = null;
+                //var orgnullcheck = reportSelection.Organisation.Contains("-1");
+                var levelnullcheck = reportSelection.Level.Contains("-1");
+                var employees1 =
+                    (from employee in EmployeeDetailContext.Collection()
+                     .Where(e => reportSelection.Categories.Contains(e.EmployeeType))
+                     .ToList()
+                     join posting in PostingDetailContext.Collection()
+                                                         .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                         .ToList()
+                                                          on employee.Id equals posting.EmployeeId
+                     join level in LevelContext.Collection().ToList()
+                                       on employee.LevelId equals level.Id into yy1
+                     from y2 in yy1.DefaultIfEmpty()
+
+                     join org in OrganisationContext.Collection().ToList()
+                     on employee.OrganisationId equals org.Id into xx
+                     from y in xx.DefaultIfEmpty()
+
+                     orderby employee.FirstName, employee.MiddleName, employee.LastName
+                     select new
+                     {
+                         employee.EmployeeCode,
+                         FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                         Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                         Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                         EmployeeType = employee.EmployeeType.GetDisplayName(),
+                         Organisation = y == null ? "" : y.Name,
+                         //Discipline = y1 == null ? "" : y1.Name,
+                         //Level = y2 == null ? "" : y2.Name,
+                         DateofJoiningDGH = employee.DateofJoiningDGH?.ToString("dd-MM-yyyy"),
+                         employee.DateOfSuperannuation,
+                         SuperannuationDate = employee.DateOfSuperannuation?.ToString("dd-MM-yyyy"),
+                         DateofLeavingDGH = employee.DateofLeavingDGH?.ToString("dd-MM-yyyy"),
+
+                         employee.ReasonForLeaving,
+                         employee.DeputationPeriod,
+                         employee.WorkingStatus,
+                         WorkStatus = employee.WorkingStatus == true ? "working" : "separated",
+                         employee.LevelId,
+                         employee.OrganisationId,
+                     }).Distinct().Where(x => (reportSelection?.Working == "working" ? x.WorkingStatus == true :
+                          reportSelection?.Working == "separated" ? false : x.WorkingStatus == true || x.WorkingStatus == false)
+
+                                      ).ToList();
+
+
+
+                dt_ = ToDataTable(employees1);
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+                else if (!reportSelection.From.HasValue)
+                {
+                    var emp = employees1.Where(x => Convert.ToDateTime(x.DateofJoiningDGH) <= reportSelection.To || (!x.WorkingStatus && Convert.ToDateTime(x.DateofJoiningDGH) < reportSelection.To)).ToList();
+                    //                 select employee).Distinct().ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else if (!reportSelection.To.HasValue)
+                {
+                    var emp = employees1.Where(x => Convert.ToDateTime(x.DateofJoiningDGH) >= reportSelection.From).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else
+                {
+                    var emp = employees1.Where(x => Convert.ToDateTime(x.DateofJoiningDGH) >= reportSelection.From && Convert.ToDateTime(x.DateofJoiningDGH) <= reportSelection.To).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                dt_.Columns.Remove("LevelId");
+                dt_.Columns.Remove("OrganisationId");
+                dt_.Columns.Remove("DateOfSuperannuation");
+                dt_.Columns.Remove("WorkingStatus");
+                dt_.Columns.Remove("WorkStatus");
+
+                ViewBag.ReportTitle = "- Level Wise Report";
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+
+
+
 
 
         [HttpPost]
@@ -1684,6 +2538,149 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
             return columdetail;
         }
+
+        [HttpPost]
+        public ActionResult ManPowerVintageReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+            else
+            {
+                ViewBag.Title = "Man Power Vintage Report (Department Wise)";
+                DataTable dt_ = null;
+                var type = reportSelection.CustomColumns.ToList();
+                // var status = reportSelection?.Working == "working" ? true : reportSelection?.Working == "separated" ? false : null;
+                // List<EmployeeDetail> employees = new List<EmployeeDetail>();
+
+                var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+
+                                  join posting in PostingDetailContext.Collection()
+                                                     .Where(p => reportSelection.Departments.Contains(p.DepartmentId))
+                                                     .ToList()
+                                                      on employee.Id equals posting.EmployeeId
+                                  join org in OrganisationContext.Collection().ToList()
+                                 // where(employee.OrganisationId == org.Id)
+                                 on employee.OrganisationId equals org.Id into xx
+                                  //into xx
+                                  from y in xx.DefaultIfEmpty()
+                                  join disci in DisciplineContext.Collection().ToList()
+                                  on employee.DisciplineId equals disci.Id into yy
+                                  from y1 in yy.DefaultIfEmpty()
+                                  join level in LevelContext.Collection().ToList()
+                                    on employee.LevelId equals level.Id into yy1
+                                  from y2 in yy1.DefaultIfEmpty()
+
+                                  select new
+                                  {
+                                      employee.EmployeeCode,
+                                      FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                      EmployeeType = employee.EmployeeType.GetDisplayName(),
+                                      Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                                      //employee.AadhaarNumber,
+                                      //BloodGroup = employee.BloodGroup.GetDisplayName(),
+                                      //QualificationDetails = ManPowerEtraDetai("Qualification Details", employee, reportSelection),
+                                      PromotionDetails = ManPowerEtraDetai("Promotion Details", employee, reportSelection),
+                                      PostingDetails = ManPowerEtraDetai("Posting Details", employee, reportSelection),
+                                      //DependentDetails = ManPowerEtraDetai("Dependent Details", employee, reportSelection),
+                                      TelephoneExtension = ManPowerEtraDetai("Telephone Extension", employee, reportSelection),
+                                      Vintage = ManPowerEtraDetai("Vintage", employee, reportSelection),
+                                      Organisation = y == null ? "" : y.Name,
+                                      DateOfBirth = employee.DateOfBirth?.ToString("dd-MM-yyyy"),
+                                      //DateOfSuperannuation = employee.DateOfSuperannuation?.ToString("dd-MM-yyyy"),
+                                      DateofJoiningParentOrg = employee.DateofJoiningParentOrg?.ToString("dd-MM-yyyy"),
+                                      DateofRelievingLastOffice = employee.DateofRelievingLastOffice?.ToString("dd-MM-yyyy"),
+                                      employee.DateofJoiningDGH,
+                                      DGHJoinigDate = employee.DateofJoiningDGH?.ToString("dd-MM-yyyy"),
+                                      employee.DateofLeavingDGH,
+                                      DGHLeavingDate = employee.DateofLeavingDGH?.ToString("dd-MM-yyyy"),
+
+                                      employee.ReasonForLeaving,
+                                      employee.DeputationPeriod,
+                                      SeatingLocation = employee.SeatingLocation.GetDisplayName(),
+
+                                      employee.MobileNumber,
+                                      //employee.ResidenceNumber,
+                                      //employee.ResidenceAddress,
+                                      //employee.PermanentAddress,
+                                      employee.EmailID,
+                                      //employee.ProfilePhoto,
+                                      employee.WorkingStatus,
+                                      WorkStatus = employee.WorkingStatus == true ? "working" : "separated",
+                                      employee.Gender,
+                                      Discipline = y1 == null ? "" : y1.Name,
+                                      employee.PrimaryExpertise,
+                                      Level = y2 == null ? "" : y2.Name,
+                                      //employee.CurrentBasicPay,
+                                      //employee.PANNumber,
+                                      //employee.PassportNumber,
+                                      //employee.PassportValidity,
+                                      //employee.VehicleNumber,
+                                      //employee.MaritalStatus,
+                                      //MarriageDate = employee.MarriageDate?.ToString("dd-MM-yyyy"),
+
+                                      employee.AlternateEmailID,
+                                      //employee.EmergencyPerson,
+                                      //employee.EmergencyContact,
+                                      //employee.UANNumber,
+                                      DeputedLocation = employee.DeputedLocation.GetDisplayName(),
+                                      //employee.CreatedAt,
+                                      //employee.LastUpdateAt,
+                                      //employee.LastUpdateBy,
+                                      //employee.VehicleType,
+                                      //VehicleCategory = employee.VehicleCategory.GetDisplayName(),
+                                      //employee.EmergencyRelation,
+                                      EmployeeTypeId = employee.EmployeeType,
+                                  }).Distinct().Where(p => type.Contains(p.EmployeeTypeId.ToString()) &&
+                                  (reportSelection?.Working == "working" ? p.WorkingStatus == true :
+                                  reportSelection?.Working == "separated" ? false : p.WorkingStatus == true || p.WorkingStatus == false)
+
+).ToList();
+
+
+                if (!reportSelection.From.HasValue && !reportSelection.To.HasValue)
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+                else if (!reportSelection.From.HasValue)
+                {
+
+                    var emp = employees1.Where(x =>
+                     reportSelection?.Working == "separated" ? (x.DateofLeavingDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To)) :
+                     (x.DateofJoiningDGH <= reportSelection.To || (!x.WorkingStatus && x.DateofLeavingDGH < reportSelection.To))).ToList();
+                    //                 select employee).Distinct().ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else if (!reportSelection.To.HasValue)
+                {
+                    var emp = employees1.Where(x =>
+                     reportSelection?.Working == "separated" ? (x.DateofLeavingDGH >= reportSelection.From) :
+                     (x.DateofJoiningDGH >= reportSelection.From)).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                else
+                {
+                    var emp = employees1.Where(x =>
+                      reportSelection?.Working == "separated" ? (x.DateofLeavingDGH >= reportSelection.From && x.DateofLeavingDGH <= reportSelection.To) :
+                       (x.DateofJoiningDGH >= reportSelection.From && x.DateofJoiningDGH <= reportSelection.To)).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+
+                dt_.Columns.Remove("EmployeeTypeId");
+                dt_.Columns.Remove("DateofJoiningDGH");
+                dt_.Columns.Remove("DateofLeavingDGH");
+                dt_.Columns.Remove("WorkingStatus");
+                //dt_.Columns.Remove("ProfilePhoto");
+
+
+                ViewBag.ReportTitle = "- Man Power Vintage Report (Department Wise)";
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+
         [HttpPost]
         public ActionResult ManPowerReport(ReportSelectionViewModel reportSelection)
         {
@@ -1889,7 +2886,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult VintageReportExclude (ReportSelectionViewModel reportSelection)
+        public ActionResult VintageReportExclude(ReportSelectionViewModel reportSelection)
         {
             if (!ModelState.IsValid)
             {
@@ -1901,7 +2898,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 List<EmployeeDetail> employees = new List<EmployeeDetail>();
 
                 if (!reportSelection.From.HasValue && !reportSelection.To.HasValue) employees = (from employee in EmployeeDetailContext.Collection()
-                                                                                                                                        .Where(e => reportSelection.Categories.Contains(e.EmployeeType) 
+                                                                                                                                        .Where(e => reportSelection.Categories.Contains(e.EmployeeType)
                                                                                                                                         )
                                                                                                                                         .ToList()
                                                                                                  join posting in PostingDetailContext.Collection()
@@ -2381,10 +3378,6 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         {
             ReportSelectionViewModel reportSelectionViewModel;
             if (customReportType.IsNullOrWhiteSpace()) reportSelectionViewModel = new ReportSelectionViewModel();
-            else if (customReportType == "MissingDataReport")
-            {
-                reportSelectionViewModel = new ReportSelectionViewModel();
-            }
 
             else reportSelectionViewModel = new ReportSelectionViewModel(customReportType);
 
@@ -2392,7 +3385,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                                        orderby department.Name
                                                        select new SelectListItem() { Value = department.Id, Text = department.Name }).AsEnumerable<SelectListItem>();
 
-            if (customReportType == "SuperannuationReport")
+            if (customReportType == "SuperannuationReport" || customReportType == "LevelWiseReport")
             {
 
                 var organisation = (from m in OrganisationContext.Collection()
@@ -2432,6 +3425,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                                       select new SelectListItem() { Value = level.Value, Text = level.Text }).AsEnumerable<SelectListItem>();
 
             }
+
+
             return reportSelectionViewModel;
         }
 

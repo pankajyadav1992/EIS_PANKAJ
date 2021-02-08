@@ -118,4 +118,12 @@ namespace EmployeeInformationSystem.WebUI.Models
         public bool DeleteEmployee { get; set; }
         public bool GenerateReports { get; set; }
     }
+
+    public class MissingData
+    {
+        public string Title { get; set; }
+        public int CountValue { get; set; }
+    }
+
+   
 }

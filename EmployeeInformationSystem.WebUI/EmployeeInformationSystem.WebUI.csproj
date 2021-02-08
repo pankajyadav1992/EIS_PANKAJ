@@ -679,6 +679,9 @@
     <Content Include="Views\Reports\LoginDetailsReport.cshtml" />
     <Content Include="Views\Reports\MissingDataReport.cshtml" />
     <Content Include="Views\Reports\VintageReportExclude.cshtml" />
+    <Content Include="Views\Reports\LevelWiseReport.cshtml" />
+    <Content Include="Views\Reports\ManPowerVintageReport.cshtml" />
+    <Content Include="Views\Reports\DataCompletedReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
