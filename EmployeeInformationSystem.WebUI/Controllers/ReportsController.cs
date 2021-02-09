@@ -34,6 +34,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<Department> DepartmentContext;
         IRepository<QualificationDetail> QualificationDetailContext;
         IRepository<TelephoneExtension> TelephoneExtensionContext;
+        IRepository<EmployeeAsHoD> EmployeeAsHoDDetailContext;
 
         public ReportsController(IRepository<EmployeeDetail> employeeDetailContext,
         IRepository<Discipline> disciplineContext,
@@ -49,7 +50,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<PromotionDetail> promotionDetailContext,
         IRepository<Department> departmentContext,
         IRepository<QualificationDetail> qualificationDetailContext,
-        IRepository<TelephoneExtension> telephoneExtensionContext)
+        IRepository<TelephoneExtension> telephoneExtensionContext,
+        IRepository<EmployeeAsHoD> employeeAsHoDDetailContext
+        )
         {
             EmployeeDetailContext = employeeDetailContext;
             DisciplineContext = disciplineContext;
@@ -67,6 +70,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             QualificationDetailContext = qualificationDetailContext;
             TelephoneExtensionContext = telephoneExtensionContext;
 
+            EmployeeAsHoDDetailContext = employeeAsHoDDetailContext;
             //Setting Parameters for Page
             base.SetGlobalParameters();
             ViewBag.UserName = UserName;
@@ -798,7 +802,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                         employee.LevelId,
                         employee.OrganisationId,
                         EmployeeTypeId = employee.EmployeeType,
-                        ContractExpiryDate = employee.DateOfContractExpiry?.ToString("dd-Mm-yyyy")
+                        ContractExpiryDate = employee.DateOfContractExpiry?.ToString("dd-MM-yyyy")
 
                     }
 
@@ -951,22 +955,22 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     {
                         if (data.EmployeeCode == null)
                         {
-                            data.EmployeeCode = "Missing";
+                            data.EmployeeCode = "--Missing--";
 
 
 
                         }
                         if (data.Title == null)
                         {
-                            data.Title = "Missing";
+                            data.Title = "--Missing--";
                         }
                         if (data.FirstName == null)
                         {
-                            data.FirstName = "Missing";
+                            data.FirstName = "--Missing--";
                         }
                         if (data.DeputationPeriod == null)
                         {
-                            data.DeputationPeriod = "Missing";
+                            data.DeputationPeriod = "--Missing--";
 
                             DeputationPeriodCount = DeputationPeriodCount + 1;
 
@@ -976,14 +980,14 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                         if (data.MobileNumber == null)
                         {
-                            data.MobileNumber = "Missing";
+                            data.MobileNumber = "--Missing--";
                             MobileNumberCount = MobileNumberCount + 1;
 
                         }
 
                         if (data.ResidenceNumber == null)
                         {
-                            data.ResidenceNumber = "Missing";
+                            data.ResidenceNumber = "--Missing--";
 
                             ResidenceNumberCount = ResidenceNumberCount + 1;
 
@@ -991,46 +995,46 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                         if (data.ResidenceAddress == null)
                         {
-                            data.ResidenceAddress = "Missing";
+                            data.ResidenceAddress = "--Missing--";
                             ResidenceAddressCount = ResidenceAddressCount + 1;
                         }
 
                         if (data.PermanentAddress == null)
                         {
-                            data.PermanentAddress = "Missing";
+                            data.PermanentAddress = "--Missing--";
                             PermanentAddressCount = PermanentAddressCount + 1;
                         }
 
                         if (data.PrimaryExpertise == null)
                         {
-                            data.PrimaryExpertise = "Missing";
+                            data.PrimaryExpertise = "--Missing--";
                             PrimaryExpertiseCount = PrimaryExpertiseCount + 1;
                         }
 
                         if (data.CurrentBasicPay == null)
                         {
 
-                            data.CurrentBasicPay = "Missing";
+                            data.CurrentBasicPay = "--Missing--";
                             CurrentBasicPayCount = CurrentBasicPayCount + 1;
                         }
 
                         if (data.PANNumber == null)
                         {
 
-                            data.PANNumber = "Missing";
+                            data.PANNumber = "--Missing--";
                             PANNumberCount = PANNumberCount + 1;
                         }
 
                         if (data.AadhaarNumber == null)
                         {
 
-                            data.AadhaarNumber = "Missing";
+                            data.AadhaarNumber = "--Missing--";
                             AadhaarNumberCount = AadhaarNumberCount + 1;
                         }
 
                         if (data.PassportNumber == null)
                         {
-                            data.PassportNumber = "Missing";
+                            data.PassportNumber = "--Missing--";
                             PassportNumberCount = PassportNumberCount + 1;
                         }
 
@@ -1038,13 +1042,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                         if (data.VehicleType == null)
                         {
-                            data.VehicleType = "Missing";
+                            data.VehicleType = "--Missing--";
                             VehicleTypeCount = VehicleTypeCount + 1;
                         }
 
                         if (data.VehicleNumber == null)
                         {
-                            data.VehicleNumber = "Missing";
+                            data.VehicleNumber = "--Missing--";
                             VehicleNumberCount = VehicleNumberCount + 1;
 
                         }
@@ -1057,33 +1061,33 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                         if (data.AlternateEmailID == null)
                         {
-                            data.AlternateEmailID = "Missing";
+                            data.AlternateEmailID = "--Missing--";
                             AlternateEmailIDCount = AlternateEmailIDCount + 1;
 
                         }
 
                         if (data.EmergencyPerson == null)
                         {
-                            data.EmergencyPerson = "Missing";
+                            data.EmergencyPerson = "--Missing--";
                             EmergencyPersonCount = EmergencyPersonCount + 1;
                         }
 
                         if (data.EmergencyRelation == null)
                         {
-                            data.EmergencyRelation = "Missing";
+                            data.EmergencyRelation = "--Missing--";
                             EmergencyRelationCount = EmergencyRelationCount + 1;
                         }
 
                         if (data.EmergencyContact == null)
                         {
-                            data.EmergencyContact = "Missing";
+                            data.EmergencyContact = "--Missing--";
                             EmergencyContactCount = EmergencyContactCount + 1;
                         }
 
                         if (data.UANNumber == null)
                         {
 
-                            data.UANNumber = "Missing";
+                            data.UANNumber = "--Missing--";
                             UANNumberCount = UANNumberCount + 1;
                         }
 
@@ -1150,7 +1154,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                         if (data.EmailID == null)
                         {
-                            data.EmailID = "Missing";
+                            data.EmailID = "--Missing--";
                             EmailIDCount = EmailIDCount + 1;
                         }
                         employeesCheck.Add(data);
@@ -1379,7 +1383,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     MissingDataList.Add(Mdata26);
                 }
 
-                if (MissingDataList.Count>0)
+                if (MissingDataList.Count > 0)
                 {
                     ViewBag.MissingDataSummary = MissingDataList;
                 }
@@ -1484,22 +1488,22 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 {
                     if (data.EmployeeCode == null)
                     {
-                        data.EmployeeCode = "Missing";
+                        data.EmployeeCode = "--Missing--";
 
 
 
                     }
                     if (data.Title == null)
                     {
-                        data.Title = "Missing";
+                        data.Title = "--Missing--";
                     }
                     if (data.FirstName == null)
                     {
-                        data.FirstName = "Missing";
+                        data.FirstName = "--Missing--";
                     }
                     if (data.DeputationPeriod == null)
                     {
-                        data.DeputationPeriod = "Missing";
+                        data.DeputationPeriod = "--Missing--";
 
                         DeputationPeriodCount = DeputationPeriodCount + 1;
 
@@ -1509,14 +1513,14 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                     if (data.MobileNumber == null)
                     {
-                        data.MobileNumber = "Missing";
+                        data.MobileNumber = "--Missing--";
                         MobileNumberCount = MobileNumberCount + 1;
 
                     }
 
                     if (data.ResidenceNumber == null)
                     {
-                        data.ResidenceNumber = "Missing";
+                        data.ResidenceNumber = "--Missing--";
 
                         ResidenceNumberCount = ResidenceNumberCount + 1;
 
@@ -1524,46 +1528,46 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                     if (data.ResidenceAddress == null)
                     {
-                        data.ResidenceAddress = "Missing";
+                        data.ResidenceAddress = "--Missing--";
                         ResidenceAddressCount = ResidenceAddressCount + 1;
                     }
 
                     if (data.PermanentAddress == null)
                     {
-                        data.PermanentAddress = "Missing";
+                        data.PermanentAddress = "--Missing--";
                         PermanentAddressCount = PermanentAddressCount + 1;
                     }
 
                     if (data.PrimaryExpertise == null)
                     {
-                        data.PrimaryExpertise = "Missing";
+                        data.PrimaryExpertise = "--Missing--";
                         PrimaryExpertiseCount = PrimaryExpertiseCount + 1;
                     }
 
                     if (data.CurrentBasicPay == null)
                     {
 
-                        data.CurrentBasicPay = "Missing";
+                        data.CurrentBasicPay = "--Missing--";
                         CurrentBasicPayCount = CurrentBasicPayCount + 1;
                     }
 
                     if (data.PANNumber == null)
                     {
 
-                        data.PANNumber = "Missing";
+                        data.PANNumber = "--Missing--";
                         PANNumberCount = PANNumberCount + 1;
                     }
 
                     if (data.AadhaarNumber == null)
                     {
 
-                        data.AadhaarNumber = "Missing";
+                        data.AadhaarNumber = "--Missing--";
                         AadhaarNumberCount = AadhaarNumberCount + 1;
                     }
 
                     if (data.PassportNumber == null)
                     {
-                        data.PassportNumber = "Missing";
+                        data.PassportNumber = "--Missing--";
                         PassportNumberCount = PassportNumberCount + 1;
                     }
 
@@ -1571,13 +1575,13 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                     if (data.VehicleType == null)
                     {
-                        data.VehicleType = "Missing";
+                        data.VehicleType = "--Missing--";
                         VehicleTypeCount = VehicleTypeCount + 1;
                     }
 
                     if (data.VehicleNumber == null)
                     {
-                        data.VehicleNumber = "Missing";
+                        data.VehicleNumber = "--Missing--";
                         VehicleNumberCount = VehicleNumberCount + 1;
 
                     }
@@ -1590,33 +1594,33 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                     if (data.AlternateEmailID == null)
                     {
-                        data.AlternateEmailID = "Missing";
+                        data.AlternateEmailID = "--Missing--";
                         AlternateEmailIDCount = AlternateEmailIDCount + 1;
 
                     }
 
                     if (data.EmergencyPerson == null)
                     {
-                        data.EmergencyPerson = "Missing";
+                        data.EmergencyPerson = "--Missing--";
                         EmergencyPersonCount = EmergencyPersonCount + 1;
                     }
 
                     if (data.EmergencyRelation == null)
                     {
-                        data.EmergencyRelation = "Missing";
+                        data.EmergencyRelation = "--Missing--";
                         EmergencyRelationCount = EmergencyRelationCount + 1;
                     }
 
                     if (data.EmergencyContact == null)
                     {
-                        data.EmergencyContact = "Missing";
+                        data.EmergencyContact = "--Missing--";
                         EmergencyContactCount = EmergencyContactCount + 1;
                     }
 
                     if (data.UANNumber == null)
                     {
 
-                        data.UANNumber = "Missing";
+                        data.UANNumber = "--Missing--";
                         UANNumberCount = UANNumberCount + 1;
                     }
 
@@ -1683,7 +1687,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                     if (data.EmailID == null)
                     {
-                        data.EmailID = "Missing";
+                        data.EmailID = "--Missing--";
                         EmailIDCount = EmailIDCount + 1;
                     }
                     employeesCheck.Add(data);
@@ -1838,6 +1842,87 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 DataTable dt_ = GetDataTable(employeesCheck, reportSelection);
 
                 ViewBag.ReportTitle = "- Missing Data Report ";
+
+                return View("GeneratedReportView", dt_);
+            }
+        }
+
+
+
+        [HttpPost]
+        public ActionResult ExistingPastReport(ReportSelectionViewModel reportSelection)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(reportSelection);
+            }
+
+            else
+            {
+                DataTable dt_ = null;
+
+                var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+                                  join posting in PostingDetailContext.Collection().ToList()
+                                                            on employee.Id equals posting.EmployeeId
+
+                                  join promo in PromotionDetailContext.Collection().Where(x => x.Designation.Name.StartsWith("ADG")
+                                  || x.Designation.Name == "DG(DGH)" || x.Designation.Name.StartsWith("Head") || x.Designation.Name == "DIRECTOR GENERAL").ToList()
+                                   on employee.Id equals promo.EmployeeId
+
+                                  join org in OrganisationContext.Collection().ToList()
+                                   on employee.OrganisationId equals org.Id into xx
+
+                                  join hods in EmployeeAsHoDDetailContext.Collection().ToList()
+                                  on employee.Id equals hods.EmployeeId into hd
+
+                                  from y in xx.DefaultIfEmpty()
+                                      //from v in xy.DefaultIfEmpty()
+
+                                  from n in hd.DefaultIfEmpty()
+                                  orderby promo.Designation.Name
+                                  select new
+                                  {
+
+                                      employee.EmployeeCode,
+                                      FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                      Department = ManPowerEtraDetai("Department", employee, reportSelection),
+                                      Designation = ManPowerEtraDetai("Designation", employee, reportSelection),
+                                      PostingFromDate = posting.From?.ToString("dd-MM-yyyy"),
+                                      PostingToDate = posting.To?.ToString("dd-MM-yyyy"),
+                                      PromotionFromDate = promo.From?.ToString("dd-MM-yyyy"),
+                                      PromotionToDate = promo.To?.ToString("dd-MM-yyyy"),
+
+                                      EmployeeType = employee.EmployeeType.GetDisplayName(),
+                                      Organisation = y == null ? "" : y.Name,
+                                      WorkStatus = employee.WorkingStatus == true ? "working" : "separated",
+                                      employee.WorkingStatus
+
+                                  }
+                                ).ToList();
+
+
+                if (reportSelection.Working == "all")
+                {
+                    dt_ = ToDataTable(employees1);
+                }
+
+                else if (reportSelection.Working == "working")
+                {
+
+                    var emp = employees1.Where(x => x.WorkingStatus == true).ToList();
+                    dt_ = ToDataTable(emp);
+
+                }
+
+                else if (reportSelection.Working == "separated")
+                {
+                    var emp= employees1.Where(x => x.WorkingStatus == false).ToList();
+                    dt_ = ToDataTable(emp);
+                }
+                dt_.Columns.Remove("WorkingStatus");
+
+
+                ViewBag.ReportTitle = "- Existing/Past HODs,DGs,ADGs";
 
                 return View("GeneratedReportView", dt_);
             }

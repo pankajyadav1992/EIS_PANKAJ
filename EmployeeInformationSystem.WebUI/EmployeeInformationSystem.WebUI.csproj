@@ -682,6 +682,7 @@
     <Content Include="Views\Reports\LevelWiseReport.cshtml" />
     <Content Include="Views\Reports\ManPowerVintageReport.cshtml" />
     <Content Include="Views\Reports\DataCompletedReport.cshtml" />
+    <Content Include="Views\Reports\ExistingPastReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
