@@ -66,6 +66,12 @@ namespace EmployeeInformationSystem.WebUI
             container.RegisterType<IRepository<QualificationDetail>, SQLRepository<QualificationDetail>>();
             container.RegisterType<IRepository<DependentDetail>, SQLRepository<DependentDetail>>();
             container.RegisterType<IRepository<TelephoneExtension>, SQLRepository<TelephoneExtension>>();
-        }
+            container.RegisterType<IRepository<LeaveType>, SQLRepository<LeaveType>>();
+
+            container.RegisterType<IRepository<LeaveMaster>, SQLRepository<LeaveMaster>>();
+            container.RegisterType<IRepository<EmployeeLeaveBalance>, SQLRepository<EmployeeLeaveBalance>>();
+            container.RegisterType<IRepository<EmployeeLeaveDetails>, SQLRepository<EmployeeLeaveDetails>>();
+
+          }
     }
 }

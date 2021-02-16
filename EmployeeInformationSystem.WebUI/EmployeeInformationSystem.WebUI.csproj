@@ -229,6 +229,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\EmployeeDataController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LeaveController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MasterDataController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
@@ -683,6 +684,7 @@
     <Content Include="Views\Reports\ManPowerVintageReport.cshtml" />
     <Content Include="Views\Reports\DataCompletedReport.cshtml" />
     <Content Include="Views\Reports\ExistingPastReport.cshtml" />
+    <Content Include="Views\Leave\LeaveMaster.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
