@@ -54,5 +54,12 @@ namespace EmployeeInformationSystem.DataAccess.SQL
         public DbSet<PromotionDetail> PromotionDetails { get; set; }
         public DbSet<QualificationDetail> QualificationDetails { get; set; }
         public DbSet<TelephoneExtension> TelephoneExtensions { get; set; }
+
+        //leave 
+
+        public DbSet<LeaveType> LeaveTypes { get; set; }
+        public DbSet<LeaveMaster> LeaveMasters { get; set; }
+        public DbSet<EmployeeLeaveBalance> EmployeeLeaveBalances { get; set; }
+        public DbSet<EmployeeLeaveDetails> EmployeeLeaveDetails { get; set; }
     }
 }

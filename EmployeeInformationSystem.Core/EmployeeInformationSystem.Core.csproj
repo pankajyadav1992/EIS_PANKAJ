@@ -81,7 +81,11 @@
     <Compile Include="Models\Discipline.cs" />
     <Compile Include="Models\EmployeeAsHoD.cs" />
     <Compile Include="Models\EmployeeDetail.cs" />
+    <Compile Include="Models\EmployeeLeaveBalance.cs" />
+    <Compile Include="Models\EmployeeLeaveDetails.cs" />
     <Compile Include="Models\HoD.cs" />
+    <Compile Include="Models\LeaveMaster.cs" />
+    <Compile Include="Models\LeaveType.cs" />
     <Compile Include="Models\Level.cs" />
     <Compile Include="Models\Organisation.cs" />
     <Compile Include="Models\PastExperience.cs" />
