@@ -36,5 +36,8 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Suffix Till")]
         public string SuffixTill { get; set; }
         public string Purpose { get; set; }
+
+        public Boolean StationLeave { get; set; } 
+
     }
 }
