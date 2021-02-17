@@ -92,5 +92,26 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
             return View();
         }
+
+
+
+        public ActionResult LeaveType()
+        {
+            return View("LeaveType");
+        }
+
+        [HttpPost]
+        public ActionResult AddLeaveType(LeaveType lt)
+        {
+            if (ModelState.IsValid)
+            {
+                LeaveTypeContext.Insert(lt);
+                
+                LeaveTypeContext.Commit();
+      
+
+            }
+            return View("LeaveType");
+        }
     }
 }
