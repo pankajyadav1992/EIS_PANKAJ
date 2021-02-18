@@ -137,20 +137,18 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             var viewname = "";
             switch (targetmodel)
             {    case "LeaveType":
-                    LeaveType lt = new LeaveType();
-                   
-                    var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
-                   
+                    LeaveType lt = new LeaveType();                   
+                    var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();                   
                     foreach(var item in LT_data)
                     {
                         lt.Name = item.Name;
                         lt.Id = item.Id;
                     }
                     viewname = "LeaveType";
-                    ViewBag.Name= viewname; 
-                    return View(viewname, lt);
-
-               
+                    ViewBag.Name= viewname;
+                    ViewBag.HeadingName = "Update Leave Type";
+                    ViewBag.HeadingColor = "bg-warning ";
+                    return View(viewname, lt);               
                 case "LeaveMaster":
 
                     LeaveMaster lm = new LeaveMaster();
@@ -210,6 +208,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     }
                     viewname = "LeaveType";
                     ViewBag.Name = "DeleteLeaveType";
+                    ViewBag.HeadingName = "Delete Leave Type";
+                    ViewBag.HeadingColor = "bg-danger";
                     return View(viewname, lt);
                     //break;
             }
@@ -237,6 +237,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         #region  Leave type Code Start 
         public ActionResult LeaveType()
         {
+            ViewBag.HeadingName = "Add Leave Type";
+            ViewBag.HeadingColor = "bg-success";
             ViewBag.Name = "";
             return View("LeaveType");
         }
@@ -253,8 +255,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
             if (returnText == "Success")
             {
-                // return View("Success");
-                // return Content(returnText);
+                ViewBag.HeadingName = "Add Leave Type";
+                ViewBag.HeadingColor = "bg-success";
                 ViewBag.Msg = "Leave Type added succesfully";
             }            
             return View("LeaveType");
@@ -276,12 +278,14 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             dt_ = ToDataTable(LQ_data);
             ViewBag.ReportTitle = " Leave Type ";
             ViewBag.targetmodel = "LeaveType";
+            ViewBag.HeadingName = "View Leave Type";
+            ViewBag.HeadingColor = "bg-info";
             return View("ShowResponse", dt_);
         }
 
         [HttpPost]
         public ActionResult UpdateLeaveType(LeaveType lt)
-        {
+        {            
             string returnText = "Error";
             if (ModelState.IsValid)
             {
@@ -291,8 +295,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
             if (returnText == "Success")
             {
-                // return View("Success");
-                // return Content(returnText);
+                ViewBag.HeadingName = "Update Leave Type";
+                ViewBag.HeadingColor = "bg-warning ";
                 ViewBag.Msg = "Leave Type Update succesfully";
             }
             else
@@ -314,8 +318,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
             if (returnText == "Success")
             {
-                // return View("Success");
-                // return Content(returnText);
+                ViewBag.HeadingName = "Delete Leave Type";
+                ViewBag.HeadingColor = "bg-danger";
                 ViewBag.Msg = "Leave Type Delete succesfully";
             }
             else

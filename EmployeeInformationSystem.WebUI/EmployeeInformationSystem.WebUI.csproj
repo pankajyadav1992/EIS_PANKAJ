@@ -688,6 +688,7 @@
     <Content Include="Views\Leave\LeaveType.cshtml" />
     <Content Include="Views\Leave\ShowResponse.cshtml" />
     <Content Include="Views\Leave\Edit.cshtml" />
+    <Content Include="Views\Leave\ApplyLeave.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
