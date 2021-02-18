@@ -132,22 +132,63 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public ActionResult Edit(string idData,string targetmodel)
         {
-            LeaveType lt = new LeaveType();            
-            DataTable dt_ = null;
+                
+          
             var viewname = "";
             switch (targetmodel)
             {    case "LeaveType":
-                    //List<LeaveType> l = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
-                    var LQ_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
-                    dt_ = ToDataTable(LQ_data); 
-                    foreach(var item in LQ_data)
+                    LeaveType lt = new LeaveType();
+                   
+                    var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
+                   
+                    foreach(var item in LT_data)
                     {
                         lt.Name = item.Name;
                     }
                     viewname = "LeaveType";
                     return View(viewname, lt);
+
+               
+                case "LeaveMaster":
+
+                    LeaveMaster lm = new LeaveMaster();
+                    var LQ_data = (from leaveMaster in LeaveMasterContext.Collection().ToList()
+
+                                   join orgC in OrganisationContext.Collection().ToList()
+                                   on leaveMaster.OrganisationId equals orgC.Id
+
+                                   join ltC in LeaveTypeContext.Collection().ToList()
+                                   on leaveMaster.LeaveTypeId equals ltC.Id
+
+                                   select new
+                                   {
+                                       Organisation = orgC.Name,
+                                       LeaveType = ltC.Name,
+                                       leaveMaster.AnnualQuota,
+                                       leaveMaster.ValidFrom,
+                                       leaveMaster.ValidTill,
+                                       leaveMaster.Id
+
+
+                                   }
+
+                        ).Where(x => x.Id == idData).ToList();
+
+                    foreach (var item in LQ_data)
+                    {
+                        lm.AnnualQuota = item.AnnualQuota;
+
+                    }
+                    List<Organisation> orgList = OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
+                    ViewBag.OrganisationList = orgList;
+
+                    List<LeaveType> LeaveType = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
+                    ViewBag.LevelTypeList = LeaveType;
+
+                    viewname = "LeaveMaster";
+                    return View(viewname, lm); 
                     //break;
-                   
+
             }
             return View(viewname);        
         }
