@@ -149,15 +149,23 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         [HttpPost]
         public ActionResult AddLeaveType(LeaveType lt)
         {
+            string returnText = "Error";
             if (ModelState.IsValid)
             {
-                LeaveTypeContext.Insert(lt);
-                
+                LeaveTypeContext.Insert(lt);                
                 LeaveTypeContext.Commit();
-      
-
+                returnText = "Success";
             }
-            return View("LeaveType");
+            if (returnText == "Success")
+            {
+                // return View("Success");
+                return Content(returnText);
+            }
+            else
+            {
+                return View("LeaveType");
+            }
+          
         }
 
 
