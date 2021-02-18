@@ -131,9 +131,12 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                          dt_ = ToDataTable(LQ_data);
 
+                
+
 
             }
-            return View("ShowResponse");
+            ViewBag.ReportTitle = "- ";
+            return View("LeaveMaster");
         }
 
 
