@@ -2,7 +2,9 @@
 using EmployeeInformationSystem.Core.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -28,6 +30,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<TelephoneExtension> TelephoneExtensionContext;
         IRepository<EmployeeAsHoD> EmployeeAsHoDDetailContext;
         IRepository<LeaveType> LeaveTypeContext;
+        IRepository<LeaveMaster> LeaveMasterContext;
 
         public LeaveController(IRepository<EmployeeDetail> employeeDetailContext,
         IRepository<Discipline> disciplineContext,
@@ -45,7 +48,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<QualificationDetail> qualificationDetailContext,
         IRepository<TelephoneExtension> telephoneExtensionContext,
         IRepository<EmployeeAsHoD> employeeAsHoDDetailContext,
-        IRepository<LeaveType> leaveTypeContext
+        IRepository<LeaveType> leaveTypeContext,
+        IRepository<LeaveMaster> leaveMasterContext
         )
         {
             EmployeeDetailContext = employeeDetailContext;
@@ -67,6 +71,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             EmployeeAsHoDDetailContext = employeeAsHoDDetailContext;
 
             LeaveTypeContext = leaveTypeContext;
+            LeaveMasterContext = leaveMasterContext;
             //Setting Parameters for Page
 
             base.SetGlobalParameters();
@@ -83,14 +88,52 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public ActionResult LeaveMaster()
         {
+            
            List<Organisation> orgList =  OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
             ViewBag.OrganisationList = orgList;
            
             List<LeaveType> LeaveType = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
             ViewBag.LevelTypeList = LeaveType;
-
+            
 
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddLeaveQuota(LeaveMaster l)
+        { DataTable dt_ = null;
+
+            if (ModelState.IsValid)
+            {
+                LeaveMasterContext.Insert(l);
+                LeaveMasterContext.Commit();
+                ViewBag.Msg = "LeaveQuotaAdd";
+
+                var LQ_data = (from leaveMaster in LeaveMasterContext.Collection().ToList()
+
+                               join orgC in OrganisationContext.Collection().ToList()
+                               on leaveMaster.OrganisationId equals orgC.Id
+
+                               join lt in LeaveTypeContext.Collection().ToList()
+                               on leaveMaster.LeaveTypeId equals lt.Id
+
+                               select new
+                               {
+                                   Organisation = orgC.Name,
+                                   LeaveType = lt.Name,
+                                   leaveMaster.AnnualQuota,
+                                   leaveMaster.ValidFrom,
+                                   leaveMaster.ValidTill,
+                                   leaveMaster.Id
+                               }
+
+                         ).Where(x => x.Id == l.Id).ToList();
+
+                         dt_ = ToDataTable(LQ_data);
+
+
+            }
+            return View("ShowResponse");
         }
 
 
@@ -120,6 +163,33 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 return View("LeaveType");
             }
           
+        }
+
+
+        public DataTable ToDataTable<T>(List<T> items)
+        {
+            DataTable dataTable = new DataTable(typeof(T).Name);
+            //Get all the properties
+            PropertyInfo[] Props = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+            foreach (PropertyInfo prop in Props)
+            {
+                //Setting column names as Property names
+                dataTable.Columns.Add(prop.Name);
+            }
+            foreach (T item in items)
+            {
+                var values = new object[Props.Length];
+                for (int i = 0; i < Props.Length; i++)
+                {
+                    //inserting property values to datatable rows
+                    values[i] = Props[i].GetValue(item, null);
+
+                }
+                dataTable.Rows.Add(values);
+            }
+            //put a breakpoint here and check datatable
+            return dataTable;
+
         }
     }
 }

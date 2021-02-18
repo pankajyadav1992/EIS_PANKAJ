@@ -686,6 +686,7 @@
     <Content Include="Views\Reports\ExistingPastReport.cshtml" />
     <Content Include="Views\Leave\LeaveMaster.cshtml" />
     <Content Include="Views\Leave\LeaveType.cshtml" />
+    <Content Include="Views\Leave\ShowResponse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace EmployeeInformationSystem.Core.Models
 {
@@ -25,18 +26,5 @@ namespace EmployeeInformationSystem.Core.Models
 
     }
 
-    public class LeaveMasterList
-    {
-        public List<LeaveType> LeaveTypeList { get; set; }
-        public List<Organisation> OrganisationList { get; set; }
-        
-        [Display(Name = "Annual Quota")]
-        public string AnnualQuota { get; set; }
-
-        [Display(Name = "Valid From")]
-        public string ValidFrom { get; set; }
-
-        [Display(Name = "Valid Till")]
-        public string ValidTill { get; set; }
-    }
+    
 }
