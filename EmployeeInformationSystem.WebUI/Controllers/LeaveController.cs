@@ -88,52 +88,65 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public ActionResult LeaveMaster()
         {
-            
-           List<Organisation> orgList =  OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
+           
+
+            List<Organisation> orgList =  OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
             ViewBag.OrganisationList = orgList;
            
             List<LeaveType> LeaveType = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
             ViewBag.LevelTypeList = LeaveType;
-            
 
+           
             return View();
+        }
+
+        public ActionResult ViewLeaveQuota()
+        {
+            DataTable dt_ = null;
+            var LQ_data = (from leaveMaster in LeaveMasterContext.Collection().ToList()
+
+                           join orgC in OrganisationContext.Collection().ToList()
+                           on leaveMaster.OrganisationId equals orgC.Id
+
+                           join lt in LeaveTypeContext.Collection().ToList()
+                           on leaveMaster.LeaveTypeId equals lt.Id
+
+                           select new
+                           {
+                               Organisation = orgC.Name,
+                               LeaveType = lt.Name,
+                               leaveMaster.AnnualQuota,
+                               leaveMaster.ValidFrom,
+                               leaveMaster.ValidTill,
+                               leaveMaster.Id
+
+                             
+                           }
+
+                       ).OrderBy(x => x.Organisation).ToList();
+
+            dt_ = ToDataTable(LQ_data);
+            ViewBag.targetmodel = "LeaveMaster";
+            return View("ShowResponse", dt_);
+        }
+
+        public ActionResult Edit(string idData,string targetmodel)
+        {
+            return View();
+        
         }
 
         [HttpPost]
         public ActionResult AddLeaveQuota(LeaveMaster l)
-        { DataTable dt_ = null;
+        { 
 
             if (ModelState.IsValid)
             {
                 LeaveMasterContext.Insert(l);
                 LeaveMasterContext.Commit();
-                ViewBag.Msg = "LeaveQuotaAdd";
+                ViewBag.Msg = "Leave Quota added succesfully";
 
-                var LQ_data = (from leaveMaster in LeaveMasterContext.Collection().ToList()
-
-                               join orgC in OrganisationContext.Collection().ToList()
-                               on leaveMaster.OrganisationId equals orgC.Id
-
-                               join lt in LeaveTypeContext.Collection().ToList()
-                               on leaveMaster.LeaveTypeId equals lt.Id
-
-                               select new
-                               {
-                                   Organisation = orgC.Name,
-                                   LeaveType = lt.Name,
-                                   leaveMaster.AnnualQuota,
-                                   leaveMaster.ValidFrom,
-                                   leaveMaster.ValidTill,
-                                   leaveMaster.Id
-                               }
-
-                         ).Where(x => x.Id == l.Id).ToList();
-
-                         dt_ = ToDataTable(LQ_data);
-
-                
-
-
+               
             }
             ViewBag.ReportTitle = "- ";
             return View("LeaveMaster");
