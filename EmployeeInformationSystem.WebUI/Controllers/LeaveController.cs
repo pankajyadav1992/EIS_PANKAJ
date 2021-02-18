@@ -132,18 +132,24 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public ActionResult Edit(string idData,string targetmodel)
         {
+            LeaveType lt = new LeaveType();            
+            DataTable dt_ = null;
             var viewname = "";
             switch (targetmodel)
-            {
-                case "LeaveType":
-
-                    List<LeaveType> l = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
-
+            {    case "LeaveType":
+                    //List<LeaveType> l = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
+                    var LQ_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
+                    dt_ = ToDataTable(LQ_data); 
+                    foreach(var item in LQ_data)
+                    {
+                        lt.Name = item.Name;
+                    }
                     viewname = "LeaveType";
-                    break;
+                    return View(viewname, lt);
+                    //break;
+                   
             }
-            return View(viewname);
-        
+            return View(viewname);        
         }
 
         [HttpPost]
