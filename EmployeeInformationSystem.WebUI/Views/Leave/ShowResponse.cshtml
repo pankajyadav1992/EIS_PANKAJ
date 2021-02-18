@@ -49,7 +49,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <h3 class="h4">Report @ViewBag.ReportTitle</h3>
+                            <h3 class="h4"> @ViewBag.ReportTitle</h3>
                         </div>
                         <div class="card-body">
                          
@@ -61,19 +61,21 @@
                                             <th>@col.ColumnName <br /> <input type="text" placeholder="Search" /></th>
 
                                         }
-                                        <th>View</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (DataRow row in Model.Rows)
                                     {
-                                        <tr>
-                                            @foreach (DataColumn col in Model.Columns)
-                                            {
-                                                <td class="tableRow">@row[col.ColumnName]</td>
-                                            }
-                                            <td>@Html.ActionLink("Edit","Edit","Leave",new { idData = @row["Id"].ToString(), targetmodel=@ViewBag.targetmodel },null) </td>
-                                        </tr>
+                                    <tr>
+                                        @foreach (DataColumn col in Model.Columns)
+                                        {
+                                            <td class="tableRow">@row[col.ColumnName]</td>
+                                        }
+                                        <td>@Html.ActionLink("Edit", "Edit", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
+                                        <td>@Html.ActionLink("Delete", "Delete", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
+                                    </tr>
 
                                     }
                                 </tbody>

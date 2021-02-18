@@ -144,8 +144,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     foreach(var item in LT_data)
                     {
                         lt.Name = item.Name;
+                        lt.Id = item.Id;
                     }
                     viewname = "LeaveType";
+                    ViewBag.Name= viewname; 
                     return View(viewname, lt);
 
                
@@ -193,6 +195,28 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return View(viewname);        
         }
 
+        public ActionResult Delete(string idData, string targetmodel)
+        {
+            var viewname = "";
+            switch (targetmodel)
+            {
+                case "LeaveType":
+                    LeaveType lt = new LeaveType();
+                    var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
+                    foreach (var item in LT_data)
+                    {
+                        lt.Name = item.Name;
+                        lt.Id = item.Id;
+                    }
+                    viewname = "LeaveType";
+                    ViewBag.Name = "DeleteLeaveType";
+                    return View(viewname, lt);
+                    //break;
+            }
+            return View(viewname);
+        }
+
+
         [HttpPost]
         public ActionResult AddLeaveQuota(LeaveMaster l)
         { 
@@ -210,9 +234,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         }
 
 
-
+        #region  Leave type Code Start 
         public ActionResult LeaveType()
         {
+            ViewBag.Name = "";
             return View("LeaveType");
         }
 
@@ -223,19 +248,18 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             if (ModelState.IsValid)
             {
                 LeaveTypeContext.Insert(lt);                
-                LeaveTypeContext.Commit();
+                LeaveTypeContext.Commit();              
                 returnText = "Success";
             }
             if (returnText == "Success")
             {
                 // return View("Success");
-                return Content(returnText);
-            }
-            else
-            {
-                return View("LeaveType");
-            }          
+                // return Content(returnText);
+                ViewBag.Msg = "Leave Type added succesfully";
+            }            
+            return View("LeaveType");
         }
+
         public ActionResult ViewLeaveType()
         {
             DataTable dt_ = null;
@@ -250,13 +274,60 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                            }).ToList();
 
             dt_ = ToDataTable(LQ_data);
-            ViewBag.ReportTitle = "- Leave Type ";
+            ViewBag.ReportTitle = " Leave Type ";
             ViewBag.targetmodel = "LeaveType";
             return View("ShowResponse", dt_);
         }
 
+        [HttpPost]
+        public ActionResult UpdateLeaveType(LeaveType lt)
+        {
+            string returnText = "Error";
+            if (ModelState.IsValid)
+            {
+                LeaveTypeContext.Update(lt);
+                LeaveTypeContext.Commit();
+                returnText = "Success";
+            }
+            if (returnText == "Success")
+            {
+                // return View("Success");
+                // return Content(returnText);
+                ViewBag.Msg = "Leave Type Update succesfully";
+            }
+            else
+            {
+                return View("LeaveType");
+            }
+            return View("LeaveType");
+        }
 
-       
+        [HttpPost]
+        public ActionResult DeleteLeaveType(LeaveType lt)
+        {
+            string returnText = "Error";
+            if (ModelState.IsValid)
+            {
+                LeaveTypeContext.Delete(lt.Id);
+                LeaveTypeContext.Commit();
+                returnText = "Success";
+            }
+            if (returnText == "Success")
+            {
+                // return View("Success");
+                // return Content(returnText);
+                ViewBag.Msg = "Leave Type Delete succesfully";
+            }
+            else
+            {
+                return View("LeaveType");
+            }
+            return View("LeaveType");
+        }
+
+
+
+        #endregion
 
         public DataTable ToDataTable<T>(List<T> items)
         {
