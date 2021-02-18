@@ -161,8 +161,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             else
             {
                 return View("LeaveType");
-            }
-          
+            }          
         }
 
 
