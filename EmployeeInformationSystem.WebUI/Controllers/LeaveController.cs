@@ -130,7 +130,21 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return View("ShowResponse", dt_);
         }
 
-       
+        public ActionResult Edit(string idData,string targetmodel)
+        {
+            var viewname = "";
+            switch (targetmodel)
+            {
+                case "LeaveType":
+
+                    List<LeaveType> l = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
+
+                    viewname = "LeaveType";
+                    break;
+            }
+            return View(viewname);
+        
+        }
 
         [HttpPost]
         public ActionResult AddLeaveQuota(LeaveMaster l)
@@ -175,7 +189,27 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 return View("LeaveType");
             }          
         }
+        public ActionResult ViewLeaveType()
+        {
+            DataTable dt_ = null;
+            var LQ_data = (from LeaveType in LeaveTypeContext.Collection().ToList()
+                           select new
+                           {
+                               LeaveType.Name,
+                               LeaveType.CreatedAt,
+                               LeaveType.LastUpdateAt,
+                               LeaveType.LastUpdateBy,
+                               LeaveType.Id
+                           }).ToList();
 
+            dt_ = ToDataTable(LQ_data);
+            ViewBag.ReportTitle = "- Leave Type ";
+            ViewBag.targetmodel = "LeaveType";
+            return View("ShowResponse", dt_);
+        }
+
+
+       
 
         public DataTable ToDataTable<T>(List<T> items)
         {
