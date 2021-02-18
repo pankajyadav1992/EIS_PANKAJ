@@ -7,24 +7,27 @@
 @Styles.Render("~/Content/bootstrap-select")
 @Styles.Render("~/Content/gijgo")
 
-<div class="container-fluid" style="position:relative">
-    <div class="container-fluid">
-        <div class="row" id="reportDisplayBlock">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-header d-flex align-items-center">
-                        Leave Quota
-                    </div>
+
+@if (ViewBag.Msg == null)
+{
+    <div class="container-fluid" style="position:relative">
+        <div class="container-fluid">
+            <div class="row" id="reportDisplayBlock">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-header d-flex align-items-center">
+                            Leave Quota
+                        </div>
 
 
 
 
-                    @using (Html.BeginForm("AddLeaveQuota", "Leave", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Add Leave Quota" }))
-                    {
-                        @Html.AntiForgeryToken()
-                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        @using (Html.BeginForm("AddLeaveQuota", "Leave", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Add Leave Quota" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-                      
+
                             <div class="card-body" id="reportDisplayBody">
 
 
@@ -32,7 +35,7 @@
                                     <label class="col-sm-3 form-control-label">Organisation</label>
                                     <div class="col-sm-5">
                                         <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
-                                            <option value="" selected>--Select Organisation--</option>
+                                            <option value="0" selected>--Select Organisation--</option>
                                             @foreach (var employee in ViewBag.OrganisationList)
                                             {
                                                 <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
@@ -50,7 +53,7 @@
                                     <label class="col-sm-3 form-control-label">Leave Type</label>
                                     <div class="col-sm-5">
                                         <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
-                                            <option value="" selected>--Select Leave Type--</option>
+                                            <option value="0" selected>--Select Leave Type--</option>
                                             @foreach (var employee in ViewBag.LevelTypeList)
                                             {
                                                 <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
@@ -101,15 +104,20 @@
                             </div>
 
                         }
-                       
 
+
+                    </div>
                 </div>
+
             </div>
-
         </div>
-    </div>
 
-</div>
+    </div>}
+else
+{
+    @ViewBag.Msg
+}
+
 @section Scripts{
     @Scripts.Render("~/bundles/bootstrap-select")
     @Scripts.Render("~/bundles/gijgo")
@@ -127,16 +135,24 @@
            var isValid = true;
            var australianDate = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$|^$/;
 
-            if ("" == $('#@Html.IdFor(model => model.OrganisationId) :selected').length) {
+            if ($("#@Html.IdFor(model => model.OrganisationId) option:selected").val()== 0) {
                $("#errorOrg").show(); isValid = false;
            } else {
                 $("#errorOrg").hide();
            }
 
-          if ("" == $('#@Html.IdFor(model => model.LeaveTypeId) :selected').length) {
+          if ($("#@Html.IdFor(model => model.LeaveTypeId) option:selected").val()== 0) {
                $("#errorLeave").show(); isValid = false;
            } else {
                 $("#errorLeave").hide();
+            }
+
+            var asdhfashd = $("#OrganisationId option:selected").text();
+            if ($("#OrganisationId option:selected").val() == 0) {
+                $("#errorLeave").show(); isValid = false;
+            }
+            else {
+                 $("#errorLeave").hide();
             }
 
             if ($("#@Html.IdFor(model => model.AnnualQuota)").val() == "") {
