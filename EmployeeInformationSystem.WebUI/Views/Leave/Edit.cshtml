@@ -1,4 +1,10 @@
-﻿@model EmployeeInformationSystem.Core.Models.LeaveMaster
+﻿
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@model EmployeeInformationSystem.Core.Models.LeaveMaster
 
 @{
     ViewBag.Title = "LeaveMaster";
@@ -10,7 +16,7 @@
 
 @if (ViewBag.Msg == null)
 {
-   
+
 
     <div class="container-fluid" style="position:relative">
         <div class="container-fluid">
@@ -72,8 +78,6 @@
                                     @Html.LabelFor(model => model.AnnualQuota, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
                                     <div class="col-sm-5">
                                         @Html.EditorFor(model => model.AnnualQuota, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
-
-                                        @Html.TextBoxFor(model=>model.AnnualQuota)
                                     </div>
                                     <div classs="col-sm-4" style="display:none;color: red;" id="errorAQ">Please enter annual quota</div>
                                 </div>

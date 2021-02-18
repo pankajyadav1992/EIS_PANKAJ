@@ -130,11 +130,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return View("ShowResponse", dt_);
         }
 
-        public ActionResult Edit(string idData,string targetmodel)
-        {
-            return View();
-        
-        }
+       
 
         [HttpPost]
         public ActionResult AddLeaveQuota(LeaveMaster l)
