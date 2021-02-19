@@ -12,17 +12,20 @@ namespace EmployeeInformationSystem.Core.Models
         public string EmployeeId { get; set; }
         public virtual EmployeeDetail Employee { get; set; }
 
-        public string LeaveTypeId { get; set; }
-        public virtual LeaveType LeaveType { get; set; }
-        
-        [Display(Name = "No of Day")]
-        public string NoOfDays { get; set; }
+        public string OrganisationId { get; set; }
+        public virtual Organisation Organisation { get; set; }
 
         [Display(Name = "Leave From")]
         public string LeaveFrom { get; set; }
 
         [Display(Name = "Leave Till")]
         public string LeaveTill { get; set; }
+        public string LeaveTypeId { get; set; }
+        public virtual LeaveType LeaveType { get; set; }
+        
+        [Display(Name = "No of Day")]
+        public string NoOfDays { get; set; }
+       
 
         [Display(Name = "Prefix From")]
         public string PrefixFrom { get; set; }
@@ -36,7 +39,7 @@ namespace EmployeeInformationSystem.Core.Models
         [Display(Name = "Suffix Till")]
         public string SuffixTill { get; set; }
         public string Purpose { get; set; }
-
+        public string StationLeaveReason { get; set; }
         public Boolean StationLeave { get; set; } 
 
     }

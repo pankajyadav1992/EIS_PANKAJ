@@ -31,6 +31,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<EmployeeAsHoD> EmployeeAsHoDDetailContext;
         IRepository<LeaveType> LeaveTypeContext;
         IRepository<LeaveMaster> LeaveMasterContext;
+        IRepository<EmployeeLeaveDetails> EmployeeLeaveDetailsContext;
 
         public LeaveController(IRepository<EmployeeDetail> employeeDetailContext,
         IRepository<Discipline> disciplineContext,
@@ -49,7 +50,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<TelephoneExtension> telephoneExtensionContext,
         IRepository<EmployeeAsHoD> employeeAsHoDDetailContext,
         IRepository<LeaveType> leaveTypeContext,
-        IRepository<LeaveMaster> leaveMasterContext
+        IRepository<LeaveMaster> leaveMasterContext,
+        IRepository<EmployeeLeaveDetails> employeeLeaveDetailsContext
         )
         {
             EmployeeDetailContext = employeeDetailContext;
@@ -67,11 +69,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             DepartmentContext = departmentContext;
             QualificationDetailContext = qualificationDetailContext;
             TelephoneExtensionContext = telephoneExtensionContext;
-
             EmployeeAsHoDDetailContext = employeeAsHoDDetailContext;
-
             LeaveTypeContext = leaveTypeContext;
             LeaveMasterContext = leaveMasterContext;
+            EmployeeLeaveDetailsContext = employeeLeaveDetailsContext;
             //Setting Parameters for Page
 
             base.SetGlobalParameters();
@@ -328,12 +329,49 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
             return View("LeaveType");
         }
-
-
-
         #endregion
 
-        public DataTable ToDataTable<T>(List<T> items)
+
+        #region 'Apply Leave'
+        [HttpGet]
+        public ActionResult ApplyLeave()
+        {
+            List<EmployeeDetail> EmployeeList = EmployeeDetailContext.Collection().Where(q => q.WorkingStatus == true).ToList();
+            ViewBag.EmlployeeTypeList = EmployeeList;
+
+            List<Organisation> orgList = OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
+            ViewBag.OrganisationList = orgList;
+
+            List<LeaveType> LeaveType = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
+            ViewBag.LevelTypeList = LeaveType;
+
+            ViewBag.HeadingName = "Apply Leave";
+            ViewBag.HeadingColor = "bg-success";
+            ViewBag.Name = "";
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ApplyLeaveApplication(EmployeeLeaveDetails Eld)
+        {
+            string returnText = "Error";
+            if (ModelState.IsValid)
+            {
+               EmployeeLeaveDetailsContext.Insert(Eld);
+                EmployeeLeaveDetailsContext.Commit();
+                returnText = "Success";
+            }
+            if (returnText == "Success")
+            {
+                ViewBag.HeadingName = "Add Leave Type";
+                ViewBag.HeadingColor = "bg-success";
+                ViewBag.Msg = "Leave Apply Succesfully";
+            }
+            return View("ApplyLeave");
+        }
+            #endregion
+
+            public DataTable ToDataTable<T>(List<T> items)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
             //Get all the properties
