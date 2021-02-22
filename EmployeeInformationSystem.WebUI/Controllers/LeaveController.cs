@@ -1,5 +1,7 @@
 ﻿using EmployeeInformationSystem.Core.Contracts;
 using EmployeeInformationSystem.Core.Models;
+using EmployeeInformationSystem.Core.ViewModels;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -32,6 +34,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<LeaveType> LeaveTypeContext;
         IRepository<LeaveMaster> LeaveMasterContext;
         IRepository<EmployeeLeaveDetails> EmployeeLeaveDetailsContext;
+
 
         public LeaveController(IRepository<EmployeeDetail> employeeDetailContext,
         IRepository<Discipline> disciplineContext,
@@ -89,14 +92,14 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public ActionResult LeaveMaster()
         {
-           
 
-            List<Organisation> orgList =  OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
+
+            List<Organisation> orgList = OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
             ViewBag.OrganisationList = orgList;
-           
+
             List<LeaveType> LeaveType = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
             ViewBag.LevelTypeList = LeaveType;
-           
+
 
 
 
@@ -123,36 +126,38 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                leaveMaster.ValidTill,
                                leaveMaster.Id
 
-                             
+
                            }
 
                        ).OrderBy(x => x.Organisation).ToList();
 
             dt_ = ToDataTable(LQ_data);
             ViewBag.targetmodel = "LeaveMaster";
+            ViewBag.HeadingName = "View Leave Quota ";
             return View("ShowResponse", dt_);
         }
 
-        public ActionResult Edit(string idData,string targetmodel)
+        public ActionResult Edit(string idData, string targetmodel)
         {
-                
-          
+
+
             var viewname = "";
             switch (targetmodel)
-            {    case "LeaveType":
-                    LeaveType lt = new LeaveType();                   
-                    var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();                   
-                    foreach(var item in LT_data)
+            {
+                case "LeaveType":
+                    LeaveType lt = new LeaveType();
+                    var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
+                    foreach (var item in LT_data)
                     {
                         lt.Name = item.Name;
                         lt.Id = item.Id;
                     }
                     viewname = "LeaveType";
-                    ViewBag.Name= viewname;
+                    ViewBag.Name = viewname;
                     ViewBag.HeadingName = "Update Leave Type";
                     ViewBag.HeadingColor = "bg-warning ";
-                    return View(viewname, lt);               
-               
+                    return View(viewname, lt);
+
                 case "LeaveMaster":
 
                     LeaveMaster lm = new LeaveMaster();
@@ -197,11 +202,11 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     ViewBag.LevelTypeList = LeaveType;
 
                     viewname = "LeaveMaster";
-                    return View(viewname, lm); 
+                    return View(viewname, lm);
                     //break;
 
             }
-            return View(viewname);        
+            return View(viewname);
         }
 
         public ActionResult Delete(string idData, string targetmodel)
@@ -277,7 +282,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         #region  Leave Master Code Start 
         [HttpPost]
         public ActionResult AddLeaveQuota(LeaveMaster l)
-        { 
+        {
 
             if (ModelState.IsValid)
             {
@@ -285,7 +290,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 LeaveMasterContext.Commit();
                 ViewBag.Msg = "Leave Quota added succesfully";
 
-               
+
             }
             ViewBag.ReportTitle = "- ";
             return View("LeaveMaster");
@@ -334,8 +339,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             string returnText = "Error";
             if (ModelState.IsValid)
             {
-                LeaveTypeContext.Insert(lt);                
-                LeaveTypeContext.Commit();              
+                LeaveTypeContext.Insert(lt);
+                LeaveTypeContext.Commit();
                 returnText = "Success";
             }
             if (returnText == "Success")
@@ -343,7 +348,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 ViewBag.HeadingName = "Add Leave Type";
                 ViewBag.HeadingColor = "bg-success";
                 ViewBag.Msg = "Leave Type added succesfully";
-            }            
+            }
             return View("LeaveType");
         }
 
@@ -370,7 +375,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         [HttpPost]
         public ActionResult UpdateLeaveType(LeaveType lt)
-        {            
+        {
             string returnText = "Error";
             if (ModelState.IsValid)
             {
@@ -441,7 +446,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             string returnText = "Error";
             if (ModelState.IsValid)
             {
-               EmployeeLeaveDetailsContext.Insert(Eld);
+                EmployeeLeaveDetailsContext.Insert(Eld);
                 EmployeeLeaveDetailsContext.Commit();
                 returnText = "Success";
             }
@@ -453,9 +458,145 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
             return View("ApplyLeave");
         }
-            #endregion
-        
-            public DataTable ToDataTable<T>(List<T> items)
+        #endregion
+
+
+
+
+        public ActionResult ViewLeaveDetails()
+        {
+            return View();
+        }
+
+        public string GetOrgForDropDown()
+        {
+            string jsondata = String.Empty;
+
+            List<Organisation> orgList = OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
+            DataTable dt = ToDataTable(orgList);
+            jsondata = JsonConvert.SerializeObject(dt);
+
+            return jsondata;
+        }
+
+        public string GetEmpName(MultiSelect Oid)
+        {
+
+            string jsondata = String.Empty;
+            DataTable dt = null;
+            var employees1 = (from employee in EmployeeDetailContext.Collection().ToList()
+
+                              join org in OrganisationContext.Collection().ToList()
+                              on employee.OrganisationId equals org.Id into xx
+                              from y in xx.DefaultIfEmpty()
+                              where Oid.orgList.Contains(employee.OrganisationId)
+                              select new
+                              {
+                                  employee.EmployeeCode,
+                                  FullName = employee.FirstName + " " + (employee.MiddleName == "" ? "" : employee.MiddleName + " ") + employee.LastName,
+                                  Organisation = y == null ? "" : y.Name,
+                                  employee.OrganisationId,
+                                  employee.Id
+
+                              })
+               .Distinct().ToList();
+
+            dt = ToDataTable(employees1);
+
+            jsondata = JsonConvert.SerializeObject(dt);
+
+            return jsondata;
+        }
+
+        [HttpPost]
+        public ActionResult ViewLeaveDetails(MultiSelect m)
+        {
+           
+            var data = (
+                          from el in EmployeeLeaveDetailsContext.Collection().ToList()
+                          join emp in EmployeeDetailContext.Collection().ToList()
+                          on el.EmployeeId equals emp.Id
+
+
+                          join org in OrganisationContext.Collection().ToList()
+                          on el.OrganisationId equals org.Id
+
+                          join le in LeaveTypeContext.Collection().ToList()
+                          on el.LeaveTypeId equals le.Id
+
+                          where (m.orgList.Contains(el.OrganisationId) && m.empList.Contains(el.EmployeeId))
+
+                          select new
+                          {
+                              FullName = emp.FirstName + " " + (emp.MiddleName == "" ? "" : emp.MiddleName + " ") + emp.LastName,
+                              Organisation=org.Name,
+                              Leave=le.Name,
+                              el.NoOfDays,
+                              FromDate=el.LeaveFrom,
+                              ToDate=el.LeaveTill,
+                              el.Purpose
+
+                          }
+
+
+                      ).ToList();
+
+            DataTable dt = ToDataTable(data);
+
+            ViewBag.HeadingName = "Employee Leave Details";
+            ViewBag.HeadingColor = "bg-success";
+
+            return View("ShowResponse", dt);
+
+        }
+
+     
+        public ActionResult ViewAllLeaveDetails()
+        {
+
+            var data = (
+                          from el in EmployeeLeaveDetailsContext.Collection().ToList()
+                          join emp in EmployeeDetailContext.Collection().ToList()
+                          on el.EmployeeId equals emp.Id
+
+
+                          join org in OrganisationContext.Collection().ToList()
+                          on el.OrganisationId equals org.Id
+
+                          join le in LeaveTypeContext.Collection().ToList()
+                          on el.LeaveTypeId equals le.Id
+
+                         
+
+                          select new
+                          {
+                              FullName = emp.FirstName + " " + (emp.MiddleName == "" ? "" : emp.MiddleName + " ") + emp.LastName,
+                              Organisation = org.Name,
+                              Leave = le.Name,
+                              el.NoOfDays,
+                              FromDate = el.LeaveFrom,
+                              ToDate = el.LeaveTill,
+                              el.Purpose
+
+                          }
+
+
+                      ).ToList();
+
+            DataTable dt = ToDataTable(data);
+
+            ViewBag.HeadingName = "Employee Leave Details";
+            ViewBag.HeadingColor = "bg-success";
+
+            return View("ShowResponse", dt);
+
+        }
+
+
+
+
+
+        public DataTable ToDataTable<T>(List<T> items)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
             //Get all the properties
@@ -479,6 +620,97 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             //put a breakpoint here and check datatable
             return dataTable;
 
+        }
+
+        public string ManPowerEtraDetai(string column, EmployeeDetail employee, ReportSelectionViewModel reportSelection)
+        {
+            string columdetail = "";
+            switch (column)
+            {
+                case "Qualification Details":
+                    string[] qualifications = (from qualification in QualificationDetailContext.Collection().Where(q => q.EmployeeId == employee.Id).ToList()
+                                               where !qualification.From.HasValue || ((qualification.From >= reportSelection.From || !reportSelection.From.HasValue) && (qualification.From <= reportSelection.To || !reportSelection.To.HasValue))
+                                               select "Degree:" + (!string.IsNullOrEmpty(qualification.Duration) ? qualification.Duration + " " : "") + qualification.Degree.Name +
+                                               (!string.IsNullOrEmpty(qualification.Specialization) ? "(" + qualification.Specialization + ")" : "") +
+                                               (!string.IsNullOrEmpty(qualification.Grade) ? ", Grade/Percentage: " + qualification.Grade : "") +
+                                               (!string.IsNullOrEmpty(qualification.Class) ? ", Class: " + qualification.Class : "") +
+                                               (!string.IsNullOrEmpty(qualification.Institution) ? ", Institution: " + qualification.Institution : "") +
+                                               (!string.IsNullOrEmpty(qualification.University) ? ", University: " + qualification.University : "") +
+                                               (qualification.From.HasValue ? ", From: " + qualification.From.Value.ToString("dd'-'MM'-'yyyy") : "") +
+                                               (qualification.To.HasValue ? ", To: " + qualification.To.Value.ToString("dd'-'MM'-'yyyy") : "")
+                                                   ).ToArray();
+                    columdetail = String.Join("NUMBER", qualifications);
+                    break;
+
+                case "Designation":
+                    string designation = (from promotion in PromotionDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
+                                          group promotion by promotion.EmployeeId into p
+                                          select p.OrderByDescending(l => l.From).FirstOrDefault().Designation.Name).SingleOrDefault();
+                    columdetail = designation;
+                    break;
+                case "Department":
+                    string department = (from posting in PostingDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
+                                         group posting by posting.EmployeeId into p
+                                         select p.OrderByDescending(l => l.From).FirstOrDefault().Department.Name).SingleOrDefault();
+                    columdetail = department;
+                    break;
+                case "Dependent Details":
+                    string[] dependents = (from depedent in DependentDetailContext.Collection().Where(d => d.EmployeeId == employee.Id).ToList()
+                                           where !depedent.DateofBirth.HasValue || ((depedent.DateofBirth >= reportSelection.From || !reportSelection.From.HasValue) && (depedent.DateofBirth <= reportSelection.To || !reportSelection.To.HasValue))
+                                           select "Name: " + depedent.DependentName
+                                           + (depedent.DateofBirth.HasValue ? ", DOB: " + depedent.DateofBirth.Value.ToString("dd'-'MM'-'yyyy") : "")
+                                           + ", Relation: " + depedent.Relationship).ToArray();
+                    columdetail = String.Join("NUMBER", dependents);
+                    break;
+                case "Telephone Extension":
+                    TelephoneExtension extension = TelephoneExtensionContext.Collection().Where(t => t.EmployeeId == employee.Id)
+                                                                                                            .FirstOrDefault();
+                    columdetail = extension == null ? "" : extension.Number.ToString();
+                    break;
+                case "Promotion Details":
+                    string[] promotions = (from promotion in PromotionDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
+                                           where !promotion.From.HasValue || ((promotion.From >= reportSelection.From || !reportSelection.From.HasValue) && (promotion.From <= reportSelection.To || !reportSelection.To.HasValue))
+                                           select "Designation: " + promotion.Designation.Name +
+                                           (!string.IsNullOrEmpty(promotion.PayScaleId) ? ", PayScale: " + promotion.PayScale.Scale : "") +
+                                           (!string.IsNullOrEmpty(promotion.LevelId) ? ", Level: " + promotion.Level.Name : "") +
+                                           (promotion.From.HasValue ? ", From: " + promotion.From.Value.ToString("dd'-'MM'-'yyyy") : "") +
+                                               (promotion.To.HasValue ? ", To: " + promotion.To.Value.ToString("dd'-'MM'-'yyyy") : "")
+                                           ).ToArray();
+                    columdetail = String.Join("NUMBER", promotions);
+                    break;
+                case "Pay Scale":
+                    string[] payscale = (from pay in PayScaleContext.Collection().Where(x => x.OrganisationId == employee.OrganisationId).ToList()
+                                         select pay.Scale).ToArray();
+
+                    columdetail = String.Join("NUMBER", payscale);
+                    break;
+                case "Past Experience":
+                    string[] past_exp = (from exp in PastExperienceContext.Collection().Where(x => x.EmployeeId == employee.Id).ToList()
+                                         select (!string.IsNullOrEmpty(exp.Position) ?
+                                         "Postion: " + exp.Position : "") +
+                                         (!string.IsNullOrEmpty(exp.Organisation) ? ", Organisation: " + exp.Organisation : "") +
+                                            (exp.From.HasValue ? ", From: " + exp.From : "") +
+                                             (exp.To.HasValue ? ", To: " + exp.To : "")
+                                         ).ToArray();
+
+                    columdetail = String.Join("NUMBER", past_exp);
+                    break;
+
+                case "Posting Details":
+                    string[] postings = (from posting in PostingDetailContext.Collection().Where(p => p.EmployeeId == employee.Id).ToList()
+                                         where !posting.From.HasValue || ((posting.From >= reportSelection.From || !reportSelection.From.HasValue) && (posting.From <= reportSelection.To || !reportSelection.To.HasValue))
+                                         select "Department: " + posting.Department.Name +
+                                         (!string.IsNullOrEmpty(posting.HODId) ? ", HoD: " + posting.HOD.Designation : "") +
+                                         (!string.IsNullOrEmpty(posting.Reporting) ? ", Reporting: " + posting.Reporting : "") +
+                                         (posting.From.HasValue ? ", From: " + posting.From.Value.ToString("dd'-'MM'-'yyyy") : "") +
+                                             (posting.To.HasValue ? ", To: " + posting.To.Value.ToString("dd'-'MM'-'yyyy") : "")
+                                           ).ToArray();
+                    columdetail = String.Join("NUMBER", postings);
+                    break;
+
+            }
+
+            return columdetail;
         }
     }
 }

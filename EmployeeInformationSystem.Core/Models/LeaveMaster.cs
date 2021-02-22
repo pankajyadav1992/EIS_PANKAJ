@@ -28,5 +28,11 @@ namespace EmployeeInformationSystem.Core.Models
       
     }
 
+    public class MultiSelect
+    {
+        public List<string> orgList { get; set; }
+        public List<string> empList { get; set; }
+    }
+
     
 }

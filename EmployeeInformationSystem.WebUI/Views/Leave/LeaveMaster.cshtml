@@ -18,7 +18,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            Leave Quota
+                            <b>Leave Quota</b>>
                         </div>
 
                         @if (ViewBag.Action == null || ViewBag.Action == "")
@@ -37,7 +37,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 form-control-label">Organisation</label>
                                         <div class="col-sm-5">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="false">
+                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
 
                                                 <option value="0" selected>--Select Organisation--</option>
                                                 @foreach (var employee in ViewBag.OrganisationList)
@@ -148,7 +148,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 form-control-label">Organisation</label>
                                         <div class="col-sm-5">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="false">
+                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
 
                                                 <option value="0" selected>--Select Organisation--</option>
                                                 @foreach (var employee in ViewBag.OrganisationList)
@@ -263,7 +263,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 form-control-label">Organisation</label>
                                         <div class="col-sm-5">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="false">
+                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
 
                                                 <option value="0" selected>--Select Organisation--</option>
                                                 @foreach (var employee in ViewBag.OrganisationList)
