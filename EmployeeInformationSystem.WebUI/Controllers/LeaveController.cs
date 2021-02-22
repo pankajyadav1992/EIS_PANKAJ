@@ -34,7 +34,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<LeaveType> LeaveTypeContext;
         IRepository<LeaveMaster> LeaveMasterContext;
         IRepository<EmployeeLeaveDetails> EmployeeLeaveDetailsContext;
-
+        IRepository<EmployeeLeaveBalance> EmployeeLeaveBalanceContext;
 
         public LeaveController(IRepository<EmployeeDetail> employeeDetailContext,
         IRepository<Discipline> disciplineContext,
@@ -54,7 +54,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<EmployeeAsHoD> employeeAsHoDDetailContext,
         IRepository<LeaveType> leaveTypeContext,
         IRepository<LeaveMaster> leaveMasterContext,
-        IRepository<EmployeeLeaveDetails> employeeLeaveDetailsContext
+        IRepository<EmployeeLeaveDetails> employeeLeaveDetailsContext,
+        IRepository<EmployeeLeaveBalance> employeeLeaveBalanceContext
         )
         {
             EmployeeDetailContext = employeeDetailContext;
@@ -76,6 +77,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             LeaveTypeContext = leaveTypeContext;
             LeaveMasterContext = leaveMasterContext;
             EmployeeLeaveDetailsContext = employeeLeaveDetailsContext;
+            EmployeeLeaveBalanceContext = employeeLeaveBalanceContext;
             //Setting Parameters for Page
 
             base.SetGlobalParameters();
@@ -452,12 +454,47 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
             if (returnText == "Success")
             {
+                EmpLeaveBalCount(Eld);
                 ViewBag.HeadingName = "Add Leave Type";
                 ViewBag.HeadingColor = "bg-success";
                 ViewBag.Msg = "Leave Apply Succesfully";
             }
             return View("ApplyLeave");
         }
+
+        public PartialViewResult GetOrganisation_Leave(string EmployeeId)
+        {
+
+            var Edata = EmployeeDetailContext.Collection().Where(q => q.Id == EmployeeId).ToList();
+            LeaveMaster lm = new LeaveMaster();
+
+
+            foreach (var item in Edata)
+            {
+                lm.Organisation = item.Organisation;
+                ViewBag.orgName = item.Organisation.Name;
+                ViewBag.orgID = item.Organisation.Id;
+            }
+            //LeaveType lt = new LeaveType();
+            //var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
+            //foreach (var item in LT_data)
+            //{
+            //    lt.Name = item.Name;
+            //    lt.Id = item.Id;
+            //}
+
+            //var employeeModel = new EmployeeModel();
+            //employeeModel.listEmp = GetEmployeeDataFromDB();
+            //var emp = employeeModel.listEmp.Where(e => e.EmployeeId == EmployeeId).FirstOrDefault();
+            ////Set default emp records  
+            //employeeModel.EmployeeId = emp.EmployeeId;
+            //employeeModel.EmpName = emp.EmpName;
+            //employeeModel.Salary = emp.Salary;
+            // return PartialView("_OrgPartial", employeeModel);
+            return PartialView("_OrgPartial", lm);
+        }
+
+
         #endregion
 
 
@@ -511,7 +548,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         [HttpPost]
         public ActionResult ViewLeaveDetails(MultiSelect m)
         {
-           
+
             var data = (
                           from el in EmployeeLeaveDetailsContext.Collection().ToList()
                           join emp in EmployeeDetailContext.Collection().ToList()
@@ -525,48 +562,6 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                           on el.LeaveTypeId equals le.Id
 
                           where (m.orgList.Contains(el.OrganisationId) && m.empList.Contains(el.EmployeeId))
-
-                          select new
-                          {
-                              FullName = emp.FirstName + " " + (emp.MiddleName == "" ? "" : emp.MiddleName + " ") + emp.LastName,
-                              Organisation=org.Name,
-                              Leave=le.Name,
-                              el.NoOfDays,
-                              FromDate=el.LeaveFrom,
-                              ToDate=el.LeaveTill,
-                              el.Purpose
-
-                          }
-
-
-                      ).ToList();
-
-            DataTable dt = ToDataTable(data);
-
-            ViewBag.HeadingName = "Employee Leave Details";
-            ViewBag.HeadingColor = "bg-success";
-
-            return View("ShowResponse", dt);
-
-        }
-
-     
-        public ActionResult ViewAllLeaveDetails()
-        {
-
-            var data = (
-                          from el in EmployeeLeaveDetailsContext.Collection().ToList()
-                          join emp in EmployeeDetailContext.Collection().ToList()
-                          on el.EmployeeId equals emp.Id
-
-
-                          join org in OrganisationContext.Collection().ToList()
-                          on el.OrganisationId equals org.Id
-
-                          join le in LeaveTypeContext.Collection().ToList()
-                          on el.LeaveTypeId equals le.Id
-
-                         
 
                           select new
                           {
@@ -591,6 +586,52 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return View("ShowResponse", dt);
 
         }
+
+
+        public ActionResult ViewAllLeaveDetails()
+        {
+
+            var data = (
+                          from el in EmployeeLeaveDetailsContext.Collection().ToList()
+                          join emp in EmployeeDetailContext.Collection().ToList()
+                          on el.EmployeeId equals emp.Id
+
+
+                          join org in OrganisationContext.Collection().ToList()
+                          on el.OrganisationId equals org.Id
+
+                          join le in LeaveTypeContext.Collection().ToList()
+                          on el.LeaveTypeId equals le.Id
+
+
+
+                          select new
+                          {
+                              FullName = emp.FirstName + " " + (emp.MiddleName == "" ? "" : emp.MiddleName + " ") + emp.LastName,
+                              Organisation = org.Name,
+                              Leave = le.Name,
+                              el.NoOfDays,
+                              FromDate = el.LeaveFrom,
+                              ToDate = el.LeaveTill,
+                              el.Purpose
+
+                          }
+
+
+                      ).ToList();
+
+            DataTable dt = ToDataTable(data);
+
+            ViewBag.HeadingName = "Employee Leave Details";
+            ViewBag.HeadingColor = "bg-success";
+
+            return View("ShowResponse", dt);
+
+        }
+
+
+
+
 
 
 
@@ -621,6 +662,66 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return dataTable;
 
         }
+
+        public string EmpLeaveBalCount(EmployeeLeaveDetails e)
+        {
+            var check = (from eLB in EmployeeLeaveBalanceContext.Collection().ToList()
+                         where eLB.EmployeeId
+                         == e.EmployeeId
+                         select eLB
+                        ).Count();
+
+            if (check == 0)
+            {
+
+                var data = (from emp in EmployeeDetailContext.Collection().ToList()
+
+                            join org in OrganisationContext.Collection().ToList()
+                            on emp.OrganisationId equals org.Id
+
+                            join lm in LeaveMasterContext.Collection().ToList()
+                            on org.Id equals lm.OrganisationId
+
+                            where lm.LeaveTypeId == e.LeaveTypeId && org.Id == e.OrganisationId
+                            select new
+                            {
+                                TotalLeaveCount = lm.AnnualQuota,
+                                AvailableLeaveCount = Convert.ToInt32(lm.AnnualQuota) - Convert.ToInt32(e.NoOfDays),
+                                lm.LeaveTypeId,
+                                EmployeeId = emp.Id
+
+
+
+                            }
+                            ).ToList();
+
+                EmployeeLeaveBalance Eb = new EmployeeLeaveBalance();
+                foreach (var i in data)
+                {
+                    Eb.EmployeeId = i.EmployeeId;
+                    Eb.LeaveTypeId = i.LeaveTypeId;
+                    Eb.AvailableLeaveCount = i.AvailableLeaveCount.ToString();
+                    Eb.TotalLeaveCount = i.TotalLeaveCount.ToString();
+                }
+                EmployeeLeaveBalanceContext.Insert(Eb);
+                EmployeeLeaveBalanceContext.Commit();
+
+                return "success";
+            }
+
+            else
+            {
+                return "success";
+            }
+        }
+
+
+
+
+
+
+
+
 
         public string ManPowerEtraDetai(string column, EmployeeDetail employee, ReportSelectionViewModel reportSelection)
         {
