@@ -222,12 +222,59 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     ViewBag.HeadingName = "Delete Leave Type";
                     ViewBag.HeadingColor = "bg-danger";
                     return View(viewname, lt);
-                    //break;
+                //break;
+
+
+                case "LeaveMaster":
+
+                    LeaveMaster lm = new LeaveMaster();
+                    var LQ_data = (from leaveMaster in LeaveMasterContext.Collection().ToList()
+
+                                   join orgC in OrganisationContext.Collection().ToList()
+                                   on leaveMaster.OrganisationId equals orgC.Id
+
+                                   join ltC in LeaveTypeContext.Collection().ToList()
+                                   on leaveMaster.LeaveTypeId equals ltC.Id
+
+                                   select new
+                                   {
+                                       Organisation = orgC.Name,
+                                       LeaveType = ltC.Name,
+                                       leaveMaster.AnnualQuota,
+                                       leaveMaster.ValidFrom,
+                                       leaveMaster.ValidTill,
+                                       leaveMaster.Id
+
+
+                                   }
+
+                        ).Where(x => x.Id == idData).ToList();
+
+                    foreach (var item in LQ_data)
+                    {
+                        lm.AnnualQuota = item.AnnualQuota;
+                        lm.ValidFrom = item.ValidFrom;
+                        lm.ValidTill = item.ValidTill;
+                        ViewBag.LName = item.LeaveType;
+                        ViewBag.OName = item.Organisation;
+                        lm.Id = item.Id;
+
+                    }
+
+                    ViewBag.Action = "DeleteLeaveMaster";
+                    List<Organisation> orgList = OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
+                    ViewBag.OrganisationList = orgList;
+
+                    List<LeaveType> LeaveType = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
+                    ViewBag.LevelTypeList = LeaveType;
+
+                    viewname = "LeaveMaster";
+                    return View(viewname, lm);
             }
             return View(viewname);
         }
 
-
+        #region  Leave Master Code Start 
         [HttpPost]
         public ActionResult AddLeaveQuota(LeaveMaster l)
         { 
@@ -255,6 +302,22 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
             return View("LeaveMaster");
         }
+
+        [HttpPost]
+        public ActionResult DeleteLeaveMaster(LeaveMaster l)
+        {
+            if (ModelState.IsValid)
+            {
+                LeaveMasterContext.Delete(l.Id);
+                LeaveMasterContext.Commit();
+                ViewBag.Msg = "Leave Quota deleted succesfully";
+            }
+            return View("LeaveMaster");
+
+        }
+
+
+        #endregion
 
         #region  Leave type Code Start 
         public ActionResult LeaveType()
