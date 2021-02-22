@@ -468,7 +468,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             var Edata = EmployeeDetailContext.Collection().Where(q => q.Id == EmployeeId).ToList();
             LeaveMaster lm = new LeaveMaster();
 
-
+            
             foreach (var item in Edata)
             {
                 lm.Organisation = item.Organisation;

@@ -31,7 +31,7 @@
                                             <option value="0" selected>--Select Employee--</option>
                                             @foreach (var emp in ViewBag.EmlployeeTypeList)
                                             {
-                                                <option value="@emp.Id" data-employeetype="@emp.FirstName">@emp.FirstName</option>
+                                                <option value="@emp.Id" data-employeetype="@emp.FirstName">@emp.FirstName @emp.MiddleName @emp.LastName</option>
                                             }
                                         </select>
                                     </div>
@@ -137,8 +137,8 @@
                                     <label class="form-control-label col-sm-3 d-flex justify-content-center">Station Leave</label>
                                     <div class="col-sm-4">
                                         @*@Html.EditorFor(model => model.StationLeave, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })*@
-                                        @Html.RadioButtonFor(model => model.StationLeave, true, new { @class = "radio-template requiredField", @id = "WorkingStatus_True" }) Working&nbsp;&nbsp;
-                                        @Html.RadioButtonFor(model => model.StationLeave, false, new { @class = "radio-template requiredField", @id = "WorkingStatus_False" }) Separated
+                                        @Html.RadioButtonFor(model => model.StationLeave, true, new { @class = "radio-template requiredField", @id = "True" }) Yes&nbsp;&nbsp;
+                                        @Html.RadioButtonFor(model => model.StationLeave, false, new { @class = "radio-template requiredField", @id = "False" }) No
                                     </div>
                                     <div class="col-sm-4">
                                         <div classs="col-sm-9 align-left" style="display:none; color: red;" id="errorStationLeave">Please Enter No of Leaves</div>
