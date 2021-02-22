@@ -475,6 +475,27 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 ViewBag.orgName = item.Organisation.Name;
                 ViewBag.orgID = item.Organisation.Id;
             }
+
+            var LeaveBalance = (
+                          from el in EmployeeLeaveDetailsContext.Collection().ToList()
+                          join emp in EmployeeDetailContext.Collection().ToList()
+                          on el.EmployeeId equals emp.Id
+                          join org in OrganisationContext.Collection().ToList()
+                          on el.OrganisationId equals org.Id
+                          join le in LeaveTypeContext.Collection().ToList()
+                          on el.LeaveTypeId equals le.Id
+                          select new
+                          {                             
+                              Organisation = org.Name,
+                              Leave = le.Name,
+                              el.NoOfDays,
+                              FromDate = el.LeaveFrom,
+                              ToDate = el.LeaveTill,
+                              el.Purpose
+                          }
+                      ).ToList();
+
+        
             //LeaveType lt = new LeaveType();
             //var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
             //foreach (var item in LT_data)
