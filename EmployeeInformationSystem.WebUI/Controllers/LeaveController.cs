@@ -361,9 +361,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                            select new
                            {
                                LeaveType.Name,
-                               LeaveType.CreatedAt,
-                               LeaveType.LastUpdateAt,
-                               LeaveType.LastUpdateBy,
+                               //LeaveType.CreatedAt,
+                               //LeaveType.LastUpdateAt,
+                               //LeaveType.LastUpdateBy,
                                LeaveType.Id
                            }).ToList();
 
@@ -476,43 +476,39 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 ViewBag.orgID = item.Organisation.Id;
             }
 
-            var LeaveBalance = (
-                          from el in EmployeeLeaveDetailsContext.Collection().ToList()
-                          join emp in EmployeeDetailContext.Collection().ToList()
-                          on el.EmployeeId equals emp.Id
-                          join org in OrganisationContext.Collection().ToList()
-                          on el.OrganisationId equals org.Id
-                          join le in LeaveTypeContext.Collection().ToList()
-                          on el.LeaveTypeId equals le.Id
-                          select new
-                          {                             
-                              Organisation = org.Name,
-                              Leave = le.Name,
-                              el.NoOfDays,
-                              FromDate = el.LeaveFrom,
-                              ToDate = el.LeaveTill,
-                              el.Purpose
-                          }
-                      ).ToList();
+            var check = (from eLB in EmployeeLeaveBalanceContext.Collection().ToList()
+                         where eLB.EmployeeId
+                         == EmployeeId
+                         select eLB
+                       ).Count();
 
-        
-            //LeaveType lt = new LeaveType();
-            //var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
-            //foreach (var item in LT_data)
-            //{
-            //    lt.Name = item.Name;
-            //    lt.Id = item.Id;
-            //}
+            if (check == 0)
+            {
+ 
+            }
+            else
+            {
 
-            //var employeeModel = new EmployeeModel();
-            //employeeModel.listEmp = GetEmployeeDataFromDB();
-            //var emp = employeeModel.listEmp.Where(e => e.EmployeeId == EmployeeId).FirstOrDefault();
-            ////Set default emp records  
-            //employeeModel.EmployeeId = emp.EmployeeId;
-            //employeeModel.EmpName = emp.EmpName;
-            //employeeModel.Salary = emp.Salary;
-            // return PartialView("_OrgPartial", employeeModel);
-            return PartialView("_OrgPartial", lm);
+            }
+
+
+                //LeaveType lt = new LeaveType();
+                //var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
+                //foreach (var item in LT_data)
+                //{
+                //    lt.Name = item.Name;
+                //    lt.Id = item.Id;
+                //}
+
+                //var employeeModel = new EmployeeModel();
+                //employeeModel.listEmp = GetEmployeeDataFromDB();
+                //var emp = employeeModel.listEmp.Where(e => e.EmployeeId == EmployeeId).FirstOrDefault();
+                ////Set default emp records  
+                //employeeModel.EmployeeId = emp.EmployeeId;
+                //employeeModel.EmpName = emp.EmpName;
+                //employeeModel.Salary = emp.Salary;
+                // return PartialView("_OrgPartial", employeeModel);
+                return PartialView("_OrgPartial", lm);
         }
 
 
