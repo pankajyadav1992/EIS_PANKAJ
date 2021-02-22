@@ -96,8 +96,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
            
             List<LeaveType> LeaveType = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
             ViewBag.LevelTypeList = LeaveType;
-
            
+
+
+
             return View();
         }
 
@@ -150,6 +152,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     ViewBag.HeadingName = "Update Leave Type";
                     ViewBag.HeadingColor = "bg-warning ";
                     return View(viewname, lt);               
+               
                 case "LeaveMaster":
 
                     LeaveMaster lm = new LeaveMaster();
@@ -178,8 +181,15 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     foreach (var item in LQ_data)
                     {
                         lm.AnnualQuota = item.AnnualQuota;
+                        lm.ValidFrom = item.ValidFrom;
+                        lm.ValidTill = item.ValidTill;
+                        ViewBag.LName = item.LeaveType;
+                        ViewBag.OName = item.Organisation;
+                        lm.Id = item.Id;
 
                     }
+
+                    ViewBag.Action = "UpdateLeaveMaster";
                     List<Organisation> orgList = OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
                     ViewBag.OrganisationList = orgList;
 
@@ -234,6 +244,17 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return View("LeaveMaster");
         }
 
+        [HttpPost]
+        public ActionResult UpdateLeaveMaster(LeaveMaster l)
+        {
+            if (ModelState.IsValid)
+            {
+                LeaveMasterContext.Update(l);
+                LeaveMasterContext.Commit();
+                ViewBag.Msg = "Leave Quota updated succesfully";
+            }
+            return View("LeaveMaster");
+        }
 
         #region  Leave type Code Start 
         public ActionResult LeaveType()
@@ -370,7 +391,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return View("ApplyLeave");
         }
             #endregion
-
+        
             public DataTable ToDataTable<T>(List<T> items)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
