@@ -34,6 +34,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<LeaveType> LeaveTypeContext;
         IRepository<LeaveMaster> LeaveMasterContext;
         IRepository<EmployeeLeaveDetails> EmployeeLeaveDetailsContext;
+        IRepository<EmployeeLeaveBalance> EmployeeLeaveBalanceContext;
 
 
         public LeaveController(IRepository<EmployeeDetail> employeeDetailContext,
@@ -54,7 +55,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         IRepository<EmployeeAsHoD> employeeAsHoDDetailContext,
         IRepository<LeaveType> leaveTypeContext,
         IRepository<LeaveMaster> leaveMasterContext,
-        IRepository<EmployeeLeaveDetails> employeeLeaveDetailsContext
+        IRepository<EmployeeLeaveDetails> employeeLeaveDetailsContext,
+        IRepository<EmployeeLeaveBalance> employeeLeaveBalanceContext
         )
         {
             EmployeeDetailContext = employeeDetailContext;
@@ -76,6 +78,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             LeaveTypeContext = leaveTypeContext;
             LeaveMasterContext = leaveMasterContext;
             EmployeeLeaveDetailsContext = employeeLeaveDetailsContext;
+            EmployeeLeaveBalanceContext = employeeLeaveBalanceContext;
             //Setting Parameters for Page
 
             base.SetGlobalParameters();
@@ -463,6 +466,49 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         public ActionResult ViewLeaveDetails()
         {
             return View();
@@ -593,7 +639,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         }
 
 
+        //public ActionResult ViewEmpLeaveBal()
+        //{
 
+        //}
 
 
         public DataTable ToDataTable<T>(List<T> items)
