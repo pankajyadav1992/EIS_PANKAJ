@@ -551,6 +551,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
             var data = (
                           from el in EmployeeLeaveDetailsContext.Collection().ToList()
+                         
                           join emp in EmployeeDetailContext.Collection().ToList()
                           on el.EmployeeId equals emp.Id
 
@@ -680,15 +681,16 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                             on emp.OrganisationId equals org.Id
 
                             join lm in LeaveMasterContext.Collection().ToList()
-                            on org.Id equals lm.OrganisationId
+                            on emp.OrganisationId equals lm.OrganisationId
 
-                            where lm.LeaveTypeId == e.LeaveTypeId && org.Id == e.OrganisationId
+                            //where lm.LeaveTypeId == e.LeaveTypeId && org.Id == e.OrganisationId
                             select new
                             {
                                 TotalLeaveCount = lm.AnnualQuota,
                                 AvailableLeaveCount = Convert.ToInt32(lm.AnnualQuota) - Convert.ToInt32(e.NoOfDays),
                                 lm.LeaveTypeId,
-                                EmployeeId = emp.Id
+                                EmployeeId = emp.Id,
+                                OrganisationId=emp.OrganisationId
 
 
 
@@ -696,7 +698,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                             ).ToList();
 
                 EmployeeLeaveBalance Eb = new EmployeeLeaveBalance();
-                foreach (var i in data)
+                foreach (var i in data.Where(x=>x.EmployeeId==e.EmployeeId))
                 {
                     Eb.EmployeeId = i.EmployeeId;
                     Eb.LeaveTypeId = i.LeaveTypeId;
