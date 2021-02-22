@@ -25,134 +25,143 @@
                                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
                             <div class="card-body">
                                 <div class="form-group row">
-                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Employee Name</label>
-                                        <div class="col-sm-4">
-                                            <select name="EmployeeId" class="form-control" id="selectEmployeeByName" style="min-width:80%;" data-live-search="false">
-                                                <option value="0" selected>--Select Employee--</option>
-                                                @foreach (var emp in ViewBag.EmlployeeTypeList)
-                                                {
-                                                    <option value="@emp.Id" data-employeetype="@emp.FirstName">@emp.FirstName</option>
-                                                }
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-4">
-                                           <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorEmployeeId">Please Select Employee Name</div>
-                                        </div>
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Employee Name</label>
+                                    <div class="col-sm-4">
+                                        <select name="EmployeeId" class="form-control" id="selectEmployeeByName" style="min-width:80%;" data-live-search="false">
+                                            <option value="0" selected>--Select Employee--</option>
+                                            @foreach (var emp in ViewBag.EmlployeeTypeList)
+                                            {
+                                                <option value="@emp.Id" data-employeetype="@emp.FirstName">@emp.FirstName</option>
+                                            }
+                                        </select>
                                     </div>
-                                    <div class="form-group row">
-                                      <label class="form-control-label col-sm-3 d-flex justify-content-center">Organisation</label>
-                                        <div class="col-sm-4">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrganisationByName" style="min-width:80%;" data-live-search="false">
-                                                <option value="0" selected>--Select Organisation--</option>
-                                                @foreach (var employee in ViewBag.OrganisationList)
-                                                {
-                                                    <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
-                                                }
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-4">
-                                          <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorOrganisationId">Please Select Employee Name</div>
-                                        </div>
+                                    <div class="col-sm-4">
+                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorEmployeeId">Please Select Employee Name</div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">From Date</label>
-                                        <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.LeaveFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div classs="col-sm-9 align-left" style="display:none;color: red; " id="errorLeaveFrom">Please Enter From Date</div>
-                                        </div>
+                                </div>                               
+                                @*<div class="form-group row">
+            <label class="form-control-label col-sm-3 d-flex justify-content-center">Organisation</label>
+            <div class="col-sm-4">
+                <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrganisationByName" style="min-width:80%;" data-live-search="false">
+                    <option value="0" selected>--Select Organisation--</option>
+                    @foreach (var employee in ViewBag.OrganisationList)
+                    {
+                        <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-4">
+                <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorOrganisationId">Please Select Employee Name</div>
+            </div>
+        </div>*@
+          <div class="form-group row">
+            <label class="form-control-label col-sm-3 d-flex justify-content-center">Organisation</label>
+            <div class="col-sm-4">
+                <div id="partialDiv">
+                    @Html.Partial("_OrgPartial")
+                </div>
+            </div>
+            
+        </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">From Date</label>
+                                    <div class="col-sm-4">
+                                        @Html.EditorFor(model => model.LeaveFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">To Date</label>
-                                        <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.LeaveTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorLeaveTill">Please Enter To Date</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Type of Leave</label>
-                                        <div class="col-sm-4">
-                                            <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="false">
-                                                <option value="0" selected>--Select Leave Type--</option>
-                                                @foreach (var leavetype in ViewBag.LevelTypeList)
-                                                {
-                                                    <option value="@leavetype.Id" data-employeetype="@leavetype.Name">@leavetype.Name</option>
-                                                }
-                                            </select>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorLeaveId">Please Select Leave Type</div>
-                                        </div>                                        
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">No. of days</label>
-                                        <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.NoOfDays, new { htmlAttributes = new { @class = "form-control", @type = "number", @data_type = "number" } })
-                                        </div>
-                                        <div class="col-sm-4">
-                                           <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorNoOfDays">Please Enter No. of days</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                      <label class="form-control-label col-sm-3 d-flex justify-content-center">Prefix</label>
-                                        <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.PrefixFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                                        </div>
-                                        <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.PrefixTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Suffix</label>
-                                        <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.SuffixFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                                        </div>
-                                        <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.SuffixTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" } })
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Purpose</label>
-                                        <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
-                                        </div>
-                                        <div class="col-sm-4">
-                                         <div classs="col-sm-9 align-left" style="display:none; color: red;" id="errorPurpose">Please Enter Purpose</div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Station Leave</label>
-                                        <div class="col-sm-4">
-                                            @*@Html.EditorFor(model => model.StationLeave, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })*@
-                                            @Html.RadioButtonFor(model => model.StationLeave, true, new { @class = "radio-template requiredField", @id = "WorkingStatus_True" }) Working&nbsp;&nbsp;
-                                            @Html.RadioButtonFor(model => model.StationLeave, false, new { @class = "radio-template requiredField", @id = "WorkingStatus_False" }) Separated
-                                        </div>
-                                        <div class="col-sm-4">
-                                           <div classs="col-sm-9 align-left" style="display:none; color: red;" id="errorStationLeave">Please Enter No of Leaves</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Station Leave Reason</label>
-                                        <div class="col-sm-4">
-                                            @Html.TextAreaFor(model => model.NoOfDays, new { htmlAttributes = new { @Width = "500px", @class = "form-control", @type = "textarea", @data_type = "text" } })
-                                        </div>
-                                        <div class="form-group row offset-sm-3">
-                                            <div classs="col-sm-9" style="display:none;color: red;" id="errorNoOfDays">Please Enter No of Leaves</div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-9 offset-sm-4">
-                                            <input type="submit" value="Apply" class="btn btn-primary" id="ApplyLeaveBtn">
-                                        </div>
+                                    <div class="col-sm-4">
+                                        <div classs="col-sm-9 align-left" style="display:none;color: red; " id="errorLeaveFrom">Please Enter From Date</div>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">To Date</label>
+                                    <div class="col-sm-4">
+                                        @Html.EditorFor(model => model.LeaveTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" , autocomplete = "off" } })
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorLeaveTill">Please Enter To Date</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Type of Leave</label>
+                                    <div class="col-sm-4">
+                                        <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="false">
+                                            <option value="0" selected>--Select Leave Type--</option>
+                                            @foreach (var leavetype in ViewBag.LevelTypeList)
+                                            {
+                                                <option value="@leavetype.Id" data-employeetype="@leavetype.Name">@leavetype.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorLeaveId">Please Select Leave Type</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">No. of days</label>
+                                    <div class="col-sm-4">
+                                        @Html.EditorFor(model => model.NoOfDays, new { htmlAttributes = new { @class = "form-control", @type = "number", @data_type = "number" , autocomplete = "off" } })
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorNoOfDays">Please Enter No. of days</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Prefix</label>
+                                    <div class="col-sm-4">
+                                        @Html.EditorFor(model => model.PrefixFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off", @disabled = "disabled" } })
+                                    </div>
+                                    <div class="col-sm-4">
+                                        @Html.EditorFor(model => model.PrefixTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" , autocomplete = "off" , @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Suffix</label>
+                                    <div class="col-sm-4">
+                                        @Html.EditorFor(model => model.SuffixFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" , @disabled = "disabled" } })
+                                    </div>
+                                    <div class="col-sm-4">
+                                        @Html.EditorFor(model => model.SuffixTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date" , autocomplete = "off" , @disabled = "disabled" } })
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Purpose</label>
+                                    <div class="col-sm-4">
+                                        @Html.EditorFor(model => model.Purpose, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text", autocomplete = "off" } })
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div classs="col-sm-9 align-left" style="display:none; color: red;" id="errorPurpose">Please Enter Purpose</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Station Leave</label>
+                                    <div class="col-sm-4">
+                                        @*@Html.EditorFor(model => model.StationLeave, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })*@
+                                        @Html.RadioButtonFor(model => model.StationLeave, true, new { @class = "radio-template requiredField", @id = "WorkingStatus_True" }) Working&nbsp;&nbsp;
+                                        @Html.RadioButtonFor(model => model.StationLeave, false, new { @class = "radio-template requiredField", @id = "WorkingStatus_False" }) Separated
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <div classs="col-sm-9 align-left" style="display:none; color: red;" id="errorStationLeave">Please Enter No of Leaves</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Station Leave Reason</label>
+                                    <div class="col-sm-4">
+                                        @Html.TextAreaFor(model => model.NoOfDays, new { htmlAttributes = new { @Width = "500px", @class = "form-control", @type = "textarea", @data_type = "text", autocomplete = "off" } })
+                                    </div>
+                                    <div class="form-group row offset-sm-3">
+                                        <div classs="col-sm-9" style="display:none;color: red;" id="errorNoOfDays">Please Enter No of Leaves</div>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-9 offset-sm-4">
+                                        <input type="submit" value="Apply" class="btn btn-primary" id="ApplyLeaveBtn">
+                                    </div>
+                                </div>
+                            </div>
                                 }
-                                                 
-                        </div>
+
+                            </div>
                     </div>
                 </div>
             </div>
@@ -190,6 +199,57 @@
         });
 
 
+        $("#@Html.IdFor(model => model.LeaveFrom)").on('change', function () {
+             var myDate = $(this).val();
+            myDate = myDate.split("-");
+            var newDate = myDate[2] + "-" + myDate[1] + "-" + myDate[0];
+            var my_ddate = new Date(newDate).getTime();
+            var currentDate = new Date(newDate);
+            var dayweek = currentDate.getDay();
+            //alert(dayweek);
+            var result1 = new Date(currentDate);
+            var result2 = new Date(currentDate);
+            if (dayweek == 1)
+            {
+                result1.setDate(result1.getDate() + 1);
+                $("#@Html.IdFor(model => model.PrefixFrom)").val(("0" + result1.getDate()).slice(-2) + '-' + ("0" + (result1.getMonth() + 1)).slice(-2) + '-' + result1.getFullYear());
+                result2.setDate(result2.getDate() + 2);
+                $("#@Html.IdFor(model => model.PrefixTill)").val(("0" + result2.getDate()).slice(-2) + '-' + ("0" + (result2.getMonth() + 1)).slice(-2) + '-' + result2.getFullYear());
+               $("#@Html.IdFor(model => model.SuffixFrom)").val("");
+                $("#@Html.IdFor(model => model.SuffixTill)").val("");
+            }
+            if (dayweek == 5)
+            {
+                 result1.setDate(result1.getDate() -2);
+                $("#@Html.IdFor(model => model.SuffixFrom)").val(("0" + result1.getDate()).slice(-2) + '-' + ("0" + (result1.getMonth() + 1)).slice(-2) + '-' + result1.getFullYear());
+                result2.setDate(result2.getDate() - 1);
+                $("#@Html.IdFor(model => model.SuffixTill)").val(("0" + result2.getDate()).slice(-2) + '-' + ("0" + (result2.getMonth() + 1)).slice(-2) + '-' + result2.getFullYear());
+                $("#@Html.IdFor(model => model.PrefixFrom)").val("");
+                $("#@Html.IdFor(model => model.PrefixTill)").val("");
+            }
+           });
+
+
+
+        $(document).on('change', '#selectEmployeeByName', function () {
+            var empid = $(this).children(":selected").val();
+            //alert(empid);
+            $.ajax(
+                {
+                    url: '../Leave/GetOrganisation_Leave?EmployeeId=' + empid,
+                    type: 'GET',
+                    data: "",
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        $("#partialDiv").html(data);
+                    },
+                    error: function () {
+                        alert("error");
+                    }
+                });
+
+        });
+
 
         $(document).on('click', '#ApplyLeaveBtn', function (e) {
            var isValid = true;
@@ -219,8 +279,8 @@
             } else {
                 $("#errorLeaveId").hide();
             }
-                        
-            
+
+
 
              if ($("#@Html.IdFor(model => model.LeaveFrom)").val() == "")
              {
@@ -248,7 +308,7 @@
                  $("#errorPurpose").show(); isValid = false;
              }
              else { $("#errorPurpose").hide();            }
-                    
+
 
             if (!isValid) {
                 e.preventDefault(); //prevent the default action

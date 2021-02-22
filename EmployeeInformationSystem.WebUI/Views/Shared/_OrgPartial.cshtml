@@ -1,0 +1,14 @@
+﻿@model EmployeeInformationSystem.Core.Models.LeaveMaster
+@{
+    //ViewBag.Title = "LeaveMaster";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@Styles.Render("~/Content/bootstrap-select")
+@Styles.Render("~/Content/gijgo")
+
+
+   
+<div>
+    <input class=" form-control" type="text" value="@ViewBag.orgName"  disabled />
+    <input class=" form-control" type="hidden" value="@ViewBag.orgID" name="OrganisationId"  />    
+</div>

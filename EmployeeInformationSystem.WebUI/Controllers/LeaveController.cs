@@ -453,9 +453,43 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             }
             return View("ApplyLeave");
         }
-            #endregion
-        
-            public DataTable ToDataTable<T>(List<T> items)
+
+        public PartialViewResult GetOrganisation_Leave(string EmployeeId)
+        {
+            
+            var Edata= EmployeeDetailContext.Collection().Where(q => q.Id == EmployeeId).ToList();
+            LeaveMaster lm = new LeaveMaster();
+
+          
+            foreach (var item in Edata)
+            {
+                lm.Organisation = item.Organisation; 
+                ViewBag.orgName= item.Organisation.Name;
+                ViewBag.orgID = item.Organisation.Id;
+            }
+            //LeaveType lt = new LeaveType();
+            //var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
+            //foreach (var item in LT_data)
+            //{
+            //    lt.Name = item.Name;
+            //    lt.Id = item.Id;
+            //}
+
+            //var employeeModel = new EmployeeModel();
+            //employeeModel.listEmp = GetEmployeeDataFromDB();
+            //var emp = employeeModel.listEmp.Where(e => e.EmployeeId == EmployeeId).FirstOrDefault();
+            ////Set default emp records  
+            //employeeModel.EmployeeId = emp.EmployeeId;
+            //employeeModel.EmpName = emp.EmpName;
+            //employeeModel.Salary = emp.Salary;
+            // return PartialView("_OrgPartial", employeeModel);
+            return PartialView("_OrgPartial", lm);
+        }
+
+
+        #endregion
+
+        public DataTable ToDataTable<T>(List<T> items)
         {
             DataTable dataTable = new DataTable(typeof(T).Name);
             //Get all the properties

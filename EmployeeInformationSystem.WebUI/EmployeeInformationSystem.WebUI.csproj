@@ -689,6 +689,7 @@
     <Content Include="Views\Leave\ShowResponse.cshtml" />
     <Content Include="Views\Leave\Edit.cshtml" />
     <Content Include="Views\Leave\ApplyLeave.cshtml" />
+    <Content Include="Views\Shared\_OrgPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
