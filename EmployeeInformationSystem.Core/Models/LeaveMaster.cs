@@ -34,5 +34,14 @@ namespace EmployeeInformationSystem.Core.Models
         public List<string> empList { get; set; }
     }
 
-    
+    public class LeaveBalance
+    {
+        public string LeaveType { get; set; }
+        public string LeaveCount { get; set; }
+        public string OrganisationName { get; set; }
+        public string EmpId { get; set; }
+        public string EmpName { get; set; }       
+    }
+
+
 }

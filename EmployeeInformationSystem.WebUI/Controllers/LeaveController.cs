@@ -361,9 +361,9 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                            select new
                            {
                                LeaveType.Name,
-                               //LeaveType.CreatedAt,
-                               //LeaveType.LastUpdateAt,
-                               //LeaveType.LastUpdateBy,
+                               LeaveType.CreatedAt,
+                               LeaveType.LastUpdateAt,
+                               LeaveType.LastUpdateBy,
                                LeaveType.Id
                            }).ToList();
 
@@ -464,51 +464,47 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
         public PartialViewResult GetOrganisation_Leave(string EmployeeId)
         {
-
             var Edata = EmployeeDetailContext.Collection().Where(q => q.Id == EmployeeId).ToList();
             LeaveMaster lm = new LeaveMaster();
-
-            
             foreach (var item in Edata)
             {
                 lm.Organisation = item.Organisation;
                 ViewBag.orgName = item.Organisation.Name;
                 ViewBag.orgID = item.Organisation.Id;
             }
-
             var check = (from eLB in EmployeeLeaveBalanceContext.Collection().ToList()
                          where eLB.EmployeeId
                          == EmployeeId
                          select eLB
-                       ).Count();
-
+                        ).Count();
             if (check == 0)
             {
- 
+                           var  LeaveBal = (from edc in EmployeeDetailContext.Collection().ToList()
+                            join
+                            lmc in LeaveMasterContext.Collection().ToList()
+                            on edc.OrganisationId equals lmc.OrganisationId
+                            join
+                            ltc in LeaveTypeContext.Collection().ToList()
+                            on lmc.LeaveTypeId equals ltc.Id
+                            where(edc.Id== EmployeeId) 
+                            select new LeaveBalance
+                            {
+                                LeaveType= ltc.Name,
+                                LeaveCount = lmc.AnnualQuota,
+                                //LeaveType= ltc.Name,
+                                // LeaveCount= lmc.AnnualQuota,
+                                // // edc.Organisation,
+                                // // edc.FirstName,
+                                // EmpId=  edc.Id,
+                            }
+                          ) .ToList();
+               
+                ViewBag.Balance = LeaveBal;
             }
-            else
-            {
-
-            }
 
 
-                //LeaveType lt = new LeaveType();
-                //var LT_data = LeaveTypeContext.Collection().Where(a => a.Id == idData).ToList();
-                //foreach (var item in LT_data)
-                //{
-                //    lt.Name = item.Name;
-                //    lt.Id = item.Id;
-                //}
 
-                //var employeeModel = new EmployeeModel();
-                //employeeModel.listEmp = GetEmployeeDataFromDB();
-                //var emp = employeeModel.listEmp.Where(e => e.EmployeeId == EmployeeId).FirstOrDefault();
-                ////Set default emp records  
-                //employeeModel.EmployeeId = emp.EmployeeId;
-                //employeeModel.EmpName = emp.EmpName;
-                //employeeModel.Salary = emp.Salary;
-                // return PartialView("_OrgPartial", employeeModel);
-                return PartialView("_OrgPartial", lm);
+                return PartialView("_OrgPartial");
         }
 
 

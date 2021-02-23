@@ -1,4 +1,4 @@
-﻿@model EmployeeInformationSystem.Core.Models.LeaveMaster
+﻿@model EmployeeInformationSystem.Core.Models.LeaveBalance
 @{
     //ViewBag.Title = "LeaveMaster";
     //Layout = "~/Views/Shared/_Layout.cshtml";
@@ -11,4 +11,18 @@
 <div>
     <input class=" form-control" type="text" value="@ViewBag.orgName"  disabled />
     <input class=" form-control" type="hidden" value="@ViewBag.orgID" name="OrganisationId"  />    
+</div>
+<div>
+    @if (@ViewBag.orgName != null)
+    {
+    <ol>
+        @foreach (var item in @ViewBag.Balance)
+        {
+            <li>
+                <span> @item.LeaveType </span>
+                <span> @item.LeaveCount </span>
+            </li>
+        }
+    </ol>
+    }
 </div>
