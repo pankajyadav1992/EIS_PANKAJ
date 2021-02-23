@@ -15,14 +15,19 @@
 <div>
     @if (@ViewBag.orgName != null)
     {
-    <ol>
-        @foreach (var item in @ViewBag.Balance)
-        {
-            <li>
-                <span> @item.LeaveType </span>
-                <span> @item.LeaveCount </span>
-            </li>
-        }
-    </ol>
+    <table class="table table-bordered">
+        <thead>
+            <tr><th>Leave Type</th><th>Available Leave</th></tr>
+        </thead>
+                                   <tbody>
+                                       @foreach (var item in @ViewBag.Balance)
+                                       {
+                                       <tr>
+                                           <td> @item.LeaveType </td>
+                                           <td>@item.LeaveCount </td>
+                                       </tr>
+                                       }
+                                   </tbody>
+    </table>
     }
 </div>
