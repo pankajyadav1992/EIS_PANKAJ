@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>@ViewBag.Title | EIS</title>
+    <title>@ViewBag.Title | LMS</title>
     <meta name="description" content="DGH Employee Information System">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="robots" content="all,follow">
@@ -124,15 +124,12 @@
                                                     <li>
                                                         <a href="#LeaveDropdown" aria-expanded="false" data-toggle="collapse"><i class="fa fa-bar-chart"></i>Leave Section</a>
                                                         <ul id="LeaveDropdown" class="collapse list-unstyled @RenderSection("Leave", required: false) ">
-                                                            <li @RenderSection("ViewLeaveQuota", required: false)><a href="@Url.Action("ViewLeaveQuota", "Leave")"><i class="fa fa-user-circle"></i>View Leave Quota</a></li>
-                                                            <li @RenderSection("LeaveMaster", required: false)><a href="@Url.Action("LeaveMaster", "Leave")"><i class="fa fa-times-rectangle"></i>Add Leave Quota</a></li>
-                                                            <li @RenderSection("ViewLeaveType", required: false)><a href="@Url.Action("ViewLeaveType", "Leave")"><i class="fa fa-user-circle"></i>View Leave Type</a></li>
                                                             <li @RenderSection("LeaveType", required: false)><a href="@Url.Action("LeaveType", "Leave")"><i class="fa fa-times-rectangle"></i>Add Leave Type</a></li>
+                                                            <li @RenderSection("ViewLeaveType", required: false)><a href="@Url.Action("ViewLeaveType", "Leave")"><i class="fa fa-user-circle"></i>View Leave Type</a></li>
+                                                            <li @RenderSection("LeaveMaster", required: false)><a href="@Url.Action("LeaveMaster", "Leave")"><i class="fa fa-times-rectangle"></i>Add Leave Quota</a></li>
+                                                            <li @RenderSection("ViewLeaveQuota", required: false)><a href="@Url.Action("ViewLeaveQuota", "Leave")"><i class="fa fa-user-circle"></i>View Leave Quota</a></li>
+                                                            <li @RenderSection("ApplyLeave", required: false)><a href="@Url.Action("ApplyLeave", "Leave")"><i class="fa fa-times-rectangle"></i>Apply Leave </a></li>
                                                             <li @RenderSection("ViewAllLeaveDetails", required: false)><a href="@Url.Action("ViewAllLeaveDetails", "Leave")"><i class="fa fa-user-circle"></i>View Leave Details</a></li>
-                                                            <li @RenderSection("ApplyLeave", required: false)><a href="@Url.Action("ApplyLeave", "Leave")"><i class="fa fa-times-rectangle"></i>Apply Leave Details</a></li>
-
-                                                          
-
                                                         </ul>
                                                     </li>
                                                     <li><span class="heading">Administrator Section</span></li>
@@ -144,8 +141,6 @@
                                                     {
                                                         <li @RenderSection("Admin", required: false)><a href="#" data-toggle="modal" data-target="#exampleModal"> <i class="fa fa-key"></i>Master Data </a></li>
                                                     }
-
-
                                                 </ul>
             </nav>
             <div class="content-inner">

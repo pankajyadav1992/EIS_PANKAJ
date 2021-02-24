@@ -427,7 +427,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         [HttpGet]
         public ActionResult ApplyLeave()
         {
-            List<EmployeeDetail> EmployeeList = EmployeeDetailContext.Collection().Where(q => q.WorkingStatus == true).ToList();
+            List<EmployeeDetail> EmployeeList = EmployeeDetailContext.Collection().Where(q => q.WorkingStatus == true).OrderBy(e=>e.FirstName).ToList() ;
             ViewBag.EmlployeeTypeList = EmployeeList;
 
             List<Organisation> orgList = OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
@@ -499,14 +499,55 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                     // // edc.Organisation,
                                     // // edc.FirstName,
                                     // EmpId=  edc.Id,
-                                }
-               ).ToList();
+                                }).ToList();
+                    ViewBag.Balance = LeaveBal;
+                }
+            else
+                {
+                    var leaveType = (from ltc in LeaveTypeContext.Collection().ToList()
+                                     join
+                                     elbc in EmployeeLeaveBalanceContext.Collection().ToList()
+                                     on ltc.Id equals elbc.LeaveTypeId
+                                     where (elbc.EmployeeId == EmployeeId)
+                                     select new LeaveBalance
+                                     {
+                                         LeaveCount = elbc.AvailableLeaveCount,
+                                         LeaveType = ltc.Name,
+                                     }
+                                     ).ToList();                    
 
-                ViewBag.Balance = LeaveBal;
+
+                  //  var exceptionList = EmployeeLeaveBalanceContext.Collection().Where(e=>e.EmployeeId== EmployeeId).Select(e => e.LeaveTypeId).ToList();
+                    
+                   // var query = LeaveTypeContext.Collection().Select(i => i.Id).Where(x => !exceptionList.Contains(x)).ToList(); 
+                                                    
+                    var LeaveBal = (from edc in EmployeeDetailContext.Collection().ToList()
+                                    join
+                                    lmc in LeaveMasterContext.Collection().ToList()
+                                    on edc.OrganisationId equals lmc.OrganisationId
+                                    join ltc in LeaveTypeContext.Collection().ToList()
+                                    on lmc.LeaveTypeId equals ltc.Id                                  
+                                    where (edc.Id == EmployeeId)
+                                    select new LeaveBalance
+                                    {
+                                        LeaveType = ltc.Name,
+                                        LeaveCount = lmc.AnnualQuota,
+                                    })
+                                    .Concat
+                                    (from ltc in LeaveTypeContext.Collection().ToList()
+                                     join
+                                     elbc in EmployeeLeaveBalanceContext.Collection().ToList()
+                                     on ltc.Id equals elbc.LeaveTypeId
+                                     where (elbc.EmployeeId == EmployeeId)
+                                     select new LeaveBalance
+                                     {
+                                         LeaveCount = elbc.AvailableLeaveCount,
+                                         LeaveType = ltc.Name,
+                                     }
+                                    ).ToList();
+                    ViewBag.Balance = LeaveBal;
+                }               
             }
-
-        }
-
             return PartialView("_OrgPartial");
         }
 
@@ -687,32 +728,23 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                          == e.EmployeeId
                          select eLB
                         ).Count();
-
             if (check == 0)
             {
-
                 var data = (from emp in EmployeeDetailContext.Collection().ToList()
-
                             join org in OrganisationContext.Collection().ToList()
                             on emp.OrganisationId equals org.Id
-
                             join lm in LeaveMasterContext.Collection().ToList()
                             on emp.OrganisationId equals lm.OrganisationId
-
-                            //where lm.LeaveTypeId == e.LeaveTypeId && org.Id == e.OrganisationId
+                            where emp.Id == e.EmployeeId && org.Id == e.OrganisationId && lm.LeaveTypeId== e.LeaveTypeId
                             select new
                             {
                                 TotalLeaveCount = lm.AnnualQuota,
                                 AvailableLeaveCount = Convert.ToInt32(lm.AnnualQuota) - Convert.ToInt32(e.NoOfDays),
-                                lm.LeaveTypeId,
+                                e.LeaveTypeId,
                                 EmployeeId = emp.Id,
                                 OrganisationId=emp.OrganisationId
-
-
-
                             }
                             ).ToList();
-
                 EmployeeLeaveBalance Eb = new EmployeeLeaveBalance();
                 foreach (var i in data.Where(x=>x.EmployeeId==e.EmployeeId))
                 {
@@ -723,13 +755,72 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 }
                 EmployeeLeaveBalanceContext.Insert(Eb);
                 EmployeeLeaveBalanceContext.Commit();
-
                 return "success";
             }
-
             else
             {
-                return "success";
+                var alredyexist = EmployeeLeaveBalanceContext.Collection().Where(q => q.EmployeeId == e.EmployeeId && q.LeaveTypeId == e.LeaveTypeId).ToList().Count();
+                if(alredyexist != 0)
+                {
+                    var updateid= EmployeeLeaveBalanceContext.Collection().Where(q => q.EmployeeId == e.EmployeeId && q.LeaveTypeId == e.LeaveTypeId).Select(q => q.Id).SingleOrDefault();
+                    var availableLeaveCount = EmployeeLeaveBalanceContext.Collection().Where(q => q.EmployeeId == e.EmployeeId && q.LeaveTypeId == e.LeaveTypeId).Select(q => q.AvailableLeaveCount).SingleOrDefault();
+                    var totalLeaveCount= EmployeeLeaveBalanceContext.Collection().Where(q => q.EmployeeId == e.EmployeeId && q.LeaveTypeId == e.LeaveTypeId).Select(q => q.TotalLeaveCount).SingleOrDefault();
+                   var data = (from elb in EmployeeLeaveBalanceContext.Collection().ToList()                               
+                                where elb.LeaveTypeId == e.LeaveTypeId && elb.EmployeeId == e.EmployeeId
+                                select new
+                                {
+                                    TotalLeaveCount = totalLeaveCount,
+                                    AvailableLeaveCount = Convert.ToInt32(availableLeaveCount) - Convert.ToInt32(e.NoOfDays),
+                                    e.LeaveTypeId,
+                                    EmployeeId = e.EmployeeId,
+                                    OrganisationId = e.OrganisationId
+                                }
+                                  ).ToList();
+
+                    EmployeeLeaveBalance Eb = EmployeeLeaveBalanceContext.Collection().FirstOrDefault(q => q.EmployeeId == e.EmployeeId && q.LeaveTypeId == e.LeaveTypeId);
+                   // Student student = db.Students.Find(s => s.StudentID == ViewModel.StudentID);
+                    //var Eb = new EmployeeLeaveBalance();
+                    foreach (var i in data.Where(x => x.EmployeeId == e.EmployeeId))
+                    {
+                        Eb.Id = updateid;
+                        Eb.EmployeeId = i.EmployeeId;
+                        Eb.LeaveTypeId = i.LeaveTypeId;
+                        Eb.AvailableLeaveCount = i.AvailableLeaveCount.ToString();
+                        Eb.TotalLeaveCount = i.TotalLeaveCount.ToString();                       
+                    }
+                    EmployeeLeaveBalanceContext.Update(Eb);
+                    EmployeeLeaveBalanceContext.Commit();
+                    return "success";
+                }
+                else 
+                {
+                    var data = (from emp in EmployeeDetailContext.Collection().ToList()
+                                join org in OrganisationContext.Collection().ToList()
+                                on emp.OrganisationId equals org.Id
+                                join lm in LeaveMasterContext.Collection().ToList()
+                                on emp.OrganisationId equals lm.OrganisationId
+                                where lm.LeaveTypeId == e.LeaveTypeId && org.Id == e.OrganisationId
+                                select new
+                                {
+                                    TotalLeaveCount = lm.AnnualQuota,
+                                    AvailableLeaveCount = Convert.ToInt32(lm.AnnualQuota) - Convert.ToInt32(e.NoOfDays),
+                                    e.LeaveTypeId,
+                                    EmployeeId = emp.Id,
+                                    OrganisationId = emp.OrganisationId
+                                }
+                                ).ToList();
+                    EmployeeLeaveBalance Eb = new EmployeeLeaveBalance();
+                    foreach (var i in data.Where(x => x.EmployeeId == e.EmployeeId))
+                    {
+                        Eb.EmployeeId = i.EmployeeId;
+                        Eb.LeaveTypeId = i.LeaveTypeId;
+                        Eb.AvailableLeaveCount = i.AvailableLeaveCount.ToString();
+                        Eb.TotalLeaveCount = i.TotalLeaveCount.ToString();
+                    }
+                    EmployeeLeaveBalanceContext.Insert(Eb);
+                    EmployeeLeaveBalanceContext.Commit();
+                    return "success";
+                }
             }
         }
 
