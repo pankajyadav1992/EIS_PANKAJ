@@ -7,11 +7,31 @@
 
 <link href="~/Content/select2/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/Content/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+@section CustomStyles{
+    @Styles.Render("~/Content/datatable")
+    <style>
+        #overlay {
+            position: absolute;
+            justify-content: left;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background: rgba(130, 130, 130, 0.5);
+        }
+    </style>
+}
 <header class="page-header bg-success text-white">
     <div class="container-fluid">
         <h2 class="no-margin-bottom"> View Leave Details</h2>
     </div>
 </header>
+<div id="overlay" style="text-align:center;display:none">
+    <img src="~/Content/img/spinner.gif" style="resize:inherit;" />
+    <br />
+</div>
 
 <section class="forms">
 
@@ -23,42 +43,67 @@
                         <div class="card-header d-flex align-items-center">
                             <b> Employee Leave Details</b>
                         </div>
-                        @using (Html.BeginForm("ViewLeaveDetails", "Leave", FormMethod.Post, new { @class = "form-horizontal", @data_heading = "Add Leave Type" }))
-                        {
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">Organisation</label>
-                                    <div class="col-sm-5">
-                                        <select name="orgList" class="form-control select2" id="orgSelect" multiple="multiple" data-placeholder="Select Organistion" style="width:430px !important">
-                                        </select>
-                                    </div>
-
+                        @*@using (Html.BeginForm("ViewLeaveDetails", "Leave", FormMethod.Post, new { @class = "form-horizontal", @data_heading = "Add Leave Type" }))
+                            {*@
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Organisation</label>
+                                <div class="col-sm-5">
+                                    <select name="orgList" class="form-control select2" id="orgSelect" multiple="multiple" data-placeholder="Select Organistion" style="width:430px !important">
+                                    </select>
                                 </div>
-
-                                <div class="form-group row">
-                                    <label class="col-sm-3 form-control-label">Employee</label>
-                                    <div class="col-sm-5">
-                                        <select name="empList" class="form-control select2" id="empSelect" multiple="multiple" data-placeholder="Select Employee" style="width:430px !important">
-                                        </select>
-                                    </div>
-
-                                </div>
-
-
-
-                                <div class="form-group row">
-                                    <div class="col-sm-9 offset-sm-3">
-                                        <input type="submit" value="Show" class="btn btn-primary" id="ShowLDetailBtn">
-                                    </div>
-                                </div>
-
-
 
                             </div>
-                            }
+
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Employee</label>
+                                <div class="col-sm-5">
+                                    <select name="empList" class="form-control select2" id="empSelect" multiple="multiple" data-placeholder="Select Employee" style="width:430px !important">
+                                    </select>
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-9 offset-sm-3">
+                                    <input type="submit" value="Show" class="btn btn-primary" id="ShowLDetailBtn">
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        @*}*@
                     </div>
 
 
+                    <div class="card" id="tblCard" style="display:none">
+                        <div class="card-header d-flex align-items-center">
+                            <b> Employee Leave Details</b>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Organisation</th>
+                                        <th>Leave</th>
+                                        <th>No of Days</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                        <th>Purpose</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ldTable"></tbody>
+                            </table>
+
+
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
@@ -133,6 +178,28 @@
                 }
             }
 
+            else if (aBy === "showDetails") {
+
+    
+                if (data.length > 0) {
+                    $('#ldTable').empty();
+                    $('#tblCard').css('display', 'block');
+
+                    $.each(data, function (Key, value) {
+                        $('#ldTable').append('<tr role="row"><td>' + value.FullName + '</td><td>' + value.Organisation + '</td><td>' + value.Leave + '</td><td>' + value.NoOfDays + '</td><td>' + value.FromDate + '</td><td>' + value.ToDate + '</td><td>' + value.Purpose + '</td></tr>');
+
+                    });
+                }
+                else {
+                    $('#ldTable').empty();
+                    $('#tblCard').css('display', 'block');
+                    $('#ldTable').append('<tr role="row"><td colspan="5" style="text-align:center"> No records found </td></tr>');
+
+
+                }
+                 $('#overlay').fadeOut();
+            }
+
         }
     }
 
@@ -163,15 +230,16 @@
 
 
 
-    //$('#ShowLDetailBtn').click(function () {
+    $('#ShowLDetailBtn').click(function () {
+        $('#overlay').fadeIn();
+        var orgList = $("#orgSelect").val();
+        var empList = $("#empSelect").val();
+        var data = {
+            'orgList': orgList,
+            'empList': empList
 
-    //    var orgList = $("#orgSelect").val();
-    //    var empList = $("#empSelect").val();
-    //    var data = {
-    //        'orgList': orgList,
-    //        'empList':empList
-
-    //    }
-    //    postData("Leave/ViewLeaveDetails", data, "", "");
-    //});
+        }
+         
+        postData("Leave/ViewLeaveDetailsByAjax", data, "showDetails", "Action");
+    });
 </script>

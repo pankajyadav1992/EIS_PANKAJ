@@ -587,9 +587,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return jsondata;
         }
 
-        [HttpPost]
-        public ActionResult ViewLeaveDetails(MultiSelect m)
+     
+        public string ViewLeaveDetailsByAjax(MultiSelect m)
         {
+            string jsondata = String.Empty;
 
             var data = (
                           from el in EmployeeLeaveDetailsContext.Collection().ToList()
@@ -606,6 +607,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                           where (m.orgList.Contains(el.OrganisationId) && m.empList.Contains(el.EmployeeId))
 
+                          
                           select new
                           {
                               FullName = emp.FirstName + " " + (emp.MiddleName == "" ? "" : emp.MiddleName + " ") + emp.LastName,
@@ -619,14 +621,16 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                           }
 
 
-                      ).ToList();
+                      ).OrderBy(x=>x.FullName).ToList();
 
             DataTable dt = ToDataTable(data);
 
             ViewBag.HeadingName = "Employee Leave Details";
             ViewBag.HeadingColor = "bg-success";
 
-            return View("ShowResponse", dt);
+            jsondata = JsonConvert.SerializeObject(dt);
+
+            return jsondata;
 
         }
 
