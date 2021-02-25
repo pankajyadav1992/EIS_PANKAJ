@@ -27,7 +27,7 @@
                                 <div class="form-group row">
                                     <label class="form-control-label col-sm-3 d-flex justify-content-center">Employee Name</label>
                                     <div class="col-sm-4">
-                                        <select name="EmployeeId" class="form-control" id="selectEmployeeByName" style="min-width:80%;" data-live-search="false">
+                                        <select name="EmployeeId" class="form-control" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
                                             <option value="0" selected>--Select Employee--</option>
                                             @foreach (var emp in ViewBag.EmlployeeTypeList)
                                             {
@@ -84,7 +84,7 @@
                                 <div class="form-group row">
                                     <label class="form-control-label col-sm-3 d-flex justify-content-center">Type of Leave</label>
                                     <div class="col-sm-4">
-                                        <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="false">
+                                        <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="true">
                                             <option value="0" selected>--Select Leave Type--</option>
                                             @foreach (var leavetype in ViewBag.LevelTypeList)
                                             {

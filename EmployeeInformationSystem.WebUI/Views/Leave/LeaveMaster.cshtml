@@ -37,7 +37,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 form-control-label">Organisation</label>
                                         <div class="col-sm-5">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
+                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrgByName" style="min-width:80%;" data-live-search="true">
 
                                                 <option value="0" selected>--Select Organisation--</option>
                                                 @foreach (var employee in ViewBag.OrganisationList)
@@ -67,7 +67,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 form-control-label">Leave Type</label>
                                         <div class="col-sm-5">
-                                            <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
+                                            <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectLeaveByName" style="min-width:80%;" data-live-search="true">
                                                 <option value="0" selected>--Select Leave Type--</option>
                                                 @foreach (var employee in ViewBag.LevelTypeList)
                                                 {
@@ -148,7 +148,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 form-control-label">Organisation</label>
                                         <div class="col-sm-5">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
+                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrgByName" style="min-width:80%;" data-live-search="true">
 
                                                 <option value="0" selected>--Select Organisation--</option>
                                                 @foreach (var employee in ViewBag.OrganisationList)
@@ -178,7 +178,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 form-control-label">Leave Type</label>
                                         <div class="col-sm-5">
-                                            <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
+                                            <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectLeaveByName" style="min-width:80%;" data-live-search="true">
                                                 <option value="0" selected>--Select Leave Type--</option>
                                                 @foreach (var employee in ViewBag.LevelTypeList)
                                                 {
@@ -263,7 +263,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 form-control-label">Organisation</label>
                                         <div class="col-sm-5">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
+                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrgByName" style="min-width:80%;" data-live-search="true">
 
                                                 <option value="0" selected>--Select Organisation--</option>
                                                 @foreach (var employee in ViewBag.OrganisationList)
@@ -293,7 +293,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-3 form-control-label">Leave Type</label>
                                         <div class="col-sm-5">
-                                            <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
+                                            <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectLeaveByName" style="min-width:80%;" data-live-search="true">
                                                 <option value="0" selected>--Select Leave Type--</option>
                                                 @foreach (var employee in ViewBag.LevelTypeList)
                                                 {
@@ -436,6 +436,28 @@ else
           //  else {
           //       $("#errorOrg").hide();
           //  }
+             if ($("#selectOrgByName").val() == 0)
+            {
+                $("#errorOrg").show();
+                isValid = false;
+            }
+            else
+            {
+                $("#errorOrg").hide();
+            }
+
+
+             if ($("#selectLeaveByName").val() == 0)
+            {
+                $("#errorLeave").show();
+                isValid = false;
+            }
+            else
+            {
+                $("#errorLeave").hide();
+            }
+
+            
 
             if ($("#@Html.IdFor(model => model.AnnualQuota)").val() == "") {
                 $("#errorAQ").show(); isValid = false;
@@ -456,7 +478,19 @@ else
            } else {
                 $("#errorToDate").hide();
            }
+             if ($("#@Html.IdFor(model => model.ValidTill)").val() == "")
+             {
+                 $("#errorToDate").show(); isValid = false;
+             }
+             else
+            { $("#errorToDate").hide(); }
 
+             if ($("#@Html.IdFor(model => model.ValidFrom)").val() == "")
+             {
+                 $("#errorFromDate").show(); isValid = false;
+             }
+             else
+             { $("#errorFromDate").hide(); }
 
 
             if (!isValid) {
