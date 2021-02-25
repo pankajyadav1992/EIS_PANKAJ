@@ -445,16 +445,28 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             string returnText = "Error";
             if (ModelState.IsValid)
             {
-                EmployeeLeaveDetailsContext.Insert(Eld);
-                EmployeeLeaveDetailsContext.Commit();
-                returnText = "Success";
-            }
-            if (returnText == "Success")
-            {
-                EmpLeaveBalCount(Eld);
-                ViewBag.HeadingName = "Add Leave Type";
-                ViewBag.HeadingColor = "bg-success";
-                ViewBag.Msg = "Leave Apply Succesfully";
+                var AvailableLeave = EmployeeLeaveBalanceContext.Collection().ToList().Where(aa => aa.EmployeeId == Eld.EmployeeId && aa.LeaveTypeId == Eld.LeaveTypeId).
+                    Select(aa => aa.AvailableLeaveCount).SingleOrDefault();
+                if (Convert.ToInt32(AvailableLeave) >= Convert.ToInt32(Eld.NoOfDays))
+                {
+                    EmployeeLeaveDetailsContext.Insert(Eld);
+                    EmployeeLeaveDetailsContext.Commit();
+                    returnText = "Success";
+                    if (returnText == "Success")
+                    {
+                        EmpLeaveBalCount(Eld);
+                        ViewBag.HeadingName = "Add Leave Type";
+                        ViewBag.HeadingColor = "bg-success";
+                        ViewBag.Msg = "Leave Apply Succesfully";
+                    }
+                }
+                else
+                {
+                    List<EmployeeDetail> EmployeeList = EmployeeDetailContext.Collection().Where(q => q.WorkingStatus == true).OrderBy(e => e.FirstName).ToList();
+                    ViewBag.EmlployeeTypeList = EmployeeList;
+                    ViewBag.Message = "Check Available Leave In Leave Type ";
+                    //return View("ApplyLeave");
+                }
             }
             return View("ApplyLeave");
         }

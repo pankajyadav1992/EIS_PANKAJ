@@ -5,8 +5,6 @@
 }
 @Styles.Render("~/Content/bootstrap-select")
 @Styles.Render("~/Content/gijgo")
-
-
 <header class="page-header @ViewBag.HeadingColor  text-white">
     <div class="container-fluid">
         <h2 class="no-margin-bottom">@ViewBag.HeadingName </h2>
@@ -87,19 +85,19 @@
                                     <div class="form-group row">
                                         <label class="form-control-label col-sm-3 d-flex justify-content-center">Prefix</label>
                                         <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.PrefixFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off", @disabled = "disabled" } })
+                                            @Html.EditorFor(model => model.PrefixFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off", placeholder = "Prefix From Date" } })
                                         </div>
                                         <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.PrefixTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off", @disabled = "disabled" } })
+                                            @Html.EditorFor(model => model.PrefixTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off", placeholder = "Prefix To Date" } })
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="form-control-label col-sm-3 d-flex justify-content-center">Suffix</label>
                                         <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.SuffixFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off", @disabled = "disabled" } })
+                                            @Html.EditorFor(model => model.SuffixFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off", placeholder = "Suffix From Date" } })
                                         </div>
                                         <div class="col-sm-4">
-                                            @Html.EditorFor(model => model.SuffixTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off", @disabled = "disabled" } })
+                                            @Html.EditorFor(model => model.SuffixTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off", placeholder = "Suffix To Date" } })
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -145,6 +143,14 @@
                 </div>
             </div>
         </div>
+        if (ViewBag.Message != null)
+        {
+            <script type="text/javascript">
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+            </script>
+        }
     }
     else
     {
@@ -163,10 +169,10 @@
         </div>
     }
 </section>
-@section Scripts{
-    @Scripts.Render("~/bundles/bootstrap-select")
-    @Scripts.Render("~/bundles/gijgo")
-    <script>
+    @section Scripts{
+        @Scripts.Render("~/bundles/bootstrap-select")
+        @Scripts.Render("~/bundles/gijgo")
+<script>
     $(document).ready(function () {
         $('select').selectpicker();
         $('[data-type="date"]').each(function () {
@@ -178,7 +184,7 @@
 
 
         $("#@Html.IdFor(model => model.LeaveFrom)").on('change', function () {
-             var myDate = $(this).val();
+             @*var myDate = $(this).val();
             myDate = myDate.split("-");
             var newDate = myDate[2] + "-" + myDate[1] + "-" + myDate[0];
             var my_ddate = new Date(newDate).getTime();
@@ -204,7 +210,7 @@
                 $("#@Html.IdFor(model => model.SuffixTill)").val(("0" + result2.getDate()).slice(-2) + '-' + ("0" + (result2.getMonth() + 1)).slice(-2) + '-' + result2.getFullYear());
                 $("#@Html.IdFor(model => model.PrefixFrom)").val("");
                 $("#@Html.IdFor(model => model.PrefixTill)").val("");
-            }
+            }*@
             $("#@Html.IdFor(model => model.LeaveTill)").val('');
         });
 
@@ -221,6 +227,39 @@
                 alert("To Date should be greater than From Date");
                 return res;
             }
+        });
+
+         $("#@Html.IdFor(model => model.SuffixTill)").on('change', function () {
+            var ToDate = $(this).val().split("-");
+            var NewToDate = ToDate[0] + "/" + ToDate[1] + "/" + ToDate[2];
+            var FromDate = $('#@Html.IdFor(model => model.SuffixFrom)').val().split("-");
+            var NewFromDate = FromDate[0] + "/" + FromDate[1] + "/" + FromDate[2];
+            let res = CompareTwoDates(NewToDate, NewFromDate);
+            if (res == false) {
+                $("#@Html.IdFor(model => model.SuffixTill)").val('');
+                alert("Suffix To Date should be greater than Suffix From Date");
+                return res;
+            }
+         });
+
+         $("#@Html.IdFor(model => model.PrefixTill)").on('change', function () {
+            var ToDate = $(this).val().split("-");
+            var NewToDate = ToDate[0] + "/" + ToDate[1] + "/" + ToDate[2];
+            var FromDate = $('#@Html.IdFor(model => model.PrefixFrom)').val().split("-");
+            var NewFromDate = FromDate[0] + "/" + FromDate[1] + "/" + FromDate[2];
+            let res = CompareTwoDates(NewToDate, NewFromDate);
+            if (res == false) {
+                $("#@Html.IdFor(model => model.PrefixTill)").val('');
+                alert("Prefix To Date should be greater than Prefix From Date");
+                return res;
+            }
+        });
+
+        $("#@Html.IdFor(model => model.SuffixFrom)").on('change', function () {
+            $("#@Html.IdFor(model => model.SuffixTill)").val('');
+        });
+         $("#@Html.IdFor(model => model.PrefixFrom)").on('change', function () {
+            $("#@Html.IdFor(model => model.PrefixTill)").val('');
         });
 
         function CompareTwoDates(endDate, startDate)
@@ -321,6 +360,6 @@
             }
         });
         });
-    </script>
+</script>
 
-}
+    }
