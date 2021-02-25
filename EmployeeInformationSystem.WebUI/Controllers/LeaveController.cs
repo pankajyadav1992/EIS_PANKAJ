@@ -429,14 +429,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         {
             List<EmployeeDetail> EmployeeList = EmployeeDetailContext.Collection().Where(q => q.WorkingStatus == true).OrderBy(e=>e.FirstName).ToList() ;
             ViewBag.EmlployeeTypeList = EmployeeList;
-
-            List<Organisation> orgList = OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
-            ViewBag.OrganisationList = orgList;
-
-            List<LeaveType> LeaveType = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
-            ViewBag.LevelTypeList = LeaveType;
-
-            ViewBag.HeadingName = "Apply Leave";
+            ViewBag.LevelTypeList = null;
+           ViewBag.HeadingName = "Apply Leave";
             ViewBag.HeadingColor = "bg-success";
             ViewBag.Name = "";
             return View();
@@ -465,21 +459,28 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         public PartialViewResult GetOrganisation_Leave(string EmployeeId)
         {
             var Edata = EmployeeDetailContext.Collection().Where(q => q.Id == EmployeeId && q.OrganisationId != null).ToList().Count();
-            var OrgName = EmployeeDetailContext.Collection().Where(q => q.Id == EmployeeId && q.OrganisationId != null).ToList();
             LeaveMaster lm = new LeaveMaster();
             if (Edata != 0)
-            { 
-            foreach (var item in OrgName)
             {
-                lm.Organisation = item.Organisation;
-                ViewBag.orgName = item.Organisation.Name;
-                ViewBag.orgID = item.Organisation.Id;
-            }
-            var check = (from eLB in EmployeeLeaveBalanceContext.Collection().ToList()
-                         where eLB.EmployeeId
-                         == EmployeeId
-                         select eLB
-                        ).Count();
+                var org = EmployeeDetailContext.Collection().Where(q => q.Id == EmployeeId && q.OrganisationId != null).Select(q =>  new { q.OrganisationId ,q.Organisation.Name}).ToList();
+                foreach(var item in org)
+                {
+                    ViewBag.orgName = item.Name;
+                    ViewBag.orgID = item.OrganisationId;
+                }
+                var LeaveType = (from edc in EmployeeDetailContext.Collection().Where(q => q.Id == EmployeeId && q.OrganisationId != null).ToList()
+                                 join oc in OrganisationContext.Collection().ToList()
+                                 on edc.OrganisationId equals oc.Id
+                                 join lmc in LeaveMasterContext.Collection().ToList()
+                                 on oc.Id equals lmc.OrganisationId
+                                 join ltc in LeaveTypeContext.Collection().ToList()
+                                 on lmc.LeaveTypeId equals ltc.Id
+                                 select new  LeaveBalance{
+                                     LeaveId = ltc.Id,
+                                     LeaveType = ltc.Name }
+                                 ).ToList();
+                ViewBag.LevelTypeList = LeaveType;
+                var check = (from eLB in EmployeeLeaveBalanceContext.Collection().ToList() where eLB.EmployeeId == EmployeeId select eLB).Count();
             if (check == 0)
             {
                 var LeaveBal = (from edc in EmployeeDetailContext.Collection().ToList()
@@ -504,30 +505,14 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 }
             else
                 {
-                    var leaveType = (from ltc in LeaveTypeContext.Collection().ToList()
-                                     join
-                                     elbc in EmployeeLeaveBalanceContext.Collection().ToList()
-                                     on ltc.Id equals elbc.LeaveTypeId
-                                     where (elbc.EmployeeId == EmployeeId)
-                                     select new LeaveBalance
-                                     {
-                                         LeaveCount = elbc.AvailableLeaveCount,
-                                         LeaveType = ltc.Name,
-                                     }
-                                     ).ToList();                    
-
-
-                  //  var exceptionList = EmployeeLeaveBalanceContext.Collection().Where(e=>e.EmployeeId== EmployeeId).Select(e => e.LeaveTypeId).ToList();
-                    
+                    var balleave = EmployeeLeaveBalanceContext.Collection().Where(e=>e.EmployeeId== EmployeeId).Select(e => e.LeaveTypeId).ToList();
                    // var query = LeaveTypeContext.Collection().Select(i => i.Id).Where(x => !exceptionList.Contains(x)).ToList(); 
-                                                    
                     var LeaveBal = (from edc in EmployeeDetailContext.Collection().ToList()
-                                    join
-                                    lmc in LeaveMasterContext.Collection().ToList()
+                                    join lmc in LeaveMasterContext.Collection().ToList()
                                     on edc.OrganisationId equals lmc.OrganisationId
                                     join ltc in LeaveTypeContext.Collection().ToList()
-                                    on lmc.LeaveTypeId equals ltc.Id                                  
-                                    where (edc.Id == EmployeeId)
+                                    on lmc.LeaveTypeId equals ltc.Id                                     
+                                    where (edc.Id == EmployeeId && !balleave.Contains(ltc.Id))
                                     select new LeaveBalance
                                     {
                                         LeaveType = ltc.Name,

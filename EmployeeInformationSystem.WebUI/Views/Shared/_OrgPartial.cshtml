@@ -15,19 +15,28 @@
 <div>
     @if (@ViewBag.orgName != null)
     {
-    <table class="table table-bordered">
-        <thead>
-            <tr><th>Leave Type</th><th>No. of Leaves Due</th></tr>
-        </thead>
-                                   <tbody>
-                                       @foreach (var item in @ViewBag.Balance)
-                                       {
-                                       <tr>
-                                           <td> @item.LeaveType </td>
-                                           <td>@item.LeaveCount </td>
-                                       </tr>
-                                       }
-                                   </tbody>
-    </table>
+        <table class="table table-bordered">
+            <thead>
+                <tr><th>Leave Type</th><th>No. of Leaves Due</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var item in @ViewBag.Balance)
+                {
+                    <tr>
+                        <td> @item.LeaveType </td>
+                        <td>@item.LeaveCount </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="false">
+            <option value="0" selected>--Select Leave Type--</option>
+
+            @foreach (var leavetype in @ViewBag.LevelTypeList)
+            {
+                <option value="@leavetype.LeaveId" data-employeetype="@leavetype.LeaveType">@leavetype.LeaveType</option>
+            }
+
+        </select>
     }
 </div>

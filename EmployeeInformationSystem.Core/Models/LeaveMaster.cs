@@ -37,6 +37,7 @@ namespace EmployeeInformationSystem.Core.Models
     public class LeaveBalance
     {
         public string LeaveType { get; set; }
+        public string LeaveId { get; set; }
         public string LeaveCount { get; set; }
         public string OrganisationName { get; set; }
         public string EmpId { get; set; }
