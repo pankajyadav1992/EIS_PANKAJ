@@ -23,6 +23,14 @@
         }
     </style>
 }
+
+@section LeaveDetails{
+    show
+}
+
+@section ViewEmpLeaveBalance{
+    class="active"
+}
 <header class="page-header bg-success text-white">
     <div class="container-fluid">
         <h2 class="no-margin-bottom"> Employee Leave Balance </h2>
@@ -95,7 +103,7 @@
                                         <th>Organisation</th>
                                         <th>Leave Type</th>
                                         <th>Leave Balance</th>
-                                        
+
                                     </tr>
                                 </thead>
                                 <tbody id="ldTable"></tbody>
@@ -189,7 +197,7 @@
                     $('#tblCard').css('display', 'block');
 
                     $.each(data, function (Key, value) {
-                        $('#ldTable').append('<tr role="row"><td class="tableRow">' + value.EmpName + '</td><td class="tableRow">' + value.Organisation + '</td><td class="tableRow">' + value.LeaveType + '</td><td class="tableRow">' + value.LeaveCount +  '</td></tr>');
+                        $('#ldTable').append('<tr role="row"><td class="tableRow">' + value.EmpName + '</td><td class="tableRow">' + value.OrganisationName + '</td><td class="tableRow">' + value.LeaveType + '</td><td class="tableRow">' + value.LeaveCount + '</td></tr>');
 
                     });
                 }
@@ -246,7 +254,7 @@
             }
 
             $("#errorOrg").hide();
-             $("#errorEmp").hide();
+            $("#errorEmp").hide();
             $('#overlay').fadeIn();
             postData("Leave/EmpLeaveBalance", data, "showDetails", "Action");
         }

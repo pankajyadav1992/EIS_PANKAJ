@@ -20,11 +20,38 @@
             width: 100%;
             background: rgba(130, 130, 130, 0.5);
         }
+
+        .tblHide {
+            display: none;
+        }
     </style>
 }
-@section Reports{
-    show
+
+
+@switch (ViewBag.HeadingName)
+{
+    case "View Leave Type":
+        @section LeaveTypeDrop{
+            show
+        }
+
+        @section ViewLeaveType{
+            class="active"
+        }
+        break;
+
+    case "View Leave Quota":
+        @section LeaveQuota{
+            show
+        }
+
+        @section ViewLeaveQuota{
+            class="active"
+        }
+        break;
+
 }
+
 
 @{ string headerClass = "";
     string type = "";}
@@ -54,8 +81,15 @@
                                     <tr>
                                         @foreach (DataColumn col in Model.Columns)
                                         {
-                                            <th>@col.ColumnName <br /> <input type="text" placeholder="Search" /></th>
 
+                                            if (@col.ColumnName == "Id")
+                                            {
+                                                <th class="tblHide">@col.ColumnName <br /> <input type="text" placeholder="Search" /></th>
+                                            }
+                                            else
+                                            {
+                                                <th>@col.ColumnName <br /> <input type="text" placeholder="Search" /></th>
+                                            }
                                         }
                                         @if (ViewBag.HeadingName != "Employee Leave Details")
                                         {
@@ -67,18 +101,25 @@
                                 <tbody>
                                     @foreach (DataRow row in Model.Rows)
                                     {
-                                        <tr>
-                                            @foreach (DataColumn col in Model.Columns)
+                                    <tr>
+                                        @foreach (DataColumn col in Model.Columns)
+                                        {
+                                            if (@col.ColumnName == "Id")
+                                            {
+                                                <td class="tableRow tblHide">@row[col.ColumnName]</td>
+                                            }
+                                            else
                                             {
                                                 <td class="tableRow">@row[col.ColumnName]</td>
                                             }
+                                        }
 
-                                            @if (ViewBag.HeadingName != "Employee Leave Details")
-                                            {
-                                                <td>@Html.ActionLink("Edit", "Edit", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
-                                                <td>@Html.ActionLink("Delete", "Delete", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
-                                            }
-                                        </tr>
+                                        @if (ViewBag.HeadingName != "Employee Leave Details")
+                                        {
+                                            <td>@Html.ActionLink("Edit", "Edit", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
+                                            <td>@Html.ActionLink("Delete", "Delete", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
+                                        }
+                                    </tr>
 
                                     }
                                 </tbody>

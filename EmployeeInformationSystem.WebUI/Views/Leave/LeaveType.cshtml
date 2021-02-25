@@ -5,6 +5,14 @@
 }
 @Styles.Render("~/Content/bootstrap-select")
 @Styles.Render("~/Content/gijgo")
+
+@section LeaveTypeDrop{
+    show
+}
+
+@section LeaveType{
+    class="active"
+}
 <header class="page-header @ViewBag.HeadingColor  text-white">
     <div class="container-fluid">
         <h2 class="no-margin-bottom">@ViewBag.HeadingName </h2>
@@ -124,11 +132,11 @@
             </div>
         </div>
     }
-    </section>
-    @section Scripts{
-        @Scripts.Render("~/bundles/bootstrap-select")
-        @Scripts.Render("~/bundles/gijgo")
-        <script>
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/bootstrap-select")
+    @Scripts.Render("~/bundles/gijgo")
+    <script>
     $(document).ready(function () {
         $(document).on('click', '#AddLeaveBtn', function (e) {
            var isValid = true;
@@ -169,6 +177,6 @@
             }
            });
         });
-        </script>
+    </script>
 
-    }
+}

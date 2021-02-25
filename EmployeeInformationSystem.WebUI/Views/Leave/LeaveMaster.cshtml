@@ -7,397 +7,412 @@
 @Styles.Render("~/Content/bootstrap-select")
 @Styles.Render("~/Content/gijgo")
 
-
-@if (ViewBag.Msg == null)
-{
-
-
-    <div class="container-fluid" style="position:relative">
-        <div class="container-fluid">
-            <div class="row" id="reportDisplayBlock">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            <b>Leave Quota</b>
-                        </div>
-
-                        @if (ViewBag.Action == null || ViewBag.Action == "")
-                        {
-
-
-                            using (Html.BeginForm("AddLeaveQuota", "Leave", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Add Leave Quota" }))
-                            {
-                                @Html.AntiForgeryToken()
-                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-
-                                <div class="card-body" id="reportDisplayBody">
-
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 form-control-label">Organisation</label>
-                                        <div class="col-sm-5">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrgByName" style="min-width:80%;" data-live-search="true">
-
-                                                <option value="0" selected>--Select Organisation--</option>
-                                                @foreach (var employee in ViewBag.OrganisationList)
-                                                {
-                                                    if (employee.Name == ViewBag.OName)
-                                                    {
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
-                                                    }
-                                                }
-
-                                            </select>
-
-
-                                        </div>
-
-
-                                    </div>
-                                    <div class="form-group row offset-sm-3">
-                                        <div classs="col-sm-9" style="display:none;color: red;" id="errorOrg">Please select columns</div>
-                                    </div>
-
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 form-control-label">Leave Type</label>
-                                        <div class="col-sm-5">
-                                            <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectLeaveByName" style="min-width:80%;" data-live-search="true">
-                                                <option value="0" selected>--Select Leave Type--</option>
-                                                @foreach (var employee in ViewBag.LevelTypeList)
-                                                {
-                                                    if (employee.Name == ViewBag.LName)
-                                                    {
-
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
-                                                    }
-                                                }
-                                            </select>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="form-group row offset-sm-3">
-                                        <div classs="col-sm-9" style="display:none;color: red;" id="errorLeave">Please select columns</div>
-                                    </div>
-
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.AnnualQuota, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.AnnualQuota, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
-
-
-                                        </div>
-                                        <div classs="col-sm-4" style="display:none;color: red;" id="errorAQ">Please enter annual quota</div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.ValidFrom, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.ValidFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
-                                        </div>
-                                        <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.ValidTill, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.ValidTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
-                                        </div>
-                                        <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
-                                    </div>
-
-
-
-
-
-
-                                    <div class="form-group row">
-                                        <div class="col-sm-9 offset-sm-3">
-                                            <input type="submit" value="Add" class="btn btn-primary" id="reportSubmitBtn">
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            }
-
-                        }
-                        @if (ViewBag.Action == "UpdateLeaveMaster")
-                        {
-                            @Html.AntiForgeryToken()
-                            using (Html.BeginForm("UpdateLeaveMaster", "Leave", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Add Leave Quota" }))
-                            {
-
-                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-
-                                <div class="card-body" id="reportDisplayBody">
-
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 form-control-label">Organisation</label>
-                                        <div class="col-sm-5">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrgByName" style="min-width:80%;" data-live-search="true">
-
-                                                <option value="0" selected>--Select Organisation--</option>
-                                                @foreach (var employee in ViewBag.OrganisationList)
-                                                {
-                                                    if (employee.Name == ViewBag.OName)
-                                                    {
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
-                                                    }
-                                                }
-
-                                            </select>
-
-
-                                        </div>
-
-
-                                    </div>
-                                    <div class="form-group row offset-sm-3">
-                                        <div classs="col-sm-9" style="display:none;color: red;" id="errorOrg">Please select columns</div>
-                                    </div>
-
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 form-control-label">Leave Type</label>
-                                        <div class="col-sm-5">
-                                            <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectLeaveByName" style="min-width:80%;" data-live-search="true">
-                                                <option value="0" selected>--Select Leave Type--</option>
-                                                @foreach (var employee in ViewBag.LevelTypeList)
-                                                {
-                                                    if (employee.Name == ViewBag.LName)
-                                                    {
-
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
-                                                    }
-                                                }
-                                            </select>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="form-group row offset-sm-3">
-                                        <div classs="col-sm-9" style="display:none;color: red;" id="errorLeave">Please select columns</div>
-                                    </div>
-
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.AnnualQuota, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.AnnualQuota, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
-
-
-                                        </div>
-                                        <div classs="col-sm-4" style="display:none;color: red;" id="errorAQ">Please enter annual quota</div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.ValidFrom, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.ValidFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
-                                        </div>
-                                        <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.ValidTill, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.ValidTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
-                                        </div>
-                                        <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
-                                    </div>
-
-                                    <div class="form-group row d-none">
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
-                                        </div>
-                                    </div>
-
-
-
-
-                                    <div class="form-group row">
-                                        <div class="col-sm-9 offset-sm-3">
-                                            <input type="submit" value="Edit" class="btn btn-primary" id="reportSubmitBtn">
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            }
-                        }
-
-                        @if (ViewBag.Action == "DeleteLeaveMaster")
-                        {
-                            @Html.AntiForgeryToken()
-                            using (Html.BeginForm("DeleteLeaveMaster", "Leave", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Add Leave Quota" }))
-                            {
-
-                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
-
-                                <div class="card-body" id="reportDisplayBody">
-
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 form-control-label">Organisation</label>
-                                        <div class="col-sm-5">
-                                            <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrgByName" style="min-width:80%;" data-live-search="true">
-
-                                                <option value="0" selected>--Select Organisation--</option>
-                                                @foreach (var employee in ViewBag.OrganisationList)
-                                                {
-                                                    if (employee.Name == ViewBag.OName)
-                                                    {
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
-                                                    }
-                                                }
-
-                                            </select>
-
-
-                                        </div>
-
-
-                                    </div>
-                                    <div class="form-group row offset-sm-3">
-                                        <div classs="col-sm-9" style="display:none;color: red;" id="errorOrg">Please select columns</div>
-                                    </div>
-
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-3 form-control-label">Leave Type</label>
-                                        <div class="col-sm-5">
-                                            <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectLeaveByName" style="min-width:80%;" data-live-search="true">
-                                                <option value="0" selected>--Select Leave Type--</option>
-                                                @foreach (var employee in ViewBag.LevelTypeList)
-                                                {
-                                                    if (employee.Name == ViewBag.LName)
-                                                    {
-
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
-                                                    }
-                                                    else
-                                                    {
-                                                        <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
-                                                    }
-                                                }
-                                            </select>
-
-
-                                        </div>
-                                    </div>
-                                    <div class="form-group row offset-sm-3">
-                                        <div classs="col-sm-9" style="display:none;color: red;" id="errorLeave">Please select columns</div>
-                                    </div>
-
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.AnnualQuota, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.AnnualQuota, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
-
-
-                                        </div>
-                                        <div classs="col-sm-4" style="display:none;color: red;" id="errorAQ">Please enter annual quota</div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.ValidFrom, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.ValidFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
-                                        </div>
-                                        <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        @Html.LabelFor(model => model.ValidTill, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.ValidTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
-                                        </div>
-                                        <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
-                                    </div>
-
-                                    <div class="form-group row d-none">
-                                        <div class="col-sm-5">
-                                            @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
-                                        </div>
-                                    </div>
-
-
-
-
-                                    <div class="form-group row">
-                                        <div class="col-sm-9 offset-sm-3">
-                                            <input type="submit" value="Delete" class="btn btn-primary" id="reportSubmitBtn">
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            }
-
-                        }
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>}
-else
-{
-
-    <div class="container-fluid" style="position:relative">
-        <div class="container-fluid">
-            <div class="row" id="reportDisplayBlock">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header d-flex align-items-center">
-                            Leave Quota
-                        </div>
-
-                        <div class="card-body" id="reportDisplayBody">
-
-                            <p>@ViewBag.Msg</p>
-
-                        </div>
-
-
-                    </div>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
+@section LeaveQuota{
+    show
 }
 
+@section LeaveMaster{
+    class="active"
+}
+        break;
+
+<header class="page-header @ViewBag.HeadingColor text-white">
+    <div class="container-fluid">
+        <h2 class="no-margin-bottom">@ViewBag.HeadingName</h2>
+    </div>
+</header>
+
+<section class="forms">
+    @if (ViewBag.Msg == null)
+    {
+
+
+        <div class="container-fluid" style="position:relative">
+            <div class="container-fluid">
+                <div class="row" id="reportDisplayBlock">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                                <b>Leave Quota</b>
+                            </div>
+
+                            @if (ViewBag.Action == null || ViewBag.Action == "")
+                            {
+
+
+                                using (Html.BeginForm("AddLeaveQuota", "Leave", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Add Leave Quota" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                                    <div class="card-body" id="reportDisplayBody">
+
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-control-label">Organisation</label>
+                                            <div class="col-sm-5">
+                                                <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrgByName" style="min-width:80%;" data-live-search="true">
+
+                                                    <option value="0" selected>--Select Organisation--</option>
+                                                    @foreach (var employee in ViewBag.OrganisationList)
+                                                    {
+                                                        if (employee.Name == ViewBag.OName)
+                                                        {
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
+                                                        }
+                                                    }
+
+                                                </select>
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="form-group row offset-sm-3">
+                                            <div classs="col-sm-9" style="display:none;color: red;" id="errorOrg">Please select columns</div>
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-control-label">Leave Type</label>
+                                            <div class="col-sm-5">
+                                                <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectLeaveByName" style="min-width:80%;" data-live-search="true">
+                                                    <option value="0" selected>--Select Leave Type--</option>
+                                                    @foreach (var employee in ViewBag.LevelTypeList)
+                                                    {
+                                                        if (employee.Name == ViewBag.LName)
+                                                        {
+
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group row offset-sm-3">
+                                            <div classs="col-sm-9" style="display:none;color: red;" id="errorLeave">Please select columns</div>
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.AnnualQuota, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.AnnualQuota, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
+
+
+                                            </div>
+                                            <div classs="col-sm-4" style="display:none;color: red;" id="errorAQ">Please enter annual quota</div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ValidFrom, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.ValidFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
+                                            </div>
+                                            <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ValidTill, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.ValidTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
+                                            </div>
+                                            <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
+                                        </div>
+
+
+
+
+
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-9 offset-sm-3">
+                                                <input type="submit" value="Add" class="btn btn-primary" id="reportSubmitBtn">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                }
+
+                            }
+                            @if (ViewBag.Action == "UpdateLeaveMaster")
+                            {
+                                @Html.AntiForgeryToken()
+                                using (Html.BeginForm("UpdateLeaveMaster", "Leave", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Add Leave Quota" }))
+                                {
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                                    <div class="card-body" id="reportDisplayBody">
+
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-control-label">Organisation</label>
+                                            <div class="col-sm-5">
+                                                <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrgByName" style="min-width:80%;" data-live-search="true">
+
+                                                    <option value="0" selected>--Select Organisation--</option>
+                                                    @foreach (var employee in ViewBag.OrganisationList)
+                                                    {
+                                                        if (employee.Name == ViewBag.OName)
+                                                        {
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
+                                                        }
+                                                    }
+
+                                                </select>
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="form-group row offset-sm-3">
+                                            <div classs="col-sm-9" style="display:none;color: red;" id="errorOrg">Please select columns</div>
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-control-label">Leave Type</label>
+                                            <div class="col-sm-5">
+                                                <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectLeaveByName" style="min-width:80%;" data-live-search="true">
+                                                    <option value="0" selected>--Select Leave Type--</option>
+                                                    @foreach (var employee in ViewBag.LevelTypeList)
+                                                    {
+                                                        if (employee.Name == ViewBag.LName)
+                                                        {
+
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group row offset-sm-3">
+                                            <div classs="col-sm-9" style="display:none;color: red;" id="errorLeave">Please select columns</div>
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.AnnualQuota, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.AnnualQuota, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
+
+
+                                            </div>
+                                            <div classs="col-sm-4" style="display:none;color: red;" id="errorAQ">Please enter annual quota</div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ValidFrom, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.ValidFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
+                                            </div>
+                                            <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ValidTill, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.ValidTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
+                                            </div>
+                                            <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
+                                        </div>
+
+                                        <div class="form-group row d-none">
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-9 offset-sm-3">
+                                                <input type="submit" value="Edit" class="btn btn-primary" id="reportSubmitBtn">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                }
+                            }
+
+                            @if (ViewBag.Action == "DeleteLeaveMaster")
+                            {
+                                @Html.AntiForgeryToken()
+                                using (Html.BeginForm("DeleteLeaveMaster", "Leave", FormMethod.Post, new { @class = "form-horizontal", @id = "customReportSelectionForm", @data_heading = "Add Leave Quota" }))
+                                {
+
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                                    <div class="card-body" id="reportDisplayBody">
+
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-control-label">Organisation</label>
+                                            <div class="col-sm-5">
+                                                <select name="OrganisationId" class="form-control selectEmployeeOption" id="selectOrgByName" style="min-width:80%;" data-live-search="true">
+
+                                                    <option value="0" selected>--Select Organisation--</option>
+                                                    @foreach (var employee in ViewBag.OrganisationList)
+                                                    {
+                                                        if (employee.Name == ViewBag.OName)
+                                                        {
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
+                                                        }
+                                                    }
+
+                                                </select>
+
+
+                                            </div>
+
+
+                                        </div>
+                                        <div class="form-group row offset-sm-3">
+                                            <div classs="col-sm-9" style="display:none;color: red;" id="errorOrg">Please select columns</div>
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-3 form-control-label">Leave Type</label>
+                                            <div class="col-sm-5">
+                                                <select name="LeaveTypeId" class="form-control selectEmployeeOption" id="selectLeaveByName" style="min-width:80%;" data-live-search="true">
+                                                    <option value="0" selected>--Select Leave Type--</option>
+                                                    @foreach (var employee in ViewBag.LevelTypeList)
+                                                    {
+                                                        if (employee.Name == ViewBag.LName)
+                                                        {
+
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
+                                                        }
+                                                    }
+                                                </select>
+
+
+                                            </div>
+                                        </div>
+                                        <div class="form-group row offset-sm-3">
+                                            <div classs="col-sm-9" style="display:none;color: red;" id="errorLeave">Please select columns</div>
+                                        </div>
+
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.AnnualQuota, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.AnnualQuota, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
+
+
+                                            </div>
+                                            <div classs="col-sm-4" style="display:none;color: red;" id="errorAQ">Please enter annual quota</div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ValidFrom, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.ValidFrom, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
+                                            </div>
+                                            <div classs="col-sm-4" style="display:none;color: red;" id="errorFromDate">Please input valid date</div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            @Html.LabelFor(model => model.ValidTill, htmlAttributes: new { @class = "col-sm-3 form-control-label" })
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.ValidTill, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })
+                                            </div>
+                                            <div classs="col-sm-4" style="display:none;color: red;" id="errorToDate">Please input valid date</div>
+                                        </div>
+
+                                        <div class="form-group row d-none">
+                                            <div class="col-sm-5">
+                                                @Html.EditorFor(model => model.Id, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "text" } })
+                                            </div>
+                                        </div>
+
+
+
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-9 offset-sm-3">
+                                                <input type="submit" value="Delete" class="btn btn-primary" id="reportSubmitBtn">
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                }
+
+                            }
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>}
+    else
+    {
+
+        <div class="container-fluid" style="position:relative">
+            <div class="container-fluid">
+                <div class="row" id="reportDisplayBlock">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-header d-flex align-items-center">
+                                Leave Quota
+                            </div>
+
+                            <div class="card-body" id="reportDisplayBody">
+
+                                <p>@ViewBag.Msg</p>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    }
+</section>
 @section Scripts{
     @Scripts.Render("~/bundles/bootstrap-select")
     @Scripts.Render("~/bundles/gijgo")
@@ -410,7 +425,7 @@ else
                             $('[data-type="date"]').each(function () {
                                 $(this).datepicker({
                                     uiLibrary: 'bootstrap',
-                                    format: 'dd-mm-yyyy'
+                                    format: 'dd-mm'
                                 });
                             });
 
@@ -457,7 +472,7 @@ else
                 $("#errorLeave").hide();
             }
 
-            
+
 
             if ($("#@Html.IdFor(model => model.AnnualQuota)").val() == "") {
                 $("#errorAQ").show(); isValid = false;

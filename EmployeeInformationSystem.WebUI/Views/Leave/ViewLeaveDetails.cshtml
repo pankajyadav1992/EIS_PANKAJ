@@ -23,6 +23,14 @@
         }
     </style>
 }
+
+@section LeaveDetails{
+    show
+}
+
+@section ViewLeaveDetails{
+    class="active"
+}
 <header class="page-header bg-success text-white">
     <div class="container-fluid">
         <h2 class="no-margin-bottom"> View Leave Details</h2>
@@ -248,7 +256,7 @@
             }
 
             $("#errorOrg").hide();
-             $("#errorEmp").hide();
+            $("#errorEmp").hide();
             $('#overlay').fadeIn();
             postData("Leave/ViewLeaveDetailsByAjax", data, "showDetails", "Action");
         }
