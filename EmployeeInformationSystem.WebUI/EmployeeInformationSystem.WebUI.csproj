@@ -759,6 +759,7 @@
     <Content Include="Views\Leave\ApplyLeave.cshtml" />
     <Content Include="Views\Leave\ViewLeaveDetails.cshtml" />
     <Content Include="Views\Shared\_OrgPartial.cshtml" />
+    <Content Include="Views\Leave\ViewEmpLeaveBalance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

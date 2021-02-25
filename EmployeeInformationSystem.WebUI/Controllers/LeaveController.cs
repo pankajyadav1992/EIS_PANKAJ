@@ -647,6 +647,84 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         }
 
 
+
+
+        public ActionResult ViewEmpLeaveBalance()
+        {
+            return View();
+        }
+
+        public string EmpLeaveBalance(MultiSelect m)
+        {
+            string jsondata = String.Empty;
+            DataTable dt = null;
+            var check = (from eLB in EmployeeLeaveBalanceContext.Collection().ToList()
+                         where m.empList.Contains(eLB.EmployeeId)
+                         
+                         select eLB
+                        ).Count();
+            if (check == 0)
+            {
+                var LeaveBal = (from edc in EmployeeDetailContext.Collection().ToList()
+                                join
+                                lmc in LeaveMasterContext.Collection().ToList()
+                                on edc.OrganisationId equals lmc.OrganisationId
+                                join
+                                ltc in LeaveTypeContext.Collection().ToList()
+                                on lmc.LeaveTypeId equals ltc.Id
+
+                                join org in OrganisationContext.Collection().ToList()
+                                on edc.OrganisationId equals org.Id
+
+                                where (m.empList.Contains(edc.Id))
+                                select new 
+                                {
+
+                                    EmpName = edc.FirstName + " " + (edc.MiddleName == "" ? "" : edc.MiddleName + " ") + edc.LastName,
+                                    Organisation = org.Name,
+                                    LeaveType = ltc.Name,
+                                    LeaveCount = lmc.AnnualQuota,
+
+                                }).ToList();
+                
+                dt = ToDataTable(LeaveBal);
+
+                jsondata = JsonConvert.SerializeObject(dt);
+            }
+            else
+            {
+
+
+                var LeaveBal = (
+                   from ebl in EmployeeLeaveBalanceContext.Collection().ToList()
+
+                   join emp in EmployeeDetailContext.Collection().ToList()
+                   on ebl.EmployeeId equals emp.Id
+
+                   join org in OrganisationContext.Collection().ToList()
+                   on emp.OrganisationId equals org.Id
+
+                   join lt in LeaveTypeContext.Collection().ToList()
+                   on ebl.LeaveTypeId equals lt.Id
+                   where (m.empList.Contains(ebl.EmployeeId))
+                   select new
+                   {
+                       EmpName = emp.FirstName + " " + (emp.MiddleName == "" ? "" : emp.MiddleName + " ") + emp.LastName,
+                       Organisation = org.Name,
+                       LeaveType = lt.Name,
+                       LeaveCount = ebl.AvailableLeaveCount,
+                   }
+
+                    ).ToList();
+
+                dt = ToDataTable(LeaveBal);
+
+                jsondata = JsonConvert.SerializeObject(dt);
+            }
+            return jsondata;
+        }
+
+
         public ActionResult ViewAllLeaveDetails()
         {
 

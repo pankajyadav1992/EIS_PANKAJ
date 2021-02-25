@@ -1,9 +1,9 @@
 ﻿@model EmployeeInformationSystem.Core.Models.MultiSelect
+
 @{
-    ViewBag.Title = "ViewLeaveDetails";
+    ViewBag.Title = "ViewEmpLeaveBalance";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 
 <link href="~/Content/select2/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/Content/select2-bootstrap4-theme/select2-bootstrap4.min.css">
@@ -25,7 +25,7 @@
 }
 <header class="page-header bg-success text-white">
     <div class="container-fluid">
-        <h2 class="no-margin-bottom"> View Leave Details</h2>
+        <h2 class="no-margin-bottom"> Employee Leave Balance </h2>
     </div>
 </header>
 <div id="overlay" style="text-align:center;display:none">
@@ -41,7 +41,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header d-flex align-items-center">
-                            <b> Employee Leave Details</b>
+                            <b> Employee Leave Balance</b>
                         </div>
                         @*@using (Html.BeginForm("ViewLeaveDetails", "Leave", FormMethod.Post, new { @class = "form-horizontal", @data_heading = "Add Leave Type" }))
                             {*@
@@ -85,7 +85,7 @@
 
                     <div class="card" id="tblCard" style="display:none">
                         <div class="card-header d-flex align-items-center">
-                            <b> Employee Leave Details</b>
+                            <b> Employee Leave Balance Details</b>
                         </div>
                         <div class="card-body">
                             <table class="table table-striped table-bordered" style="width:100%">
@@ -93,11 +93,9 @@
                                     <tr>
                                         <th>Name</th>
                                         <th>Organisation</th>
-                                        <th>Leave</th>
-                                        <th>No of Days</th>
-                                        <th>From Date</th>
-                                        <th>To Date</th>
-                                        <th>Purpose</th>
+                                        <th>Leave Type</th>
+                                        <th>Leave Balance</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody id="ldTable"></tbody>
@@ -191,7 +189,7 @@
                     $('#tblCard').css('display', 'block');
 
                     $.each(data, function (Key, value) {
-                        $('#ldTable').append('<tr role="row"><td class="tableRow">' + value.FullName + '</td><td class="tableRow">' + value.Organisation + '</td><td class="tableRow">' + value.Leave + '</td><td class="tableRow">' + value.NoOfDays + '</td><td class="tableRow">' + value.FromDate + '</td><td>' + value.ToDate + '</td><td class="tableRow">' + value.Purpose + '</td></tr>');
+                        $('#ldTable').append('<tr role="row"><td class="tableRow">' + value.EmpName + '</td><td class="tableRow">' + value.Organisation + '</td><td class="tableRow">' + value.LeaveType + '</td><td class="tableRow">' + value.LeaveCount +  '</td></tr>');
 
                     });
                 }
@@ -250,7 +248,7 @@
             $("#errorOrg").hide();
              $("#errorEmp").hide();
             $('#overlay').fadeIn();
-            postData("Leave/ViewLeaveDetailsByAjax", data, "showDetails", "Action");
+            postData("Leave/EmpLeaveBalance", data, "showDetails", "Action");
         }
 
         else {
@@ -274,4 +272,5 @@
         }
     });
 </script>
+
 
