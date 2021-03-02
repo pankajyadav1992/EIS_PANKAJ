@@ -117,6 +117,7 @@ namespace EmployeeInformationSystem.WebUI.Models
         public bool EditEmployee { get; set; }
         public bool DeleteEmployee { get; set; }
         public bool GenerateReports { get; set; }
+        public bool ManageLeave { get; set; }
     }
 
     public class MissingData

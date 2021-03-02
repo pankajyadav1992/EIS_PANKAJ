@@ -12,6 +12,7 @@ using System.Web.Mvc;
 
 namespace EmployeeInformationSystem.WebUI.Controllers
 {
+    [Authorize(Roles = "Manage Leave")]
     public class LeaveController : BaseController
     {
 

@@ -350,7 +350,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     DeleteEmployee = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Delete"),
                     ViewEmployee = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "View"),
                     GenerateReports = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Reports"),
+                    ManageLeave = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Manage Leave"),
                     Admin = claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Admin")
+                    
+                    
                 };
                 return View(modifyViewModel);
             }
@@ -402,6 +405,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                     if (model.GenerateReports && !claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Reports")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Reports"));
                     else if (!model.GenerateReports && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Reports")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Reports"));
+
+                    if (model.ManageLeave && !claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Manage Leave")) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Manage Leave"));
+                    else if (!model.ManageLeave && claims.Any(c => c.Type == ClaimTypes.Role && c.Value == "Manage Leave")) await UserManager.RemoveClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Manage Leave"));
+
 
                     // Don't sign-in as this is done via Admin page
                     //await SignInManager.SignInAsync(user, isPersistent: false, rememberBrowser: false);
