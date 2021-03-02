@@ -445,9 +445,14 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             string returnText = "Error";
             if (ModelState.IsValid)
             {
+                //Apply Leave First Time By Employee
+
+                var LeaveAnnualQuota = LeaveMasterContext.Collection().ToList().Where(a => a.LeaveTypeId == Eld.LeaveTypeId && a.OrganisationId == Eld.OrganisationId).
+                    Select(a => a.AnnualQuota).SingleOrDefault();
+                //Apply Leave Second Time By Employee
                 var AvailableLeave = EmployeeLeaveBalanceContext.Collection().ToList().Where(aa => aa.EmployeeId == Eld.EmployeeId && aa.LeaveTypeId == Eld.LeaveTypeId).
                     Select(aa => aa.AvailableLeaveCount).SingleOrDefault();
-                if (Convert.ToInt32(AvailableLeave) >= Convert.ToInt32(Eld.NoOfDays))
+                if (Convert.ToInt32(AvailableLeave) >= Convert.ToInt32(Eld.NoOfDays) || AvailableLeave== null  && Convert.ToInt32(LeaveAnnualQuota) >= Convert.ToInt32(Eld.NoOfDays))
                 {
                     EmployeeLeaveDetailsContext.Insert(Eld);
                     EmployeeLeaveDetailsContext.Commit();
@@ -547,9 +552,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                          LeaveType = ltc.Name,
                                      }
                                     ).ToList();
-                    ViewBag.Balance = LeaveBal;
-                }
+                    ViewBag.Balance = LeaveBal;                    
+                }               
             }
+            ViewBag.Message = "";
             return PartialView("_OrgPartial");
         }
 

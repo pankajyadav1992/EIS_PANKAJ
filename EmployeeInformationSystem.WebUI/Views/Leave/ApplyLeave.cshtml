@@ -42,16 +42,16 @@
                                                     <option value="@emp.Id" data-employeetype="@emp.FirstName">@emp.FirstName @emp.MiddleName @emp.LastName</option>
                                                 }
                                                 @*@foreach (var employee in ViewBag.EmlployeeTypeList)
-                                                    {
-                                                        if (employee.Name == ViewBag.OName)
-                                                        {
-                                                            <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
-                                                        }
-                                                        else
-                                                        {
-                                                            <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
-                                                        }
-                                                    }*@
+                            {
+                                if (employee.Name == ViewBag.OName)
+                                {
+                                    <option value="@employee.Id" data-employeetype="@employee.Name" selected>@employee.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@employee.Id" data-employeetype="@employee.Name">@employee.Name</option>
+                                }
+                            }*@
                                             </select>
                                         </div>
                                         <div class="col-sm-4">
@@ -146,19 +146,18 @@
                                 </div>
                             }
 
+
+                          
+                                <div class="form-group row offset-sm-3">
+                                    <div classs="col-sm-9" style="color: red;">@ViewBag.Message</div>
+                                </div>
+                           
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        if (ViewBag.Message != null)
-        {
-            <script type="text/javascript">
-            window.onload = function () {
-                alert("@ViewBag.Message");
-            };
-            </script>
-        }
+       
     }
     else
     {
