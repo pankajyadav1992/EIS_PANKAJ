@@ -453,7 +453,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 //Apply Leave Second Time By Employee
                 var AvailableLeave = EmployeeLeaveBalanceContext.Collection().ToList().Where(aa => aa.EmployeeId == Eld.EmployeeId && aa.LeaveTypeId == Eld.LeaveTypeId).
                     Select(aa => aa.AvailableLeaveCount).SingleOrDefault();
-                if (Convert.ToInt32(AvailableLeave) >= Convert.ToInt32(Eld.NoOfDays) || AvailableLeave== null  && Convert.ToInt32(LeaveAnnualQuota) >= Convert.ToInt32(Eld.NoOfDays))
+                if (Convert.ToInt32(AvailableLeave) >= Convert.ToInt32(Eld.NoOfDays) || AvailableLeave == null && Convert.ToInt32(LeaveAnnualQuota) >= Convert.ToInt32(Eld.NoOfDays))
                 {
                     EmployeeLeaveDetailsContext.Insert(Eld);
                     EmployeeLeaveDetailsContext.Commit();
@@ -553,8 +553,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                          LeaveType = ltc.Name,
                                      }
                                     ).ToList();
-                    ViewBag.Balance = LeaveBal;                    
-                }               
+                    ViewBag.Balance = LeaveBal;
+                }
             }
             ViewBag.Message = "";
             return PartialView("_OrgPartial");
@@ -595,7 +595,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                           join le in LeaveTypeContext.Collection().ToList()
                           on el.LeaveTypeId equals le.Id
 
-                          where (el.OrganisationId==m.orgId)
+                          where (el.OrganisationId == m.orgId)
 
 
                           select new
@@ -611,7 +611,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                           }
 
 
-                      ).Where(x=>Convert.ToDateTime(x.FromDate)>=Convert.ToDateTime(m.Fromdate) && Convert.ToDateTime(x.FromDate)<=Convert.ToDateTime(m.ToDate)
+                      ).Where(x => Convert.ToDateTime(x.FromDate) >= Convert.ToDateTime(m.Fromdate) && Convert.ToDateTime(x.FromDate) <= Convert.ToDateTime(m.ToDate)
                       || Convert.ToDateTime(x.ToDate) >= Convert.ToDateTime(m.Fromdate) && Convert.ToDateTime(x.ToDate) <= Convert.ToDateTime(m.ToDate)
                       )
                       .OrderBy(x => x.FullName).ToList();
@@ -783,6 +783,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
         {
             string jsondata = String.Empty;
 
+            DataTable dt = new DataTable();
+
             var data = (
                           from el in EmployeeLeaveDetailsContext.Collection().ToList()
 
@@ -807,14 +809,27 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                               el.NoOfDays,
                               FromDate = el.LeaveFrom,
                               ToDate = el.LeaveTill,
-                              el.Purpose
+                              el.Purpose,
+                              YearFrom = Convert.ToDateTime(el.LeaveFrom).ToString("yyyy"),
+                              YearTill = Convert.ToDateTime(el.LeaveTill).ToString("yyyy")
+
 
                           }
 
 
                       ).OrderBy(x => x.FullName).ToList();
 
-            DataTable dt = ToDataTable(data);
+            if (m.YearValue == "0")
+            {
+
+                dt = ToDataTable(data);
+
+            }
+            else
+            {
+                var newdata = data.Where(x => Convert.ToInt64(x.YearFrom) >= Convert.ToInt64(m.YearValue) && Convert.ToInt64(x.YearTill) <= Convert.ToInt64(m.YearValue)).ToList();
+                dt = ToDataTable(newdata);
+            }
 
             ViewBag.HeadingName = "Employee Leave Details";
             ViewBag.HeadingColor = "bg-success";
@@ -841,10 +856,10 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
             for (int i = 0; i < m.empList.Count(); i++)
             {
-               
+
 
                 var check = (from eLB in EmployeeLeaveBalanceContext.Collection().ToList()
-                             where eLB.EmployeeId==m.empList[i]
+                             where eLB.EmployeeId == m.empList[i]
 
                              select eLB.EmployeeId
                             ).Distinct().Count();
@@ -861,7 +876,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                     join org in OrganisationContext.Collection().ToList()
                                     on edc.OrganisationId equals org.Id
 
-                                    where (edc.Id== m.empList[i])
+                                    where (edc.Id == m.empList[i])
                                     select new
                                     {
 
@@ -874,7 +889,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
 
 
-                    foreach(var data in LeaveBal)
+                    foreach (var data in LeaveBal)
                     {
                         LeaveBalance item = new LeaveBalance();
                         item.EmpName = data.EmpName;
@@ -888,7 +903,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 else
                 {
                     var balleave = (from lb in EmployeeLeaveBalanceContext.Collection().ToList()
-                                    where (lb.EmployeeId== m.empList[i])
+                                    where (lb.EmployeeId == m.empList[i])
                                     select lb.LeaveTypeId).ToList();
 
 
@@ -904,7 +919,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
 
                                     join org in OrganisationContext.Collection().ToList()
                                 on edc.OrganisationId equals org.Id
-                                    where ((edc.Id== m.empList[i]) && !balleave.Contains(ltc.Id))
+                                    where ((edc.Id == m.empList[i]) && !balleave.Contains(ltc.Id))
                                     select new LeaveBalance
                                     {
                                         EmpName = edc.FirstName + " " + (edc.MiddleName == "" ? "" : edc.MiddleName + " ") + edc.LastName,
@@ -924,7 +939,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                                          join org in OrganisationContext.Collection().ToList()
                                          on edc.OrganisationId equals org.Id
 
-                                         where (elbc.EmployeeId== m.empList[i])
+                                         where (elbc.EmployeeId == m.empList[i])
                                          select new LeaveBalance
                                          {
                                              EmpName = edc.FirstName + " " + (edc.MiddleName == "" ? "" : edc.MiddleName + " ") + edc.LastName,

@@ -7,6 +7,9 @@
 
 <link href="~/Content/select2/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="~/Content/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+@Styles.Render("~/Content/bootstrap-select")
+@Styles.Render("~/Content/gijgo")
+
 
 @section CustomStyles{
     @Styles.Render("~/Content/datatable")
@@ -75,7 +78,16 @@
                                     <div classs="col-sm-9" style="display:none;color: red;" id="errorEmp">Please select columns</div>
                                 </div>
                             </div>
-
+                            <div class="form-group row">
+                                <label class="col-sm-3 form-control-label">Year</label>
+                                <div class="col-sm-5">
+                                    @*@Html.EditorFor(model => model.ToDate, new { htmlAttributes = new { @class = "form-control", @type = "text", @data_type = "date", autocomplete = "off" } })*@
+                                    <select class="form-control" id="year"></select>
+                                </div>
+                                <div class="form-group row offset-sm-3">
+                                    <div classs="col-sm-9" style="display:none;color: red;" id="errorEmp">Please select columns</div>
+                                </div>
+                            </div>
 
 
                             <div class="form-group row">
@@ -123,13 +135,14 @@
 
 
 </section>
+
 <script src="https://code.jquery.com/jquery-3.5.1.js"
         integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
         crossorigin="anonymous"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script>
 <script src="~/Content/select2/js/select2.full.min.js"></script>
-@*<script src="/EmployeeInformationSystem.WebUI/Content/vendor/datatable/js/datatables.min.js"></script>*@
+
 
 <script>
 
@@ -225,7 +238,18 @@
         theme: 'bootstrap4'
     });
 
+    var start = 2011;
+    var end = new Date().getFullYear();
+    var options = "";
 
+    var Items = "<option value=0>Select Year</option>";
+    $('#year').append(Items);
+
+
+
+    for (i = new Date().getFullYear(); i > 2010; i--) {
+        $('#year').append($('<option />').val(i).html(i));
+    }
 </script>
 
 <script>
@@ -251,7 +275,8 @@
         if (orgList.length > 0 && empList.length > 0) {
             var data = {
                 'orgList': orgList,
-                'empList': empList
+                'empList': empList,
+                'YearValue':$("#year option:selected").val()
 
             }
 

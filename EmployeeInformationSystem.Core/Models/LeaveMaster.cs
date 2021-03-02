@@ -32,6 +32,8 @@ namespace EmployeeInformationSystem.Core.Models
     {
         public List<string> orgList { get; set; }
         public List<string> empList { get; set; }
+
+        public string YearValue { get; set; }
     }
 
     public class LeaveBalance
