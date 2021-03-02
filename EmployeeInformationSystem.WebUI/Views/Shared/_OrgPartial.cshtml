@@ -35,7 +35,7 @@
         <div class="form-group row">
             <label class="form-control-label col-sm-3 d-flex justify-content-center">Type of Leave</label>
             <div class="col-sm-4">
-                <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="false">
+                <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="true">
                     <option value="0" selected>--Select Leave Type--</option>
                     @foreach (var leavetype in @ViewBag.LevelTypeList)
                     {
@@ -58,7 +58,7 @@
                 </select>
             </div>
             <div class="col-sm-4">
-                <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorOrganisationId">Please Select Employee Name</div>
+                <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorOrganisationId">Please Select Organisation Name</div>
             </div>
         </div>
         <div class="form-group row">
