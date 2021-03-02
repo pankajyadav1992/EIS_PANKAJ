@@ -180,7 +180,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 if (model.EditEmployee) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Edit"));
                 if (model.DeleteEmployee) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Delete"));
                 if (model.GenerateReports) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Reports"));
-
+                if (model.ManageLeave) await UserManager.AddClaimAsync(user.Id, new Claim(ClaimTypes.Role, "Manage Leave"));
                 if (result.Succeeded)
                 {
 
