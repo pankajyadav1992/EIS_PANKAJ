@@ -44,5 +44,12 @@ namespace EmployeeInformationSystem.Core.Models
         public string EmpName { get; set; }       
     }
 
+    public class LeaveReportsViewModel
+    {
+        public string orgId { get; set; }
+        public string  Fromdate { get; set; }
+        public string ToDate { get; set; } 
+    }
+
 
 }

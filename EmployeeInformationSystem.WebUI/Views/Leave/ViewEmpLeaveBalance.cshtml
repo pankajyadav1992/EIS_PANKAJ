@@ -24,7 +24,7 @@
     </style>
 }
 
-@section LeaveDetails{
+@section LeaveReports{
     show
 }
 
@@ -33,7 +33,7 @@
 }
 <header class="page-header bg-success text-white">
     <div class="container-fluid">
-        <h2 class="no-margin-bottom"> Employee Leave Balance </h2>
+        <h2 class="no-margin-bottom"> Employee Leave Due </h2>
     </div>
 </header>
 <div id="overlay" style="text-align:center;display:none">
@@ -204,7 +204,7 @@
                 else {
                     $('#ldTable').empty();
                     $('#tblCard').css('display', 'block');
-                    $('#ldTable').append('<tr role="row"><td colspan="5" style="text-align:center"> No records found </td></tr>');
+                    $('#ldTable').append('<tr role="row"><td colspan="4" style="text-align:center"> No records found </td></tr>');
 
 
                 }
