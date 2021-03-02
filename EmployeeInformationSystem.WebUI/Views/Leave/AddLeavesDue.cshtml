@@ -38,7 +38,10 @@
                                         <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorEmployeeId">Please Select Employee Name</div>
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                <div id="partialDiv">
+                                    @Html.Partial("_OrgPartial")
+                                </div>
+                                @*<div class="form-group row">
                                     <label class="form-control-label col-sm-3 d-flex justify-content-center">Leave Type</label>
                                     <div class="col-sm-4">
                                         <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="true">
@@ -52,7 +55,7 @@
                                     <div class="col-sm-4">
                                         <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorLeaveId">Please Select Leave Type</div>
                                     </div>
-                                </div>
+                                </div>*@
                                 <div class="form-group row">
                                     <label class="form-control-label col-sm-3 d-flex justify-content-center">No of Leaves</label>
                                     <div class="col-sm-4">
@@ -62,81 +65,105 @@
                                     <div class="col-sm-4">
                                         <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorNoOfDays">Please Enter No of Leaves</div>
                                     </div>
-                                </div>                                
-                                 <div class="form-group row">
-                                        <div class="col-sm-9 offset-sm-4">
-                                            <input type="submit" value="Apply" class="btn btn-primary" id="ApplyLeaveBtn">
-                                        </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-9 offset-sm-4">
+                                        <input type="submit" value="Apply" class="btn btn-primary" id="ApplyLeaveBtn">
                                     </div>
                                 </div>
-                            
-                            }
                             </div>
+
+                            }
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     }
     else
     {
-         <div class="container-fluid" style="position:relative">
-                                <div class="container-fluid">
-                                    <div class="row" id="reportDisplayBlock">
-                                        <div class="col-lg-12">
-                                            <div class="card">
-                                                <div class="card-body" id="reportDisplayBody">
-                                                    <p>@ViewBag.Msg</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+        <div class="container-fluid" style="position:relative">
+            <div class="container-fluid">
+                <div class="row" id="reportDisplayBlock">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body" id="reportDisplayBody">
+                                <p>@ViewBag.Msg</p>
                             </div>
-         }
-                    </section>
-                    @section Scripts{
-                        @Scripts.Render("~/bundles/bootstrap-select")
-                        @Scripts.Render("~/bundles/gijgo")
-                        <script>
-    $(document).ready(function () {
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/bootstrap-select")
+    @Scripts.Render("~/bundles/gijgo")
+    <script>
+                            $(document).ready(function () {
+
+
+                                $(document).on('change', '#selectEmployeeByName', function () {
+                                    var empid = $(this).children(":selected").val();
+                                    //alert(empid);
+                                    $.ajax(
+                                        {
+                                            url: '../Leave/GetOrganisation_Leave?EmployeeId=' + empid,
+                                            type: 'GET',
+                                            data: "",
+                                            contentType: 'application/json; charset=utf-8',
+                                            success: function (data) {
+                                                $("#partialDiv").html(data);
+                                            },
+                                            error: function () {
+                                                alert("error");
+                                            }
+                                        });
+                                });
+
         $(document).on('click', '#ApplyLeaveBtn', function (e) {
            var isValid = true;
            var australianDate = /^(?=\d)(?:(?:31(?!.(?:0?[2469]|11))|(?:30|29)(?!.0?2)|29(?=.0?2.(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(?:\x20|$))|(?:2[0-8]|1\d|0?[1-9]))([-./])(?:1[012]|0?[1-9])\1(?:1[6-9]|[2-9]\d)?\d\d(?:(?=\x20\d)\x20|$))?(((0?[1-9]|1[012])(:[0-5]\d){0,2}(\x20[AP]M))|([01]\d|2[0-3])(:[0-5]\d){1,2})?$|^$/;
 
-            if ($("#selectEmployeeByName").val() == 0)
-            {
+            if ($("#selectEmployeeByName").val() == 0) {
                 $("#errorEmployeeId").show();
                 isValid = false;
             } else {
                 $("#errorEmployeeId").hide();
             }
-         
 
-            if ($("#selectLeaveTypeName").val() == 0)
-            {
+
+            if ($("#selectLeaveTypeName").val() == 0) {
                 $("#errorLeaveId").show(); isValid = false;
             } else {
                 $("#errorLeaveId").hide();
             }
-           
 
-             if ($("#@Html.IdFor(model => model.AvailableLeaveCount)").val() == "")
-             {
-                 $("#errorNoOfDays").show(); isValid = false;
-             }
-             else
-             { $("#errorNoOfDays").hide(); }
 
-           
+            if ($("#@Html.IdFor(model => model.AvailableLeaveCount)").val() == "") {
+                $("#errorNoOfDays").show(); isValid = false;
+            }
+            else { $("#errorNoOfDays").hide(); }
+
+
 
             if (!isValid) {
                 e.preventDefault(); //prevent the default action
             } else {
                 $('#overlay').fadeIn(); // show spinner
             }
-        });
-        });
-                        </script>
 
-                    }
+            });
+
+
+
+
+
+
+        });
+
+    </script>
+
+}
 

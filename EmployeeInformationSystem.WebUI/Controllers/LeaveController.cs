@@ -477,14 +477,22 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 }
                 else
                 {
-                    List<EmployeeDetail> EmployeeList = EmployeeDetailContext.Collection().Where(q => q.WorkingStatus == true).OrderBy(e => e.FirstName).ToList();
-                    ViewBag.EmlployeeTypeList = EmployeeList;
-
-                    List<LeaveType> LeaveTypeList = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
-                    ViewBag.TypeList = LeaveTypeList;
-                    ViewBag.HeadingName = "Add Leaves Due";
-                    ViewBag.HeadingColor = "bg-success";
-                    ViewBag.Name = "";
+                    //var OrgId =EmployeeDetailContext.Collection().ToList().Where(a => a.LeaveTypeId == ELB.LeaveTypeId).ToList();
+                    //var AnnualQuota=LeaveMasterContext.Collection().ToList().Where(a => a.LeaveTypeId == ELB.LeaveTypeId).ToList();
+                    //EmployeeLeaveBalance Eb = new EmployeeLeaveBalance();
+                    //foreach (var i in LeaveQuota)
+                    //{
+                    //    Eb.Id = Eb.Id;
+                    //    Eb.EmployeeId = ELB.EmployeeId;
+                    //    Eb.LeaveTypeId = ELB.EmployeeId;
+                    //    Eb.AvailableLeaveCount = Convert.ToString(Convert.ToInt32(i.AnnualQuota) + Convert.ToInt32(ELB.AvailableLeaveCount));
+                    //    Eb.TotalLeaveCount = Convert.ToString(Convert.ToInt32(i.AnnualQuota) + Convert.ToInt32(ELB.AvailableLeaveCount));
+                    //}
+                    //EmployeeLeaveBalanceContext.Insert(Eb);
+                    //EmployeeLeaveBalanceContext.Commit();
+                    //ViewBag.HeadingName = "Add Leaves Due";
+                    //ViewBag.HeadingColor = "bg-success";
+                    //ViewBag.Msg = "Add Leaves Due Apply Succesfully";
                 }
             }
             return View("AddLeavesDue");
