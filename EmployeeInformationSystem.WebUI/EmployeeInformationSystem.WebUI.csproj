@@ -763,6 +763,8 @@
     <Content Include="Views\Leave\ViewOrgLeaveDetails.cshtml" />
     <Content Include="Views\Leave\DurationWiseLeaves.cshtml" />
     <Content Include="Views\Leave\DailyLeave.cshtml" />
+    <Content Include="Views\Leave\ErrorPage.cshtml" />
+    <Content Include="Views\Leave\AddLeavesDue.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
