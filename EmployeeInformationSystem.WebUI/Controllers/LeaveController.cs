@@ -787,8 +787,8 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                           }
 
 
-                      ).Where(x => Convert.ToDateTime(x.FromDate) >= Convert.ToDateTime(currentdate) && Convert.ToDateTime(x.FromDate) <= Convert.ToDateTime(currentdate)
-                      || Convert.ToDateTime(x.ToDate) >= Convert.ToDateTime(currentdate) && Convert.ToDateTime(x.ToDate) <= Convert.ToDateTime(currentdate)
+                      ).Where(x => Convert.ToDateTime(x.FromDate) <= Convert.ToDateTime(currentdate) && Convert.ToDateTime(x.ToDate) >= Convert.ToDateTime(currentdate)
+                      
                       )
                       .OrderBy(x => x.FullName).ToList();
 

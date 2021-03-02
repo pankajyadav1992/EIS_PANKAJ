@@ -5,6 +5,15 @@
 }
 @Styles.Render("~/Content/bootstrap-select")
 @Styles.Render("~/Content/gijgo")
+
+@section LeaveDetails{
+    show
+}
+
+@section AddLeavesDue{
+    class="active"
+}
+
 <header class="page-header @ViewBag.HeadingColor  text-white">
     <div class="container-fluid">
         <h2 class="no-margin-bottom">@ViewBag.HeadingName </h2>
@@ -22,82 +31,82 @@
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Employee Name</label>
-                                    <div class="col-sm-4">
-                                        <select name="EmployeeId" class="form-control select" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
-                                            <option value="0" selected>--Select Employee--</option>
-                                            @foreach (var emp in ViewBag.EmlployeeTypeList)
-                                            {
-                                                <option value="@emp.Id" data-employeetype="@emp.FirstName">@emp.FirstName @emp.MiddleName @emp.LastName</option>
-                                            }
-                                        </select>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Employee Name</label>
+                                        <div class="col-sm-4">
+                                            <select name="EmployeeId" class="form-control select" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
+                                                <option value="0" selected>--Select Employee--</option>
+                                                @foreach (var emp in ViewBag.EmlployeeTypeList)
+                                                {
+                                                    <option value="@emp.Id" data-employeetype="@emp.FirstName">@emp.FirstName @emp.MiddleName @emp.LastName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorEmployeeId">Please Select Employee Name</div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorEmployeeId">Please Select Employee Name</div>
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Leave Type</label>
+                                        <div class="col-sm-4">
+                                            <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="true">
+                                                <option value="0" selected>--Select Leave Type--</option>
+                                                @foreach (var leave in ViewBag.TypeList)
+                                                {
+                                                    <option value="@leave.Id" data-employeetype="@leave.Name">@leave.Name</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorLeaveId">Please Select Leave Type</div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Leave Type</label>
-                                    <div class="col-sm-4">
-                                        <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="true">
-                                            <option value="0" selected>--Select Leave Type--</option>
-                                            @foreach (var leave in ViewBag.TypeList)
-                                            {
-                                                <option value="@leave.Id" data-employeetype="@leave.Name">@leave.Name</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorLeaveId">Please Select Leave Type</div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">No of Leaves</label>
-                                    <div class="col-sm-4">
-                                        @Html.EditorFor(model => model.AvailableLeaveCount, new { htmlAttributes = new { @class = "form-control", @type = "number", @data_type = "number", autocomplete = "off" } })
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">No of Leaves</label>
+                                        <div class="col-sm-4">
+                                            @Html.EditorFor(model => model.AvailableLeaveCount, new { htmlAttributes = new { @class = "form-control", @type = "number", @data_type = "number", autocomplete = "off" } })
 
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorNoOfDays">Please Enter No of Leaves</div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorNoOfDays">Please Enter No of Leaves</div>
-                                    </div>
-                                </div>                                
-                                 <div class="form-group row">
+                                    <div class="form-group row">
                                         <div class="col-sm-9 offset-sm-4">
                                             <input type="submit" value="Apply" class="btn btn-primary" id="ApplyLeaveBtn">
                                         </div>
                                     </div>
                                 </div>
-                            
+
                             }
-                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </div>
     }
     else
     {
-         <div class="container-fluid" style="position:relative">
-                                <div class="container-fluid">
-                                    <div class="row" id="reportDisplayBlock">
-                                        <div class="col-lg-12">
-                                            <div class="card">
-                                                <div class="card-body" id="reportDisplayBody">
-                                                    <p>@ViewBag.Msg</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+        <div class="container-fluid" style="position:relative">
+            <div class="container-fluid">
+                <div class="row" id="reportDisplayBlock">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body" id="reportDisplayBody">
+                                <p>@ViewBag.Msg</p>
                             </div>
-         }
-                    </section>
-                    @section Scripts{
-                        @Scripts.Render("~/bundles/bootstrap-select")
-                        @Scripts.Render("~/bundles/gijgo")
-                        <script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</section>
+@section Scripts{
+    @Scripts.Render("~/bundles/bootstrap-select")
+    @Scripts.Render("~/bundles/gijgo")
+    <script>
     $(document).ready(function () {
         $(document).on('click', '#ApplyLeaveBtn', function (e) {
            var isValid = true;
@@ -110,7 +119,7 @@
             } else {
                 $("#errorEmployeeId").hide();
             }
-         
+
 
             if ($("#selectLeaveTypeName").val() == 0)
             {
@@ -118,7 +127,7 @@
             } else {
                 $("#errorLeaveId").hide();
             }
-           
+
 
              if ($("#@Html.IdFor(model => model.AvailableLeaveCount)").val() == "")
              {
@@ -127,7 +136,7 @@
              else
              { $("#errorNoOfDays").hide(); }
 
-           
+
 
             if (!isValid) {
                 e.preventDefault(); //prevent the default action
@@ -136,7 +145,7 @@
             }
         });
         });
-                        </script>
+    </script>
 
-                    }
+}
 
