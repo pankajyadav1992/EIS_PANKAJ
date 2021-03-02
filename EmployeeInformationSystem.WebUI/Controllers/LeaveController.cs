@@ -571,6 +571,173 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             return View();
         }
 
+        public ActionResult ViewOrgLeaveDetails()
+        {
+            List<Organisation> orgList = OrganisationContext.Collection().OrderBy(e => e.Name).ToList();
+            ViewBag.OrganisationList = orgList;
+            return View();
+        }
+
+        public string ViewOrgLeaveReport(LeaveReportsViewModel m)
+        {
+            string jsondata = String.Empty;
+
+            var data = (
+                          from el in EmployeeLeaveDetailsContext.Collection().ToList()
+
+                          join emp in EmployeeDetailContext.Collection().ToList()
+                          on el.EmployeeId equals emp.Id
+
+
+                          join org in OrganisationContext.Collection().ToList()
+                          on el.OrganisationId equals org.Id
+
+                          join le in LeaveTypeContext.Collection().ToList()
+                          on el.LeaveTypeId equals le.Id
+
+                          where (el.OrganisationId==m.orgId)
+
+
+                          select new
+                          {
+                              FullName = emp.FirstName + " " + (emp.MiddleName == "" ? "" : emp.MiddleName + " ") + emp.LastName,
+                              Organisation = org.Name,
+                              Leave = le.Name,
+                              el.NoOfDays,
+                              FromDate = el.LeaveFrom,
+                              ToDate = el.LeaveTill,
+                              el.Purpose
+
+                          }
+
+
+                      ).Where(x=>Convert.ToDateTime(x.FromDate)>=Convert.ToDateTime(m.Fromdate) && Convert.ToDateTime(x.FromDate)<=Convert.ToDateTime(m.ToDate)
+                      || Convert.ToDateTime(x.ToDate) >= Convert.ToDateTime(m.Fromdate) && Convert.ToDateTime(x.ToDate) <= Convert.ToDateTime(m.ToDate)
+                      )
+                      .OrderBy(x => x.FullName).ToList();
+
+            DataTable dt = ToDataTable(data);
+
+            ViewBag.HeadingName = "Organizations Leave Details";
+            ViewBag.HeadingColor = "bg-success";
+
+            jsondata = JsonConvert.SerializeObject(dt);
+
+            return jsondata;
+
+        }
+
+
+
+        public ActionResult DurationWiseLeaves()
+        {
+            return View();
+        }
+
+        public string DurationWiseReport(LeaveReportsViewModel m)
+        {
+            string jsondata = String.Empty;
+
+            var data = (
+                          from el in EmployeeLeaveDetailsContext.Collection().ToList()
+
+                          join emp in EmployeeDetailContext.Collection().ToList()
+                          on el.EmployeeId equals emp.Id
+
+
+                          join org in OrganisationContext.Collection().ToList()
+                          on el.OrganisationId equals org.Id
+
+                          join le in LeaveTypeContext.Collection().ToList()
+                          on el.LeaveTypeId equals le.Id
+
+                          //where (el.OrganisationId == m.orgId)
+
+
+                          select new
+                          {
+                              FullName = emp.FirstName + " " + (emp.MiddleName == "" ? "" : emp.MiddleName + " ") + emp.LastName,
+                              Organisation = org.Name,
+                              Leave = le.Name,
+                              el.NoOfDays,
+                              FromDate = el.LeaveFrom,
+                              ToDate = el.LeaveTill,
+                              el.Purpose
+
+                          }
+
+
+                      ).Where(x => Convert.ToDateTime(x.FromDate) >= Convert.ToDateTime(m.Fromdate) && Convert.ToDateTime(x.FromDate) <= Convert.ToDateTime(m.ToDate)
+                      || Convert.ToDateTime(x.ToDate) >= Convert.ToDateTime(m.Fromdate) && Convert.ToDateTime(x.ToDate) <= Convert.ToDateTime(m.ToDate)
+                      )
+                      .OrderBy(x => x.FullName).ToList();
+
+            DataTable dt = ToDataTable(data);
+
+            ViewBag.HeadingName = "Duration Wise Leave Details";
+            ViewBag.HeadingColor = "bg-success";
+
+            jsondata = JsonConvert.SerializeObject(dt);
+
+            return jsondata;
+        }
+
+        public ActionResult DailyLeave()
+        {
+            ViewBag.CurrentDate = DateTime.Now.ToString("dd-MM-yyyy");
+            return View();
+        }
+
+        public string DailyLeaveReport(LeaveReportsViewModel m)
+        {
+            string jsondata = String.Empty;
+            string currentdate = DateTime.Now.ToString("dd-MM-yyyy");
+
+            var data = (
+                          from el in EmployeeLeaveDetailsContext.Collection().ToList()
+
+                          join emp in EmployeeDetailContext.Collection().ToList()
+                          on el.EmployeeId equals emp.Id
+
+
+                          join org in OrganisationContext.Collection().ToList()
+                          on el.OrganisationId equals org.Id
+
+                          join le in LeaveTypeContext.Collection().ToList()
+                          on el.LeaveTypeId equals le.Id
+
+                          //where (el.OrganisationId == m.orgId)
+
+
+                          select new
+                          {
+                              FullName = emp.FirstName + " " + (emp.MiddleName == "" ? "" : emp.MiddleName + " ") + emp.LastName,
+                              Organisation = org.Name,
+                              Leave = le.Name,
+                              el.NoOfDays,
+                              FromDate = el.LeaveFrom,
+                              ToDate = el.LeaveTill,
+                              el.Purpose
+
+                          }
+
+
+                      ).Where(x => Convert.ToDateTime(x.FromDate) >= Convert.ToDateTime(currentdate) && Convert.ToDateTime(x.FromDate) <= Convert.ToDateTime(currentdate)
+                      || Convert.ToDateTime(x.ToDate) >= Convert.ToDateTime(currentdate) && Convert.ToDateTime(x.ToDate) <= Convert.ToDateTime(currentdate)
+                      )
+                      .OrderBy(x => x.FullName).ToList();
+
+            DataTable dt = ToDataTable(data);
+
+            ViewBag.HeadingName = "Daily Leave Details";
+            ViewBag.HeadingColor = "bg-success";
+
+            jsondata = JsonConvert.SerializeObject(dt);
+
+            return jsondata;
+        }
+
+
         public string GetOrgForDropDown()
         {
             string jsondata = String.Empty;

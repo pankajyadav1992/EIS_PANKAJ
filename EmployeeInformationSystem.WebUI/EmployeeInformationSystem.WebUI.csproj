@@ -760,6 +760,9 @@
     <Content Include="Views\Leave\ViewLeaveDetails.cshtml" />
     <Content Include="Views\Shared\_OrgPartial.cshtml" />
     <Content Include="Views\Leave\ViewEmpLeaveBalance.cshtml" />
+    <Content Include="Views\Leave\ViewOrgLeaveDetails.cshtml" />
+    <Content Include="Views\Leave\DurationWiseLeaves.cshtml" />
+    <Content Include="Views\Leave\DailyLeave.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

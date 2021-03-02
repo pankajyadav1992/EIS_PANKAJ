@@ -88,7 +88,31 @@
                                             }
                                             else
                                             {
-                                                <th>@col.ColumnName <br /> <input type="text" placeholder="Search" /></th>
+                                                if (col.ColumnName == "LeaveType")
+                                                {
+                                                    <th>Leave Type <br /> <input type="text" placeholder="Search" /></th>
+                                                }
+
+                                                else if (col.ColumnName == "AnnualQuota")
+                                                {
+                                                    <th>Annual Quota<br /> <input type="text" placeholder="Search" /></th>
+                                                }
+
+                                                else if (col.ColumnName == "ValidFrom")
+                                                {
+                                                    <th>Valid From <br /> <input type="text" placeholder="Search" /></th>
+                                                }
+
+                                                else if (col.ColumnName == "ValidTill")
+                                                {
+                                                    <th>Valid Till <br /> <input type="text" placeholder="Search" /></th>
+                                                }
+
+
+                                                else
+                                                {
+                                                    <th>@col.ColumnName <br /> <input type="text" placeholder="Search" /></th>
+                                                }
                                             }
                                         }
                                         @if (ViewBag.HeadingName != "Employee Leave Details")
@@ -101,25 +125,25 @@
                                 <tbody>
                                     @foreach (DataRow row in Model.Rows)
                                     {
-                                    <tr>
-                                        @foreach (DataColumn col in Model.Columns)
-                                        {
-                                            if (@col.ColumnName == "Id")
+                                        <tr>
+                                            @foreach (DataColumn col in Model.Columns)
                                             {
-                                                <td class="tableRow tblHide">@row[col.ColumnName]</td>
+                                                if (@col.ColumnName == "Id")
+                                                {
+                                                    <td class="tableRow tblHide">@row[col.ColumnName]</td>
+                                                }
+                                                else
+                                                {
+                                                    <td class="tableRow">@row[col.ColumnName]</td>
+                                                }
                                             }
-                                            else
-                                            {
-                                                <td class="tableRow">@row[col.ColumnName]</td>
-                                            }
-                                        }
 
-                                        @if (ViewBag.HeadingName != "Employee Leave Details")
-                                        {
-                                            <td>@Html.ActionLink("Edit", "Edit", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
-                                            <td>@Html.ActionLink("Delete", "Delete", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
-                                        }
-                                    </tr>
+                                            @if (ViewBag.HeadingName != "Employee Leave Details")
+                                            {
+                                                <td>@Html.ActionLink("Edit", "Edit", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
+                                                <td>@Html.ActionLink("Delete", "Delete", "Leave", new { idData = @row["Id"].ToString(), targetmodel = @ViewBag.targetmodel }, null) </td>
+                                            }
+                                        </tr>
 
                                     }
                                 </tbody>
