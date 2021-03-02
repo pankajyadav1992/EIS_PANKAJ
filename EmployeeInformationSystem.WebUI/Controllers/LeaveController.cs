@@ -408,26 +408,91 @@ namespace EmployeeInformationSystem.WebUI.Controllers
             string returnText = "Error";
             if (ModelState.IsValid)
             {
-                LeaveTypeContext.Delete(lt.Id);
-                LeaveTypeContext.Commit();
-                returnText = "Success";
+                try
+                {
+                    LeaveTypeContext.Delete(lt.Id);
+                    LeaveTypeContext.Commit();
+                    returnText = "Success";
+                    if (returnText == "Success")
+                    {
+                        ViewBag.HeadingName = "Delete Leave Type";
+                        ViewBag.HeadingColor = "bg-danger";
+                        ViewBag.Msg = "Leave Type Delete succesfully";
+                    }
+                    else
+                    {
+                        return View("LeaveType");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // throw ex;
+                    return View("ErrorPage");
+                }              
             }
-            if (returnText == "Success")
-            {
-                ViewBag.HeadingName = "Delete Leave Type";
-                ViewBag.HeadingColor = "bg-danger";
-                ViewBag.Msg = "Leave Type Delete succesfully";
-            }
-            else
-            {
-                return View("LeaveType");
-            }
+            
             return View("LeaveType");
         }
         #endregion
 
 
         #region 'Apply Leave'
+        [HttpGet]
+        public ActionResult AddLeavesDue()
+        {
+            List<EmployeeDetail> EmployeeList = EmployeeDetailContext.Collection().Where(q => q.WorkingStatus == true).OrderBy(e => e.FirstName).ToList();
+            ViewBag.EmlployeeTypeList = EmployeeList;
+
+            List<LeaveType> LeaveTypeList = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
+            ViewBag.TypeList = LeaveTypeList;
+            ViewBag.HeadingName = "Add Leaves Due";
+            ViewBag.HeadingColor = "bg-success";
+            ViewBag.Name = "";
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult AddLeavesDue(EmployeeLeaveBalance ELB)
+        {
+            if (ModelState.IsValid)
+            {
+                var chkleavedata = EmployeeLeaveBalanceContext.Collection().ToList().Where(a => a.LeaveTypeId == ELB.LeaveTypeId && a.EmployeeId == ELB.EmployeeId).Count();
+                if (chkleavedata != 0)
+                {
+                    var leavedata = EmployeeLeaveBalanceContext.Collection().ToList().Where(a => a.LeaveTypeId == ELB.LeaveTypeId && a.EmployeeId == ELB.EmployeeId).ToList();
+                    EmployeeLeaveBalance Eb = EmployeeLeaveBalanceContext.Collection().FirstOrDefault(q => q.EmployeeId == ELB.EmployeeId && q.LeaveTypeId == ELB.LeaveTypeId);
+                    foreach (var i in leavedata)
+                    {
+                        Eb.Id = i.Id;
+                        Eb.EmployeeId = i.EmployeeId;
+                        Eb.LeaveTypeId = i.LeaveTypeId;
+                        Eb.AvailableLeaveCount = Convert.ToString(Convert.ToInt32(i.AvailableLeaveCount) + Convert.ToInt32(ELB.AvailableLeaveCount));
+                        Eb.TotalLeaveCount = Convert.ToString(Convert.ToInt32(i.TotalLeaveCount) + Convert.ToInt32(ELB.AvailableLeaveCount));
+                    }
+                    EmployeeLeaveBalanceContext.Update(Eb);
+                    EmployeeLeaveBalanceContext.Commit();
+                    ViewBag.HeadingName = "Add Leaves Due";
+                    ViewBag.HeadingColor = "bg-success";
+                    ViewBag.Msg = "Add Leaves Due Apply Succesfully";
+                }
+                else
+                {
+                    List<EmployeeDetail> EmployeeList = EmployeeDetailContext.Collection().Where(q => q.WorkingStatus == true).OrderBy(e => e.FirstName).ToList();
+                    ViewBag.EmlployeeTypeList = EmployeeList;
+
+                    List<LeaveType> LeaveTypeList = LeaveTypeContext.Collection().OrderBy(e => e.Name).ToList();
+                    ViewBag.TypeList = LeaveTypeList;
+                    ViewBag.HeadingName = "Add Leaves Due";
+                    ViewBag.HeadingColor = "bg-success";
+                    ViewBag.Name = "";
+                }
+            }
+            return View("AddLeavesDue");
+        }
+
+
+
+
         [HttpGet]
         public ActionResult ApplyLeave()
         {
@@ -461,7 +526,7 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                     if (returnText == "Success")
                     {
                         EmpLeaveBalCount(Eld);
-                        ViewBag.HeadingName = "Add Leave Type";
+                        ViewBag.HeadingName = "Apply Leave";
                         ViewBag.HeadingColor = "bg-success";
                         ViewBag.Msg = "Leave Apply Succesfully";
                     }
