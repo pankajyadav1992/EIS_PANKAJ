@@ -14,7 +14,7 @@
 @section LeaveMaster{
     class="active"
 }
-        break;
+       
 
 <header class="page-header @ViewBag.HeadingColor text-white">
     <div class="container-fluid">
@@ -480,7 +480,7 @@
                 $("#errorAQ").hide();
             }
 
-           if (!australianDate.test($("#@Html.IdFor(model => model.ValidFrom)").val())) {
+           @*if (!australianDate.test($("#@Html.IdFor(model => model.ValidFrom)").val())) {
                $("#errorFromDate").show(); isValid = false;
                console.log($("#@Html.IdFor(model => model.ValidFrom)").val());
            } else {
@@ -492,7 +492,7 @@
                $("#errorToDate").show(); isValid = false;
            } else {
                 $("#errorToDate").hide();
-           }
+           }*@
              if ($("#@Html.IdFor(model => model.ValidTill)").val() == "")
              {
                  $("#errorToDate").show(); isValid = false;
