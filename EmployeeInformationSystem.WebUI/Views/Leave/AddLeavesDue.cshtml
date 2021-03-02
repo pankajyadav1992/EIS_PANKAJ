@@ -22,62 +22,72 @@
                             {
                                 @Html.AntiForgeryToken()
                                 @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                            <div class="card-body">
-                                <div class="form-group row">
-                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Employee Name</label>
-                                    <div class="col-sm-4">
-                                        <select name="EmployeeId" class="form-control select" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
-                                            <option value="0" selected>--Select Employee--</option>
-                                            @foreach (var emp in ViewBag.EmlployeeTypeList)
-                                            {
-                                                <option value="@emp.Id" data-employeetype="@emp.FirstName">@emp.FirstName @emp.MiddleName @emp.LastName</option>
-                                            }
-                                        </select>
+                                <div class="card-body">
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Employee Name</label>
+                                        <div class="col-sm-4">
+                                            <select name="EmployeeId" class="form-control select" id="selectEmployeeByName" style="min-width:80%;" data-live-search="true">
+                                                <option value="0" selected>--Select Employee--</option>
+                                                @foreach (var emp in ViewBag.EmlployeeTypeList)
+                                                {
+                                                    <option value="@emp.Id" data-employeetype="@emp.FirstName">@emp.FirstName @emp.MiddleName @emp.LastName</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorEmployeeId">Please Select Employee Name</div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorEmployeeId">Please Select Employee Name</div>
-                                    </div>
-                                </div>
-                                <div id="partialDiv">
-                                    @Html.Partial("_OrgPartial")
-                                </div>
-                                @*<div class="form-group row">
-                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">Leave Type</label>
-                                    <div class="col-sm-4">
-                                        <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="true">
-                                            <option value="0" selected>--Select Leave Type--</option>
-                                            @foreach (var leave in ViewBag.TypeList)
-                                            {
-                                                <option value="@leave.Id" data-employeetype="@leave.Name">@leave.Name</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-4">
-                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorLeaveId">Please Select Leave Type</div>
-                                    </div>
-                                </div>*@
-                                <div class="form-group row">
-                                    <label class="form-control-label col-sm-3 d-flex justify-content-center">No of Leaves</label>
-                                    <div class="col-sm-4">
-                                        @Html.EditorFor(model => model.AvailableLeaveCount, new { htmlAttributes = new { @class = "form-control", @type = "number", @data_type = "number", autocomplete = "off" } })
 
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">Leave Type</label>
+                                        <div class="col-sm-4">
+                                            <select name="LeaveTypeId" class="form-control" id="selectLeaveTypeName" style="min-width:80%;" data-live-search="true">
+                                                <option value="0" selected>--Select Leave Type--</option>
+                                               @*@foreach (var leave in ViewBag.TypeList)
+                                                {
+                                                    <option value="@leave.Id" data-employeetype="@leave.Name">@leave.Name</option>
+                                                }*@
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorLeaveId">Please Select Leave Type</div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorNoOfDays">Please Enter No of Leaves</div>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <div class="col-sm-9 offset-sm-4">
-                                        <input type="submit" value="Apply" class="btn btn-primary" id="ApplyLeaveBtn">
-                                    </div>
-                                </div>
-                            </div>
+                                    <div class="form-group row">
+                                        <label class="form-control-label col-sm-3 d-flex justify-content-center">No of Leaves</label>
+                                        <div class="col-sm-4">
+                                            @Html.EditorFor(model => model.AvailableLeaveCount, new { htmlAttributes = new { @class = "form-control", @type = "number", @data_type = "number", autocomplete = "off" } })
 
-                            }
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div classs="col-sm-9 align-left" style="display:none;color: red;" id="errorNoOfDays">Please Enter No of Leaves</div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-9 offset-sm-4">
+                                            <input type="submit" value="Apply" class="btn btn-primary" id="ApplyLeaveBtn">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-12 offset-sm-4" id="tblCard" style="display:none">
+                                            <table class="table table-striped table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Leave Type</th>
+                                                        <th>No. of Leaves Due</th>                                                       
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="TblLeaveData"></tbody>
+                                            </table>
+                                            </div>
+                                    </div>                          
                         </div>
+                            }
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     }
     else
@@ -100,26 +110,18 @@
 @section Scripts{
     @Scripts.Render("~/bundles/bootstrap-select")
     @Scripts.Render("~/bundles/gijgo")
-    <script>
+<script>
                             $(document).ready(function () {
 
 
                                 $(document).on('change', '#selectEmployeeByName', function () {
-                                    var empid = $(this).children(":selected").val();
-                                    //alert(empid);
-                                    $.ajax(
-                                        {
-                                            url: '../Leave/GetOrganisation_Leave?EmployeeId=' + empid,
-                                            type: 'GET',
-                                            data: "",
-                                            contentType: 'application/json; charset=utf-8',
-                                            success: function (data) {
-                                                $("#partialDiv").html(data);
-                                            },
-                                            error: function () {
-                                                alert("error");
-                                            }
-                                        });
+                                  //  var empid = $(this).children(":selected").val();
+                                    ////alert(empid);
+                                     var data = {
+                                         'EmployeeId': $("#selectEmployeeByName option:selected").val()    
+                                                }              
+
+                                    postData("Leave/Get_Leave_Employee ", data, "Leavedata", "Leave");
                                 });
 
         $(document).on('click', '#ApplyLeaveBtn', function (e) {
@@ -153,17 +155,84 @@
             } else {
                 $('#overlay').fadeIn(); // show spinner
             }
-
             });
-
-
-
-
-
 
         });
 
-    </script>
+</script>
+    <script>
 
+        var getUrl = window.location
+        var aURL = getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1] + "/";
+
+
+        function postData(api, inputData, aBy, aTyp) {
+            $.ajax({
+                type: "POST",
+                url: aURL + api,
+                data: JSON.stringify(inputData),
+                dataType: "JSON",
+                contentType: "application/json; charset=utf-8",
+                success: function (data) {
+
+                    PostDone(data, aBy, aTyp);
+                },
+                error: function (err) {
+                    window.location.href = aURL;
+                    //alert("Something went wrong");
+                }
+            });
+        }
+
+
+        PostDone = function (data, aBy, aTyp) {
+
+            if (aTyp === "Leave") {
+                if (aBy === "Leavedata") {
+                    if (data.length > 0) {
+                        $('#TblLeaveData').empty();
+                        $('#tblCard').css('display', 'block');
+                        $.each(data, function (Key, value) {
+                            $('#TblLeaveData').append('<tr role="row"><td class="tableRow">' + value.LeaveType + '</td><td>' + value.LeaveCount + '</td></tr>');
+
+                        });
+
+                        var data = {
+                            'EmployeeId': $("#selectEmployeeByName option:selected").val()
+                        }
+                        postData("Leave/Get_Leave_List_Employee ", data, "dropdown", "LeaveOrgReport");
+
+                    }
+                    else {
+                        $('#TblLeaveData').empty();
+                        $('#tblCard').css('display', 'block');
+                        $('#TblLeaveData').append('<tr role="row"><td colspan="2" style="text-align:center"> No records found </td></tr>');
+
+
+                    }
+                    $('#overlay').fadeOut();
+                }
+            }
+                if (aTyp === "LeaveOrgReport") {
+                    if (aBy === "dropdown") {
+                        $('#selectLeaveTypeName').val("");
+
+                        if (data) {
+                          
+                       
+                        $.each(data, function (Key, value) {
+                            $('#selectLeaveTypeName').append(
+                                $('<option></option>').val(value.LeaveTypeId).text(value.Name));
+                        });
+                    }
+                }
+            }
+        }
+
+
+
+
+    </script>
 }
+
 
