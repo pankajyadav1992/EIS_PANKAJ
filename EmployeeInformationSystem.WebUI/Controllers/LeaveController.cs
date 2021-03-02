@@ -477,22 +477,34 @@ namespace EmployeeInformationSystem.WebUI.Controllers
                 }
                 else
                 {
-                    //var OrgId =EmployeeDetailContext.Collection().ToList().Where(a => a.LeaveTypeId == ELB.LeaveTypeId).ToList();
-                    //var AnnualQuota=LeaveMasterContext.Collection().ToList().Where(a => a.LeaveTypeId == ELB.LeaveTypeId).ToList();
-                    //EmployeeLeaveBalance Eb = new EmployeeLeaveBalance();
-                    //foreach (var i in LeaveQuota)
-                    //{
-                    //    Eb.Id = Eb.Id;
-                    //    Eb.EmployeeId = ELB.EmployeeId;
-                    //    Eb.LeaveTypeId = ELB.EmployeeId;
-                    //    Eb.AvailableLeaveCount = Convert.ToString(Convert.ToInt32(i.AnnualQuota) + Convert.ToInt32(ELB.AvailableLeaveCount));
-                    //    Eb.TotalLeaveCount = Convert.ToString(Convert.ToInt32(i.AnnualQuota) + Convert.ToInt32(ELB.AvailableLeaveCount));
-                    //}
-                    //EmployeeLeaveBalanceContext.Insert(Eb);
-                    //EmployeeLeaveBalanceContext.Commit();
-                    //ViewBag.HeadingName = "Add Leaves Due";
-                    //ViewBag.HeadingColor = "bg-success";
-                    //ViewBag.Msg = "Add Leaves Due Apply Succesfully";
+                    var AnnualQuota = (from edc in EmployeeDetailContext.Collection().Where(a=>a.Id== ELB.EmployeeId).ToList()
+                                       join lmc in LeaveMasterContext.Collection().Where(a=>a.LeaveTypeId==ELB.LeaveTypeId).ToList()
+                                       on edc.OrganisationId equals lmc.OrganisationId
+                                       select new
+                                       {
+                                           lmc.LeaveType,
+                                           lmc.LeaveTypeId,
+                                           lmc.OrganisationId,
+                                           lmc.AnnualQuota
+                                       }).ToList();
+
+                                    
+
+                    //var AnnualQuota = LeaveMasterContext.Collection().ToList().Where(a => a.LeaveTypeId == ELB.LeaveTypeId).ToList();
+                    EmployeeLeaveBalance Eb = new EmployeeLeaveBalance();
+                    foreach (var i in AnnualQuota)
+                    {
+                        Eb.Id = Eb.Id;
+                        Eb.EmployeeId = ELB.EmployeeId;
+                        Eb.LeaveTypeId = ELB.LeaveTypeId;
+                        Eb.AvailableLeaveCount = Convert.ToString(Convert.ToInt32(i.AnnualQuota) + Convert.ToInt32(ELB.AvailableLeaveCount));
+                        Eb.TotalLeaveCount = Convert.ToString(Convert.ToInt32(i.AnnualQuota) + Convert.ToInt32(ELB.AvailableLeaveCount));
+                    }
+                    EmployeeLeaveBalanceContext.Insert(Eb);
+                    EmployeeLeaveBalanceContext.Commit();
+                    ViewBag.HeadingName = "Add Leaves Due";
+                    ViewBag.HeadingColor = "bg-success";
+                    ViewBag.Msg = "Add Leaves Due Apply Succesfully";
                 }
             }
             return View("AddLeavesDue");
